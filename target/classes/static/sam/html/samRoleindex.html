@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>角色</title>
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/cmcui.css">
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/demo.css">
+    <link rel="stylesheet" type="text/css" href="../../common/ztree/css/cmcStyle/tree1.css"/>
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/iconfont/iconfont.css">
+    <script type="text/javascript" src="../../common/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../common/ztree/js/jquery.ztree.all.js"></script>
+    <script type="text/javascript" src="../../common/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../common/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../common/easyui/plugins/jquery.messager.js"></script>
+    <script type="text/javascript" src="../../common/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../sam/js/ajaxUtilsTemp.js"></script>
+    <script type="text/javascript" src="../../common/layer/layer.js"></script>
+
+</head>
+<html>
+<head></head>
+<body>
+<div class="easyui-layout" style="width:100%;height:650px;">
+
+    <!--左侧树-->
+    <div class="easyui-layout" style="width:100%;height:650px;">
+        <div data-options="region:'west',split:true,title:'角色树'" style="overflow: auto; width: 225px;height: 600px;" title="" class="panel-body layout-body">
+            <div>
+                <ul id="menuTree" class="ztree1"></ul>
+            </div>
+
+        </div>
+        <div data-options="region:'center',border:false" style="height: 800px;">
+            <div class="cl">
+                <!--按钮操作-->
+                <div class="panel-search" style="height: 40px;">
+                    <div class="col" style="float:left;">
+                        角色名称：
+                        <input class="easyui-textbox" data-options="prompt:'输入关键字查询'" maxlength="10" style="width:400px;height:30px" id="searchRoleName"/>
+                    </div>
+
+                    <div class="col" style="float: left;margin-top: -10px;margin-left: 10px;">
+                        <div class="mt-10 text-c ">
+                            <a href="javascript:void(0)"  onclick="selectRole();" class="btn btn-green radius l-btn l-btn-small">
+                                 <span class="l-btn-left">
+                                       <i class="iconfont iconfont-search2">查询</i>
+                                  </span>
+                            </a>
+                            <a onclick="resultSearch()" class="btn btn-default radius mt-l-20  l-btn l-btn-small" >
+                                   <span class="l-btn-text">
+                                       <i class="iconfont iconfont-zhongzuo">重置</i>
+                                    </span>
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <div class="panel-tool-box cl">
+                    <div class="fl text-bold">角色列表</div>
+                    <div class="fr">
+                        <a href="javascript:void(0)" class="btn btn-secondary radius" onclick="addSamRole();"><i class="iconfont iconfont-add"></i>新增</a>
+                        <a href="javascript:void(0)" class="btn btn-secondary radius" onclick="deleteRole();"><i class="iconfont iconfont-del2"></i>删除</a>
+                    </div>
+                </div>
+                <!--表格-->
+                <table id="dg" class="easyui-datagrid" style="width:100%;height:530px;">
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <!--新增弹出窗口-->
+    <div id="pop-window" class="easyui-window" title="新增角色信息" data-options="modal:true,closed:true,collapsible:false" style="width:600px;height:400px;padding:10px">
+
+        <div style="height: 230px;">
+            <form id='basicData' method='POST' class='form form-horizontal'>
+                <div class="row cl">
+                    <label class="form-label col-4">角色名称：</label>
+                    <div class="formControls col-7">
+                        <input type="hidden" class="roleId" style="height:30px" />
+                        <input type="hidden" class="roleCode" style="height:30px" />
+                        <input type="hidden" class="superCode" style="height:30px" />
+                        <input type="text" class="easyui-textbox roleName" style="height:30px" />
+                    </div>
+                    <div class="formControls col-1" style="padding-top: 10px;">
+                        <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-4">角色描述：</label>
+                    <div class="formControls col-7">
+                        <input class="easyui-textbox description" data-options="multiline:true"  style="height:100px;">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+
+        <div class="mt-10"  style="text-align:center;">
+            <a href="javascript:void(0)"  onclick="dynameicRoleOperation()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a><span>
+            </span><a href="javascript:void(0)" onclick="$('#pop-window').window('close');"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+            <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+        </div>
+
+
+    </div>
+    <!--<div class="easyui-layout" data-options="fit:true,border:false">-->
+            <!--<div id="tt" class="easyui-tabs" >-->
+                <!--<div title="新增角色" >-->
+                    <!--<div class='panel-search'style="height: 300px;">-->
+                        <!--<form id='basicData' method='POST' class='form form-horizontal'>-->
+                            <!--<div class="row cl">-->
+                                <!--<label class="form-label col-4">角色名称：</label>-->
+                                <!--<div class="formControls col-8">-->
+                                    <!--<input type="hidden" class="roleId" style="height:30px" />-->
+                                    <!--<input type="hidden" class="roleCode" style="height:30px" />-->
+                                    <!--<input type="hidden" class="superCode" style="height:30px" />-->
+                                    <!--<input type="text" class="easyui-textbox roleName" style="height:30px" />-->
+                                <!--</div>-->
+
+                            <!--</div>-->
+                            <!--<div class="row cl">-->
+                                <!--<label class="form-label col-4">角色描述：</label>-->
+                                <!--<div class="formControls col-8">-->
+                                    <!--<input class="easyui-textbox description" data-options="multiline:true"  style="height:100px;"></input>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                        <!--</form>-->
+                    <!--</div>-->
+
+
+                    <!--<div class="mt-10"  style="text-align:center;">-->
+                        <!--<a href="javascript:void(0)"  onclick="dynameicRoleOperation()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">-->
+                            <!--<span class="l-btn-left"><span class="l-btn-text">保存</span></span></a><span>-->
+                    <!--</span><a href="javascript:void(0)" onclick="$('#pop-window').window('close');"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">-->
+                        <!--<span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>-->
+                    <!--</div>-->
+
+
+                <!--</div>-->
+
+
+                <!--<div title="人员分配" data-options="closable:true" style="overflow:auto;padding:20px;">-->
+                    <!--<div  class="easyui-layout" style="width:100%;height:590px;">-->
+                        <!--<div class="panel-search">-->
+                            <!--账号ID：-->
+                            <!--<input class="easyui-textbox" data-options="prompt:'输入关键字查询'" style="width:400px;height:30px" />-->
+                            <!--<button class="btn btn-secondary radius" type="submit" "><i class="iconfont iconfont-search2"></i>查询</button>-->
+                        <!--</div>-->
+
+
+                        <!--<div style=" float:left;width:38%;">-->
+                            <!--<div class="easyui-panel" title="待分配人员列表"  style="width:100%;height:280px;" >-->
+                                <!--<table id="freeRole" class="easyui-datagrid" style="width:100%;height:240px;">-->
+                                <!--</table>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<div style=" float:left;width:20%; padding-top:100px;">-->
+                            <!--<div class="fr">-->
+                                <!--<a href="javascript:void(0)" style="margin-left:50px;" class="btn btn-secondary radius" onclick="gridDataRight();"><i class="iconfont iconfont-arrow2-right"></i></a>-->
+                                <!--<a href="javascript:void(0)" style="margin-left:50px;" class="btn btn-secondary radius" onclick="gridDataLeft();"><i class="iconfont iconfont-arrow2-left"></i></a>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<div style=" float:left;width:38%;">-->
+                            <!--<div class="easyui-panel" title="已分配人员列表"  style="width:100%;height:280px;" >-->
+                                <!--<table id="IncludeRole" class="easyui-datagrid" style="width:100%;height:240px;">-->
+                                <!--</table>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+
+                        <!--<div  style="text-align:center;">-->
+                            <!--<a href="javascript:void(0)"  onclick="saveRoleStaff()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">-->
+                                <!--<span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>-->
+                         <!--<a href="javascript:void(0)" onclick="$('#pop-window').window('close');"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">-->
+                            <!--<span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>-->
+                        <!--</div>-->
+
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div title="Tab3" data-options="iconCls:'icon-reload',closable:true" style="padding:20px;">-->
+                    <!--tab3-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+</body>
+</html>
+<script type="text/javascript" src="../../sam/js/service/samRoleInfo.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        initRoleTree();
+        initRoleGrid(1);
+    });
+</script>
+</html>

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.sam.dao.TSamOrgaInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamOrgaInfo" >
+    <id column="ORGA_ID" property="orgaId" jdbcType="VARCHAR" />
+    <result column="ORGA_NAME" property="orgaName" jdbcType="VARCHAR" />
+    <result column="ORGA_TYPE_ID" property="orgaTypeId" jdbcType="VARCHAR" />
+    <result column="ORGA_TYPE_NAME" property="orgaTypeName" jdbcType="VARCHAR" />
+    <result column="ORGA_STATE" property="orgaState" jdbcType="CHAR" />
+    <result column="ORGA_STATE_NAME" property="orgaStateName" jdbcType="VARCHAR" />
+    <result column="ORGA_CODE" property="orgaCode" jdbcType="VARCHAR" />
+    <result column="SUPER_ORGA_CODE" property="superOrgaCode" jdbcType="VARCHAR" />
+    <result column="ORGA_DESC" property="orgaDesc" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="INSERT_TIME" property="insertTime" jdbcType="TIMESTAMP" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ORGA_ID, ORGA_NAME, ORGA_TYPE_ID, ORGA_STATE, ORGA_CODE, SUPER_ORGA_CODE, ORGA_DESC,
+    UPDATE_TIME, INSERT_TIME, TENANT_ID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamOrgaInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_orga_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_sam_orga_info
+    where ORGA_ID = #{orgaId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_sam_orga_info
+    where ORGA_ID = #{orgaId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamOrgaInfoExample" >
+    delete from t_sam_orga_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamOrgaInfo" >
+    insert into t_sam_orga_info (ORGA_ID, ORGA_NAME, ORGA_TYPE_ID,
+      ORGA_STATE, ORGA_CODE, SUPER_ORGA_CODE,
+      ORGA_DESC, UPDATE_TIME, INSERT_TIME,
+      TENANT_ID)
+    values (#{orgaId,jdbcType=VARCHAR}, #{orgaName,jdbcType=VARCHAR}, #{orgaTypeId,jdbcType=VARCHAR},
+      #{orgaState,jdbcType=CHAR}, #{orgaCode,jdbcType=VARCHAR}, #{superOrgaCode,jdbcType=VARCHAR},
+      #{orgaDesc,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{insertTime,jdbcType=TIMESTAMP},
+      #{tenantId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamOrgaInfo" >
+    insert into t_sam_orga_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgaId != null" >
+        ORGA_ID,
+      </if>
+      <if test="orgaName != null" >
+        ORGA_NAME,
+      </if>
+      <if test="orgaTypeId != null" >
+        ORGA_TYPE_ID,
+      </if>
+      <if test="orgaState != null" >
+        ORGA_STATE,
+      </if>
+      <if test="orgaCode != null" >
+        ORGA_CODE,
+      </if>
+      <if test="superOrgaCode != null" >
+        SUPER_ORGA_CODE,
+      </if>
+      <if test="orgaDesc != null" >
+        ORGA_DESC,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="insertTime != null" >
+        INSERT_TIME,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgaId != null" >
+        #{orgaId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaName != null" >
+        #{orgaName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaTypeId != null" >
+        #{orgaTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaState != null" >
+        #{orgaState,jdbcType=CHAR},
+      </if>
+      <if test="orgaCode != null" >
+        #{orgaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="superOrgaCode != null" >
+        #{superOrgaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaDesc != null" >
+        #{orgaDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamOrgaInfoExample" resultType="java.lang.Integer" >
+    select count(*) from t_sam_orga_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+
+  <select id="selectSuperNode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_sam_orga_info
+    where SUPER_ORGA_CODE = 0
+  </select>
+
+
+  <select id="selectSuperNodeByChildren" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_sam_orga_info
+    where SUPER_ORGA_CODE=#{superOrgaCode,jdbcType=VARCHAR}
+  </select>
+
+
+
+  <select id="selectByTSamOrgaInfoCountBySuperCode" parameterType="com.ai.sam.domain.TSamOrgaInfo"   resultType="java.lang.Integer" >
+      select COUNT(*) from t_sam_orga_info where SUPER_ORGA_CODE =#{orgaCode,jdbcType=VARCHAR}
+    <if test="orgaName != null and  orgaName!='' " >
+      and ORGA_NAME  LIKE CONCAT('%',#{orgaName},'%')
+    </if>
+  </select>
+
+
+
+
+  <select id="selectRepeatOrgaName"  parameterType="java.util.Map"    resultType="java.lang.Integer" >
+    select COUNT(*) from t_sam_orga_info where ORGA_NAME =#{orgaName} and SUPER_ORGA_CODE= #{nodeId}
+  </select>
+
+
+
+
+  <select id="selectByTSamOrgaInfoBySuperCode" resultMap="BaseResultMap"  parameterType="com.ai.sam.domain.TSamOrgaInfo"  >
+    select  case o.ORGA_TYPE_ID when '1' then '公司'  when '2' then '省份'  when '3' then '地市'  when '4' then '组织' when '5' then '班组'
+    end as ORGA_TYPE_NAME ,
+    case o.ORGA_STATE when '0' then '在用' when '1' then '废弃' when '2' then '暂停' end as ORGA_STATE_NAME,
+    o.ORGA_ID, o.ORGA_NAME,o.ORGA_CODE, o.SUPER_ORGA_CODE, o.ORGA_DESC, o.UPDATE_TIME, o.INSERT_TIME, o.TENANT_ID
+    from t_sam_orga_info o  where o.SUPER_ORGA_CODE =#{orgaCode,jdbcType=VARCHAR}
+    <if test="orgaName != null and  orgaName!='' " >
+      and o.ORGA_NAME  LIKE CONCAT('%',#{orgaName},'%')
+    </if>
+   ORDER BY o.ORGA_ID DESC LIMIT #{start,jdbcType=INTEGER},#{page,jdbcType=INTEGER}
+  </select>
+
+
+
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_sam_orga_info
+    <set >
+      <if test="record.orgaId != null" >
+        ORGA_ID = #{record.orgaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgaName != null" >
+        ORGA_NAME = #{record.orgaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgaTypeId != null" >
+        ORGA_TYPE_ID = #{record.orgaTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgaState != null" >
+        ORGA_STATE = #{record.orgaState,jdbcType=CHAR},
+      </if>
+      <if test="record.orgaCode != null" >
+        ORGA_CODE = #{record.orgaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.superOrgaCode != null" >
+        SUPER_ORGA_CODE = #{record.superOrgaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgaDesc != null" >
+        ORGA_DESC = #{record.orgaDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.insertTime != null" >
+        INSERT_TIME = #{record.insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_sam_orga_info
+    set ORGA_ID = #{record.orgaId,jdbcType=VARCHAR},
+    ORGA_NAME = #{record.orgaName,jdbcType=VARCHAR},
+    ORGA_TYPE_ID = #{record.orgaTypeId,jdbcType=VARCHAR},
+    ORGA_STATE = #{record.orgaState,jdbcType=CHAR},
+    ORGA_CODE = #{record.orgaCode,jdbcType=VARCHAR},
+    SUPER_ORGA_CODE = #{record.superOrgaCode,jdbcType=VARCHAR},
+    ORGA_DESC = #{record.orgaDesc,jdbcType=VARCHAR},
+    UPDATE_TIME = #{record.updateTime,jdbcType=TIMESTAMP},
+    INSERT_TIME = #{record.insertTime,jdbcType=TIMESTAMP},
+    TENANT_ID = #{record.tenantId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamOrgaInfo" >
+    update t_sam_orga_info
+    <set >
+      <if test="orgaName != null" >
+        ORGA_NAME = #{orgaName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaTypeId != null" >
+        ORGA_TYPE_ID = #{orgaTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaState != null" >
+        ORGA_STATE = #{orgaState,jdbcType=CHAR},
+      </if>
+      <if test="orgaCode != null" >
+        ORGA_CODE = #{orgaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="superOrgaCode != null" >
+        SUPER_ORGA_CODE = #{superOrgaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaDesc != null" >
+        ORGA_DESC = #{orgaDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insertTime != null" >
+        INSERT_TIME = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ORGA_ID = #{orgaId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamOrgaInfo" >
+    update t_sam_orga_info
+    set ORGA_NAME = #{orgaName,jdbcType=VARCHAR},
+      ORGA_TYPE_ID = #{orgaTypeId,jdbcType=VARCHAR},
+      ORGA_STATE = #{orgaState,jdbcType=CHAR},
+      ORGA_CODE = #{orgaCode,jdbcType=VARCHAR},
+      SUPER_ORGA_CODE = #{superOrgaCode,jdbcType=VARCHAR},
+      ORGA_DESC = #{orgaDesc,jdbcType=VARCHAR},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      INSERT_TIME = #{insertTime,jdbcType=TIMESTAMP},
+      TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+    where ORGA_ID = #{orgaId,jdbcType=VARCHAR}
+  </update>
+</mapper>

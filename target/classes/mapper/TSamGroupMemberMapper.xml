@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.sam.dao.TSamGroupMemberMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamGroupMember" >
+    <id column="MEMBER_ID" property="memberId" jdbcType="VARCHAR" />
+    <result column="GROUP_ID" property="groupId" jdbcType="VARCHAR" />
+    <result column="STAFF_ID" property="staffId" jdbcType="VARCHAR" />
+    <result column="ISPRINCIPAL" property="isprincipal" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    MEMBER_ID, GROUP_ID, STAFF_ID, ISPRINCIPAL
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamGroupMemberExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_group_member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sam_group_member
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_sam_group_member
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamGroupMemberExample" >
+    delete from t_sam_group_member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamGroupMember" >
+    insert into t_sam_group_member (MEMBER_ID, GROUP_ID, STAFF_ID, 
+      ISPRINCIPAL)
+    values (#{memberId,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, #{staffId,jdbcType=VARCHAR}, 
+      #{isprincipal,jdbcType=CHAR})
+  </insert>
+
+
+  <insert id="addStaffGroupBatch"  parameterType="java.util.List">
+    insert into t_sam_group_member(MEMBER_ID,GROUP_ID,STAFF_ID,ISPRINCIPAL) VALUES
+    <foreach collection="groupList" item="TSamGroupMember" separator=",">
+      (#{TSamGroupMember.memberId},#{TSamGroupMember.groupId},#{TSamGroupMember.staffId},#{TSamGroupMember.isprincipal})
+    </foreach>
+  </insert>
+
+
+  <delete id="deleteByGroupId" parameterType="com.ai.sam.domain.TSamGroupMember" >
+    delete from t_sam_group_member
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </delete>
+
+
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamGroupMember" >
+    insert into t_sam_group_member
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        MEMBER_ID,
+      </if>
+      <if test="groupId != null" >
+        GROUP_ID,
+      </if>
+      <if test="staffId != null" >
+        STAFF_ID,
+      </if>
+      <if test="isprincipal != null" >
+        ISPRINCIPAL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberId != null" >
+        #{memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="isprincipal != null" >
+        #{isprincipal,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamGroupMemberExample" resultType="java.lang.Integer" >
+    select count(*) from t_sam_group_member
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_sam_group_member
+    <set >
+      <if test="record.memberId != null" >
+        MEMBER_ID = #{record.memberId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupId != null" >
+        GROUP_ID = #{record.groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffId != null" >
+        STAFF_ID = #{record.staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isprincipal != null" >
+        ISPRINCIPAL = #{record.isprincipal,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_sam_group_member
+    set MEMBER_ID = #{record.memberId,jdbcType=VARCHAR},
+      GROUP_ID = #{record.groupId,jdbcType=VARCHAR},
+      STAFF_ID = #{record.staffId,jdbcType=VARCHAR},
+      ISPRINCIPAL = #{record.isprincipal,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamGroupMember" >
+    update t_sam_group_member
+    <set >
+      <if test="groupId != null" >
+        GROUP_ID = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="staffId != null" >
+        STAFF_ID = #{staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="isprincipal != null" >
+        ISPRINCIPAL = #{isprincipal,jdbcType=CHAR},
+      </if>
+    </set>
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamGroupMember" >
+    update t_sam_group_member
+    set GROUP_ID = #{groupId,jdbcType=VARCHAR},
+      STAFF_ID = #{staffId,jdbcType=VARCHAR},
+      ISPRINCIPAL = #{isprincipal,jdbcType=CHAR}
+    where MEMBER_ID = #{memberId,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectGroupMember" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select *
+    from t_sam_group_member
+    where STAFF_ID = #{staffId,jdbcType=VARCHAR}
+  </select>
+
+
+  <select id="selectStaffByGroupId" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select *
+    from t_sam_group_member
+    where GROUP_ID = #{groupId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteGroupMember" parameterType="java.util.Map"  >
+    delete from t_sam_group_member where STAFF_ID = #{staffId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insertGroupMember" parameterType="java.util.Map">
+    insert into t_sam_group_member (MEMBER_ID, GROUP_ID, STAFF_ID,
+      ISPRINCIPAL)
+    values (#{memberId,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, #{staffId,jdbcType=VARCHAR},
+      #{isprincipal,jdbcType=CHAR})
+  </insert>
+</mapper>

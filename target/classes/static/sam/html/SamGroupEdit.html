@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/cmcui.css">
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/demo.css">
+<link rel="stylesheet" type="text/css" href="../../common/ztree/css/cmcStyle/tree1.css"/>
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/iconfont/iconfont.css">
+<script type="text/javascript" src="../../common/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/ztree/js/jquery.ztree.all.js"></script>
+<script type="text/javascript" src="../../common/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../common/easyui/plugins/jquery.messager.js"></script>
+<script type="text/javascript" src="../../sam/js/ajaxUtilsTemp.js"></script>
+<script type="text/javascript" src="../../common/layer/layer.js"></script>
+
+<body>
+    <div class="easyui-layout" data-options="fit:true,border:false" style="overflow-y:scroll;">
+        <div id="tt" class="easyui-tabs" >
+            <div title="修改工作组" >
+                <div class='panel-search'style="height: 300px;">
+                    <form action="" method="post" class="form form-horizontal">
+                        <div class="row cl">
+                            <label class="form-label col-4">工作组名称：</label>
+                            <div class="formControls col-6">
+                                <input type="hidden" class="groupId" style="height:30px" />
+                                <input type="hidden" class="groupCode" style="height:30px" />
+                                <input type="hidden" class="superGroupCode" style="height:30px" />
+                                <input type="text" class="easyui-textbox orgaName" style="height:30px" />
+                            </div>
+
+                            <div class="formControls col-2" style="padding-top: 10px;">
+                                <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                            </div>
+
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-4">工作组类型：</label>
+                            <div class="formControls col-6">
+                                <select  style="height:30px" class="easyui-combobox groupTypeId" >
+                                </select>
+                            </div>
+                            <div style="padding-top: 10px;position: initial;">
+                                <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-4">工作组描述：</label>
+                            <div class="formControls col-6">
+                                <input class="easyui-textbox groupDesc" data-options="multiline:true"  style="height:100px;"></input>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+
+                <div class="mt-10"  style="text-align:center;">
+                    <a href="javascript:void(0)"  onclick="dynameicGroupOperation()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                        <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a><span>
+                    </span><a href="javascript:void(0)" onclick="resultForm()"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                    <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+                </div>
+
+
+            </div>
+            <div title="分配人员" data-options="closable:false" style="overflow:auto;padding:20px;height: 1400px;">
+                <div  class="easyui-layout" style="width:100%;">
+                <div class="container">
+                    <div class="align-items-start">
+                        <div class="col" style="height: 80px">
+                            <div class='panel-search'>
+                                <form class='form form-horizontal'>
+                                    <div class='row cl'>
+                                        <label class='form-label col-2'>账号ID：</label>
+                                        <div class='formControls col-2'><input type='text' name='staffId' class='easyui-textbox staffId'  style='width:90%;height:30px' ></div>
+                                        <label class='form-label col-2'>账号区间：</label>
+                                        <div class='formControls col-2'><input type='text' name='staffIdMin' class='easyui-textbox staffIdMin' style='width:42%;height:30px'> - <input type='text' name='staffIdMax' class='easyui-textbox staffIdMax' style='width:42%;height:30px'></div>
+                                        <label class='form-label col-2'>人员姓名：</label>
+                                        <div class='formControls col-2'><input type='text' name='staffName' class='easyui-textbox staffName'  style='width:90%;height:30px' ></div>
+                                    </div>
+                                    <div class='row cl'>
+                                        <label class='form-label col-2'>组织机构：</label>
+                                        <div class='formControls col-2'><input type='text' class='easyui-textbox' id="orgaId" name='orgaId' style='width:90%;height:30px' ></div>
+                                        <label class='form-label col-2'>账号状态：</label>
+                                        <div class='formControls col-2'><select class='easyui-combobox staffIdStatus' id='staffIdStatus' name='staffIdStatus' data-options='panelHeight:"auto"' style='width:90%;height:30px'><option value='00'>选择类型</option><option value='01'>正常</option><option value='02'>停用</option><option value='03'>作废</option><option value='04'>锁定</option><option value='05'>解锁</option><option value='06'>失效</option><option value='07'>未启用</option></select></div>
+                                    </div>
+                                    <div class='row cl'>
+                                        <div class='mt-10 text-c '>
+                                            <a href='javascript:void(0)' onclick="searchFreedistribute('0');" class='btn btn-green radius'><i class='iconfont iconfont-search2'></i>查询</a>
+                                            <a href='javascript:void(0)' onclick="resultSearch('0');" class='btn btn-default radius mt-l-20 '><i class='iconfont iconfont-zhongzuo' ></i>重置</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+
+                        <div class="col" style="height: 460px;margin-top: 80px;">
+                                <div style="float:left;width:45%;">
+                                    <div class="easyui-panel" title="待分配人员列表"  style="width:100%;height:490px;" >
+                                    <table id="freeRole" class="easyui-datagrid" style="width:100%;height:460px;">
+                                    </table>
+                                    </div>
+                                </div>
+
+                                <div style=" float:left;width:5%; padding-top:100px;padding-left: 15px;">
+                                    <div class="fr">
+                                    <a href="javascript:void(0)" style="margin-left:80px;" class="btn btn-secondary radius" onclick="gridDataRight('0');"><i class="iconfont iconfont-arrow2-right"></i></a>
+                                    <a href="javascript:void(0)" style="margin-left:80px;margin-top: 10px;" class="btn btn-secondary radius" onclick="gridDataLeft('0');"><i class="iconfont iconfont-arrow2-left"></i></a>
+                                    </div>
+                                </div>
+
+                                <div style=" float:right;width:45%;">
+                                    <div class="easyui-panel" title="已分配人员列表"  style="height:480px;" >
+                                    <table id="IncludeRole" class="easyui-datagrid" style="height:425px;">
+                                    </table>
+                                    </div>
+                                </div>
+                        </div>
+
+                        <div class="col" style="height: 40px;padding-top: 50px;">
+                            <div  style="text-align:center;">
+                                <a href="javascript:void(0)"  onclick="saveRoleStaff('0')" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                                    <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>
+
+                                <a href="javascript:void(0)" onclick="resultGird('0')"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                                    <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+</body>
+
+<script type="text/javascript" src="../../sam/js/service/samGroupEdit.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        loadGroupTypeSelect();
+        showEditGroupInfo(getQueryString("groupId"));
+        var token = AjaxUtilsTemp.getToken();
+        //initMenuTree($(".modelId").combobox('getValue'));
+        $("#orgaId").combotree({
+            multiple: true,
+            checkbox : true,
+            onlyLeafCheck : true,//只能叶子节点才能勾选
+            url : "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?access_token="+token,
+            onBeforeSelect : function(node){
+                $(this).tree("check", node.target);//控制点击文字时也能勾选
+                return false;
+            },
+            onBeforeCheck : function(node, checked){
+                if(checked){//如果是勾选操作，则把之前选中的节点清除（不勾选）
+                    var nodes = $(this).tree("getChecked");
+                    if(nodes.length > 0){
+                        for(var i=0; i<nodes.length; i++){
+                            $(this).tree("uncheck", nodes[i].target);
+                        }
+                    }
+                }
+            },
+            onLoadSuccess : function(node, data){
+                var valueOrgi = "请选择";
+                if(valueOrgi != null && $.trim(valueOrgi) != ""){
+                    var comboObj = $("#orgaId");
+                    comboObj.combotree("setValue", valueOrgi);
+                }
+            }
+        });
+    });
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+</script>
+
+</html>

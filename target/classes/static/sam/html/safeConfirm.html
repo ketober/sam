@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>信息展示</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/cmcui.css">
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/demo.css">
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/iconfont/iconfont.css">
+
+<script type="text/javascript" src="../../common/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/ztree/js/jquery.ztree.all.js"></script>
+<script type="text/javascript" src="../../common/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../common/easyui/plugins/jquery.messager.js"></script>
+<script type="text/javascript" src="../../sam/js/ajaxUtilsTemp.js"></script>
+<script type="text/javascript" src="../../sam/js/wangEditor.min.js"></script>
+
+<script>
+    // $(function () {
+    //     var username= window.sessionStorage.getItem("username")
+    //     $("#yhm").html("登录用户："+username)
+    //     $("#name").html(username)
+    //     if(window.sessionStorage.getItem("username")===null){
+    //         alert("您还没有登录，请登录后重试！")
+    //         window.location.href="Pages/index.html" rel="external nofollow" rel="external nofollow" rel="external nofollow" ;
+    //     }
+    //     $("#esc").on("click",function(){
+    //         window.sessionStorage.clear();
+    //         window.location.href="Pages/index.html" rel="external nofollow" rel="external nofollow" rel="external nofollow" ;
+    //     });
+    // })
+    $(function(){
+        //加载富文本
+        var E = window.wangEditor
+        //var editor = new E('#editor')
+        var editor = new E( document.getElementById('editor') )
+        editor.create();
+
+        //元素赋值
+        var ids = [
+            'a00', 'a01', 'a02', 'a03',
+            'b00', 'b01', 'b02', 'b03', 'b04',
+            'c00', 'c01', 'c02', 'c03', 'c04', 'c05', 'c06',
+            'd00', 'd01', 'd02', 'd03', 'd04',
+            'e00',
+            //'f00',
+            'f01', 'f02', 'f03', 'f04', 'f05', 'f06', 'f07', 'f08',
+            'g00', 'g01', 'g02', 'g03',
+            'h00', 'h01', 'h02'
+        ];
+        for (var i = 0; i < ids.length; i++) {
+            var divitem=$("#"+ids[i]).parent();
+            divitem.addClass("divcell")
+            var value=sessionStorage.getItem(ids[i]);
+            divitem.html(value)
+        }
+
+
+    });
+
+</script>
+
+
+<body id="layout_content" style="height: 650px">
+<div class="easyui-layout" style="width:100%;height:965px;">
+
+    <!--左侧-->
+    <div data-options="region:'center',title:''" style="width: 65%;">
+
+        <div class="easyui-layout" data-options="fit:true,border:false">
+
+            <div  class="easyui-tabs" style="fit:true;">
+                <div  title="救援相关信息" style="padding:0px;">
+                    <div  data-options="region:'center'">
+                        <div class='panel-search' style="margin-bottom: 0px;">
+                            <form id="aa"  method='POST' class='form form-horizontal'>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>救援代号名称：</label>
+                                    <div class='formControls col-4'><input id="a00" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>信息录入时间：</label>
+                                    <div class='formControls col-4'>
+                                        <input id="a01" class="easyui-datetimebox easyui-textbox" name='daa' style='width:90%;height:30px;'>
+                                    </div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>谈判方式：</label>
+                                    <div class='formControls col-4'>
+                                        <select class='easyui-combobox' id='a02' name='a02' data-options='panelHeight:"auto"' style='width:90%;height:30px;'>
+                                            <option value='绑匪直接谈判'>绑匪直接谈判</option>
+                                            <option value='绑匪委托第三人谈判'>绑匪委托第三人谈判</option>
+                                        </select>
+                                    </div>
+                                    <label class='form-label col-2'>紧急程度：</label>
+                                    <div class='formControls col-4'>
+                                        <select class='easyui-combobox' id='a03' name='a03' data-options='panelHeight:"auto"' style='width:90%;height:30px;'>
+                                            <option value='一级'>一级</option>
+                                            <option value='二级'>二级</option>
+                                            <option value='三级'>三级</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="easyui-tabs" style="fit:true;">
+                <div  title="人身安全确认" style="padding:0px;margin-bottom: 0px;">
+                    <div  data-options="region:'center'">
+                        <div class='panel-search' style="margin-bottom: 0px;">
+                            <form id="bb"  method='POST' class='form form-horizontal'>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>姓名：</label>
+                                    <div class='formControls col-4'><input id="b00" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>是否有人员受伤：</label>
+                                    <div class='formControls col-4'>
+                                        <select class='easyui-combobox' id='b01' name='b01' data-options='panelHeight:"auto"' style='width:90%;height:30px;'>
+                                            <option value='无'>无</option>
+                                            <option value='有'>有</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>受伤程度：</label>
+                                    <div class='formControls col-4'>
+                                        <select class='easyui-combobox' id='b02' name='b02' data-options='panelHeight:"auto"' style='width:90%;height:30px;'>
+                                            <option value='没有受伤'>没有受伤</option>
+                                            <option value='头'>头</option>
+                                            <option value='胸'>胸</option>
+                                            <option value='四肢'>四肢</option>
+                                            <option value='头、胸'>头、胸</option>
+                                            <option value='头、四肢'>头、四肢</option>
+                                            <option value='胸、四肢'>胸、四肢</option>
+                                            <option value='头、胸、四肢'>头、胸、四肢</option>
+                                        </select>
+                                    </div>
+                                    <label class='form-label col-2'>是否要提供医生：</label>
+                                    <div class='formControls col-4'>
+                                        <select class='easyui-combobox' id='b03' name='b03' data-options='panelHeight:"auto"' style='width:90%;height:30px;'>
+                                            <option value='否'>否</option>
+                                            <option value='是'>是</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>备注：</label>
+                                    <div class='formControls col-8'><input  id="b04"  type='text' class='easyui-textbox notMust' data-options='multiline:true'   name='ELEMENTURL' style='width:120%;height:70px' /></div>
+                                </div>
+                                </br>
+                                </br>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div  class="easyui-tabs" style="fit:true;">
+                <div  title="绑匪人数确认" style="padding:0px;">
+                    <div  data-options="region:'center'">
+                        <div class='panel-search' style="margin-bottom: 0px;">
+                            <form id="cc" method='POST' class='form form-horizontal'>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>被绑人数：</label>
+                                    <div class='formControls col-4'><input id="c00" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>绑匪人数：</label>
+                                    <div class='formControls col-4'><input id="c01" type='text' class='easyui-textbox'  name='MODULEID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>绑匪使用语言：</label>
+                                    <div class='formControls col-4'><input id="c02" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>绑匪特征：</label>
+                                    <div class='formControls col-4'><input id="c03" type='text' class='easyui-textbox'  name='MODULEID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>绑匪情绪：</label>
+                                    <div class='formControls col-4'><input id="c04" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>是否武装分子：</label>
+                                    <div class='formControls col-4'>
+                                        <select class='easyui-combobox' id='c05' name='c05' data-options='panelHeight:"auto"' style='width:90%;height:30px;'>
+                                            <option value='否'>否</option>
+                                            <option value='是'>是</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>备注：</label>
+                                    <div class='formControls col-8'><input id="c06"  type='text' class='easyui-textbox notMust' data-options='multiline:true'   name='ELEMENTURL' style='width:120%;height:70px' /></div>
+                                </div>
+                                </br>
+                                </br>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div  class="easyui-tabs" style="fit:true;">
+                <div  title="其他信息确认" style="padding:0px;">
+                    <div  data-options="region:'center'">
+                        <div class='panel-search' style="margin-bottom: 0px;">
+                            <form id="dd"  method='POST' class='form form-horizontal'>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>家属姓名：</label>
+                                    <div class='formControls col-4'><input id="d00" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>家属电话：</label>
+                                    <div class='formControls col-4'><input id="d01" type='text' class='easyui-textbox'  name='MODULEID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>紧急联系人姓名：</label>
+                                    <div class='formControls col-4'><input id="d02" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>紧急联系人电话：</label>
+                                    <div class='formControls col-4'><input id="d03" type='text' class='easyui-textbox'  name='MODULEID' style='width:90%;height:30px' ></div>
+                                </div>
+
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>备注：</label>
+                                    <div class='formControls col-8'><input id="d04"  type='text' class='easyui-textbox notMust' data-options='multiline:true'   name='ELEMENTURL' style='width:120%;height:70px' /></div>
+                                </div>
+                                </br>
+                                </br>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div  class="easyui-tabs" style="fit:true;">
+                <div  title="绑匪赎金诉求" style="padding:0px;">
+                    <div  data-options="region:'center'">
+                        <div class='panel-search' style="margin-bottom: 0px;">
+                            <form id="ee" method='POST' class='form form-horizontal'>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>赎金诉求：</label>
+                                    <div class='formControls col-8'><input id="e00"  type='text' class='easyui-textbox notMust' data-options='multiline:true'   name='ELEMENTURL' style='width:120%;height:70px' /></div>
+                                </div>
+                                </br>
+                                </br></br>
+
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+    <!--右侧-->
+    <div data-options="region:'east',title:'',split:true,fit:false,collapsible:false," style="width:35%">
+
+        <div class="easyui-layout" data-options="fit:true,border:false">
+
+
+
+            <div  class="easyui-tabs" style="fit:true;">
+                <div  title="个人信息" style="padding:0px;margin-bottom: 0px;">
+                    <div  data-options="region:'center'">
+                        <div class='panel-search' style="margin-bottom: 0px;">
+                            <form id="ff" method='POST' class='form form-horizontal'>
+                                <div class='row cl' >
+                                    <div style="text-align:center">
+                                        <img id="f00" src="../img/header/header.jpg" style="width: 138.93px;height: 202px;margin-top: -10px;">
+                                    </div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>姓名：</label>
+                                    <div class='formControls col-8'><input id="f01" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px'></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>性别：</label>
+                                    <div class='formControls col-8'>
+                                        <select class='easyui-combobox' id='f02' name='f02' data-options='panelHeight:"auto"' style='width:90%;height:30px;'>
+                                            <option value='男'>男</option>
+                                            <option value='女' selected>女</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>电话号码：</label>
+                                    <div class='formControls col-8'><input id="f03" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>身份证号码：</label>
+                                    <div class='formControls col-8'><input id="f04" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>护照编： </label>
+                                    <div class='formControls col-8'><input id="f05" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>投保套餐：</label>
+                                    <div class='formControls col-8'><input id="f06" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>职业：</label>
+                                    <div class='formControls col-8'><input id="f07" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>住址：</label>
+                                    <div class='formControls col-8'><input id="f08" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div  class="easyui-tabs" style="fit:true;">
+                <div  title="国家信息" style="padding:0px;">
+                    <div  data-options="region:'center'">
+                        <div class='panel-search' style="margin-bottom: 0px;">
+                            <form id="gg"  method='POST' class='form form-horizontal'>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>国籍：</label>
+                                    <div class='formControls col-8'><input id="g00" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>入境时间：</label>
+                                    <div class='formControls col-8'>
+                                        <input id="g01" class="easyui-datebox easyui-textbox" name='g01' style='width:90%;height:30px;'>
+                                    </div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>出境时间：</label>
+                                    <div class='formControls col-8'>
+                                        <input id="g02" class="easyui-datebox easyui-textbox" name='g02' style='width:90%;height:30px;'>
+                                    </div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>出境类型：</label>
+                                    <div class='formControls col-8'>
+                                        <select class='easyui-combobox' id='g03' name='g03' data-options='panelHeight:"auto"' style='width:90%;height:30px;'>
+                                            <option value='工作'>工作</option>
+                                            <option value='旅游'>旅游</option>
+                                            <option value='留学'>留学</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div  class="easyui-tabs" style="fit:true;">
+                <div  title="最新位置" style="padding:0px;">
+                    <div  data-options="region:'center'">
+                        <div class='panel-search' style="margin-bottom: 0px;">
+                            <form id="hh"  method='POST' class='form form-horizontal'>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>经度：</label>
+                                    <div class='formControls col-8'><input id="h00" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>纬度：</label>
+                                    <div class='formControls col-8'><input id="h01" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+                                    <label class='form-label col-4'>地址：</label>
+                                    <div class='formControls col-8'><input id="h02" type='text' class='easyui-textbox'  name='ELEMENTID' style='width:90%;height:30px' ></div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+    <!-- 下方 -->
+    <div data-options="region:'south',title:''" style="width: 100%;">
+
+
+        <div class='mt-10 test-c' >
+            <div style="float:right">
+                <a  href='javascript:void(0)'  class='btn btn-green radius mt-l-20 forAuth' >
+                    获取位置</a>
+                <a id='log' href='javascript:void(0)'  class='btn btn-green radius mt-l-20 forAuth' >
+                    通话记录</a>
+                <a id='sbm' href='javascript:void(0)'  class='btn btn-green radius mt-l-20 forAuth' >
+                    确认提交</a>
+            </div>
+
+        </div>
+
+
+
+    </div>
+</div>
+
+<br/><br/>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">合作措施</h3>
+        </br>
+    </div>
+    <div class="panel-body" id="editor">
+
+    </div>
+</div>
+<script>
+    $("#sbm").click(function () {
+        //打开tab页
+        var c ="<a class='level1-a sonnavlink J_menuItem' href='http://10.21.19.15:80/sam/sam/html/safeQuery.html'>信息列表</a>";
+        parent.tab.openMenu(c);
+    });
+    $("#log").click(function () {
+        //打开tab页
+        var c ="<a class='level1-a sonnavlink J_menuItem' href='http://10.21.19.15:80/oneframe/log/html/oneRecord.html'>会话记录</a>";
+        parent.tab.openMenu(c);
+    });
+</script>
+</body>
+
+
+
+<style type="text/css">
+    /*.easyui-tabs{*/
+    /*    overflow:visible;*/
+    /*}*/
+    .panel-body{
+        /*font-size:14px;*/
+        /*font-family:"Arial, microsoft yahei";*/
+        /*padding:7px;*/
+
+    }
+    body label{
+        font-weight:normal;
+    }
+    .divcell{
+        margin-top: 6px;
+    }
+    body div .row{
+        padding-right:0 !important;
+    }
+    .form-horizontal .form-label{
+        padding-right:0 !important;
+    }
+    /**.panel-body:nth-child(2n+1){ background:#ddd;}**/
+
+
+</style>
+
+</html>

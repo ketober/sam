@@ -1,0 +1,1370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.sam.dao.TSamStaffInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamStaffInfo" >
+    <id column="STAFF_ID" property="staffId" jdbcType="VARCHAR" />
+    <result column="STAFF_NAME" property="staffName" jdbcType="VARCHAR" />
+    <result column="STAFF_STATE" property="staffState" jdbcType="CHAR" />
+    <result column="STAFF_ID_STATUS" property="staffIdStatus" jdbcType="CHAR" />
+    <result column="DLEVEL_ID" property="dlevelId" jdbcType="VARCHAR" />
+    <result column="DUTY_ID" property="dutyId" jdbcType="VARCHAR" />
+    <result column="SECOND_DUTY" property="secondDuty" jdbcType="VARCHAR" />
+    <result column="ORGA_ID" property="orgaId" jdbcType="VARCHAR" />
+    <result column="POST_ID" property="postId" jdbcType="VARCHAR" />
+    <result column="SECOND_POST" property="secondPost" jdbcType="VARCHAR" />
+    <result column="UPDA_TETIME" property="updaTetime" jdbcType="TIMESTAMP" />
+    <result column="JOIN_DATE" property="joinDate" jdbcType="TIMESTAMP" />
+    <result column="MOBILE_PHONE" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="EMAIL_ADDRESS" property="emailAddress" jdbcType="VARCHAR" />
+    <result column="CITY_ID" property="cityId" jdbcType="VARCHAR" />
+    <result column="PROVICE_ID" property="proviceId" jdbcType="VARCHAR" />
+    <result column="STAFF_TYPE" property="staffType" jdbcType="VARCHAR" />
+    <result column="ID_CARD_NO" property="idCardNo" jdbcType="VARCHAR" />
+    <result column="CHANNEL_ID" property="channelId" jdbcType="VARCHAR" />
+    <result column="AUTHEN_RULE_ID" property="authenRuleId" jdbcType="INTEGER" />
+    <result column="INSERT_TIME" property="insertTime" jdbcType="TIMESTAMP" />
+    <result column="STAFF_NM_SHORT" property="staffNmShort" jdbcType="VARCHAR" />
+    <result column="PRSN_CHNL_TYPE_CD" property="prsnChnlTypeCd" jdbcType="VARCHAR" />
+    <result column="DEFAULT_SERVICE_TYPE" property="defaultServiceType" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="ISPRINCIPAL" property="isprincipal" jdbcType="VARCHAR" />
+
+
+  </resultMap>
+  <resultMap id="StaffOrgaMap" type="java.util.Map" >
+    <id column="STAFF_ID" property="staffId" jdbcType="VARCHAR" />
+    <result column="STAFF_NAME" property="staffName" jdbcType="VARCHAR" />
+    <result column="STAFF_STATE" property="staffState" jdbcType="CHAR" />
+    <result column="STAFF_ID_STATUS" property="staffIdStatus" jdbcType="CHAR" />
+    <result column="DLEVEL_ID" property="dlevelId" jdbcType="VARCHAR" />
+    <result column="DUTY_ID" property="dutyId" jdbcType="VARCHAR" />
+    <result column="SECOND_DUTY" property="secondDuty" jdbcType="VARCHAR" />
+    <result column="ORGA_ID" property="orgaId" jdbcType="VARCHAR" />
+    <result column="POST_ID" property="postId" jdbcType="VARCHAR" />
+    <result column="SECOND_POST" property="secondPost" jdbcType="VARCHAR" />
+    <result column="UPDA_TETIME" property="updaTetime" jdbcType="TIMESTAMP" />
+    <result column="JOIN_DATE" property="joinDate" jdbcType="TIMESTAMP" />
+    <result column="MOBILE_PHONE" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="EMAIL_ADDRESS" property="emailAddress" jdbcType="VARCHAR" />
+    <result column="CITY_ID" property="cityId" jdbcType="VARCHAR" />
+    <result column="PROVICE_ID" property="proviceId" jdbcType="VARCHAR" />
+    <result column="STAFF_TYPE" property="staffType" jdbcType="VARCHAR" />
+    <result column="ID_CARD_NO" property="idCardNo" jdbcType="VARCHAR" />
+    <result column="CHANNEL_ID" property="channelId" jdbcType="VARCHAR" />
+    <result column="AUTHEN_RULE_ID" property="authenRuleId" jdbcType="INTEGER" />
+    <result column="INSERT_TIME" property="insertTime" jdbcType="TIMESTAMP" />
+    <result column="STAFF_NM_SHORT" property="staffNmShort" jdbcType="VARCHAR" />
+    <result column="PRSN_CHNL_TYPE_CD" property="prsnChnlTypeCd" jdbcType="VARCHAR" />
+    <result column="DEFAULT_SERVICE_TYPE" property="defaultServiceType" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="ORGA_NAME" property="orgaName" jdbcType="VARCHAR" />
+    <result column="ORGA_TYPE_ID" property="orgaTypeId" jdbcType="VARCHAR" />
+    <result column="ORGA_CODE" property="orgaCode" jdbcType="VARCHAR" />
+    <result column="ORGA_DESC" property="orgaDesc" jdbcType="VARCHAR" />
+    <result column="PLATFORM_ID" property="platformId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    STAFF_ID, STAFF_NAME, STAFF_STATE, STAFF_ID_STATUS, DLEVEL_ID, DUTY_ID, SECOND_DUTY, 
+    ORGA_ID, POST_ID, SECOND_POST, UPDA_TETIME, JOIN_DATE, MOBILE_PHONE, EMAIL_ADDRESS, 
+    CITY_ID, PROVICE_ID, STAFF_TYPE, ID_CARD_NO, CHANNEL_ID, AUTHEN_RULE_ID, INSERT_TIME, 
+    STAFF_NM_SHORT, PRSN_CHNL_TYPE_CD, DEFAULT_SERVICE_TYPE, TENANT_ID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamStaffInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_staff_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sam_staff_info
+    where STAFF_ID = #{staffId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_sam_staff_info
+    where STAFF_ID = #{staffId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamStaffInfoExample" >
+    delete from t_sam_staff_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+  <!--角色-->
+  <!--未关联的人-->
+  <select id="selectStaffFreeRole" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamStaffInfoExample" >
+    SELECT  t1.*
+    FROM  t_sam_staff_info t1
+    WHERE t1.STAFF_ID NOT IN (SELECT STAFF_ID FROM t_sam_staff_role where ROLE_ID=#{roleId})
+    <if test="staffName != null and  staffName!='' " >
+      AND t1.STAFF_NAME  LIKE CONCAT('%',#{staffName},'%')
+    </if>
+      <if test="staffId != null &amp; staffId != ''">
+          AND t1.STAFF_ID like CONCAT('%',#{staffId},'%')
+      </if>
+      <if test="staffName != null &amp; staffName != ''">
+          AND t1.STAFF_NAME like CONCAT('%',#{staffName},'%')
+      </if>
+      <if test="staffIdMin != null &amp; staffIdMin != ''">
+          and t1.STAFF_ID &gt;= #{staffIdMin}
+      </if>
+      <if test="staffIdMax != null &amp; staffIdMax != ''">
+          and t1.STAFF_ID &lt;= #{staffIdMax}
+      </if>
+      <if test="staffState != null &amp; staffState != '' &amp; staffState != '00'">
+          AND t1.STAFF_STATE = #{staffState}
+      </if>
+      <if test="staffIdStatus != null &amp; staffIdStatus != '' &amp; staffIdStatus != '00'">
+          AND t1.STAFF_ID_STATUS = #{staffIdStatus}
+      </if>
+      <if test="dlevelId != null &amp; dlevelId != ''">
+          AND t1.DLEVEL_ID = #{dlevelId}
+      </if>
+      <if test="dutyId != null &amp; dutyId != ''">
+          AND t1.DUTY_ID = #{dutyId}
+      </if>
+      <if test="secondDuty != null &amp; secondDuty != ''">
+          AND t1.SECOND_DUTY = #{secondDuty}
+      </if>
+      <if test="orgaId != null &amp; orgaId != ''">
+          AND t1.ORGA_ID  like CONCAT('%',#{orgaId},'%')
+      </if>
+      <if test="postId != null &amp; postId != '' &amp; postId != '00'">
+          AND t1.POST_ID = #{postId}
+      </if>
+      <if test="secondPost != null &amp; secondPost != ''">
+          AND t1.SECOND_POST = #{secondPost}
+      </if>
+      <if test="updaTetime != null &amp; updaTetime != ''">
+          AND t1.UPDA_TETIME = #{updaTetime}
+      </if>
+      <if test="joinDate != null &amp; joinDate != ''">
+          AND t1.JOIN_DATE = #{joinDate}
+      </if>
+      <if test="mobilePhone != null &amp; mobilePhone != ''">
+          AND t1.MOBILE_PHONE like CONCAT('%',#{mobilePhone},'%')
+      </if>
+      <if test="emailAddress != null &amp; emailAddress != ''">
+          AND  t1.EMAIL_ADDRESS like CONCAT('%',#{emailAddress},'%')
+      </if>
+      <if test="cityId != null &amp; cityId != ''">
+          AND  t1.CITY_ID = #{cityId}
+      </if>
+      <if test="proviceId != null &amp; proviceId != ''">
+          AND t1.PROVICE_ID = #{proviceId}
+      </if>
+      <if test="staffType != null &amp; staffType != ''">
+          AND  t1.STAFF_TYPE = #{staffType}
+      </if>
+      <if test="idCardNo != null &amp; idCardNo != ''">
+          AND t1.ID_CARD_NO like CONCAT('%',#{idCardNo},'%')
+      </if>
+      <if test="channelId != null &amp; channelId != '' &amp; channelId != '00'">
+          AND t1.CHANNEL_ID = #{channelId}
+      </if>
+      <if test="authenRuleId != null &amp; authenRuleId != ''">
+          AND t1.AUTHEN_RULE_ID = #{authenRuleId}
+      </if>
+      <if test="insertTime != null &amp; insertTime != ''">
+          AND t1.INSERT_TIME = #{insertTime}
+      </if>
+      <if test="staffNmShort != null &amp; staffNmShort != ''">
+          AND t1.STAFF_NM_SHORT like CONCAT('%',#{staffNmShort},'%')
+      </if>
+      <if test="prsnChnlTypeCd != null &amp; prsnChnlTypeCd != ''&amp; prsnChnlTypeCd != '00'">
+          AND  t1.PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd}
+      </if>
+      <if test="defaultServiceType != null &amp; defaultServiceType != ''">
+          AND  t1.DEFAULT_SERVICE_TYPE = #{defaultServiceType}
+      </if>
+      <if test="tenantId != null &amp; tenantId != ''">
+          AND  t1.TENANT_ID like CONCAT('%',#{tenantId},'%')
+      </if>
+
+  </select>
+
+  <select id="selectStaffFreeRoleCount"  resultType="java.lang.Integer"  parameterType="com.ai.sam.domain.TSamStaffInfoExample">
+    SELECT  count(*)  FROM  t_sam_staff_info t1 WHERE t1.STAFF_ID NOT IN (SELECT STAFF_ID FROM t_sam_staff_role where ROLE_ID=#{roleId} )
+    <if test="staffName != null and  staffName!='' " >
+      AND t1.STAFF_NAME  LIKE CONCAT('%',#{staffName},'%')
+    </if>
+      <if test="staffId != null &amp; staffId != ''">
+          AND t1.STAFF_ID like CONCAT('%',#{staffId},'%')
+      </if>
+      <if test="staffName != null &amp; staffName != ''">
+          AND t1.STAFF_NAME like CONCAT('%',#{staffName},'%')
+      </if>
+      <if test="staffIdMin != null &amp; staffIdMin != ''">
+          and t1.STAFF_ID &gt;= #{staffIdMin}
+      </if>
+      <if test="staffIdMax != null &amp; staffIdMax != ''">
+          and t1.STAFF_ID &lt;= #{staffIdMax}
+      </if>
+      <if test="staffState != null &amp; staffState != '' &amp; staffState != '00'">
+          AND t1.STAFF_STATE = #{staffState}
+      </if>
+      <if test="staffIdStatus != null &amp; staffIdStatus != '' &amp; staffIdStatus != '00'">
+          AND t1.STAFF_ID_STATUS = #{staffIdStatus}
+      </if>
+      <if test="dlevelId != null &amp; dlevelId != ''">
+          AND t1.DLEVEL_ID = #{dlevelId}
+      </if>
+      <if test="dutyId != null &amp; dutyId != ''">
+          AND t1.DUTY_ID = #{dutyId}
+      </if>
+      <if test="secondDuty != null &amp; secondDuty != ''">
+          AND t1.SECOND_DUTY = #{secondDuty}
+      </if>
+      <if test="orgaId != null &amp; orgaId != ''">
+          AND t1.ORGA_ID  like CONCAT('%',#{orgaId},'%')
+      </if>
+      <if test="postId != null &amp; postId != '' &amp; postId != '00'">
+          AND t1.POST_ID = #{postId}
+      </if>
+      <if test="secondPost != null &amp; secondPost != ''">
+          AND t1.SECOND_POST = #{secondPost}
+      </if>
+      <if test="updaTetime != null &amp; updaTetime != ''">
+          AND t1.UPDA_TETIME = #{updaTetime}
+      </if>
+      <if test="joinDate != null &amp; joinDate != ''">
+          AND t1.JOIN_DATE = #{joinDate}
+      </if>
+      <if test="mobilePhone != null &amp; mobilePhone != ''">
+          AND t1.MOBILE_PHONE like CONCAT('%',#{mobilePhone},'%')
+      </if>
+      <if test="emailAddress != null &amp; emailAddress != ''">
+          AND  t1.EMAIL_ADDRESS like CONCAT('%',#{emailAddress},'%')
+      </if>
+      <if test="cityId != null &amp; cityId != ''">
+          AND  t1.CITY_ID = #{cityId}
+      </if>
+      <if test="proviceId != null &amp; proviceId != ''">
+          AND t1.PROVICE_ID = #{proviceId}
+      </if>
+      <if test="staffType != null &amp; staffType != ''">
+          AND  t1.STAFF_TYPE = #{staffType}
+      </if>
+      <if test="idCardNo != null &amp; idCardNo != ''">
+          AND t1.ID_CARD_NO like CONCAT('%',#{idCardNo},'%')
+      </if>
+      <if test="channelId != null &amp; channelId != '' &amp; channelId != '00'">
+          AND t1.CHANNEL_ID = #{channelId}
+      </if>
+      <if test="authenRuleId != null &amp; authenRuleId != ''">
+          AND t1.AUTHEN_RULE_ID = #{authenRuleId}
+      </if>
+      <if test="insertTime != null &amp; insertTime != ''">
+          AND t1.INSERT_TIME = #{insertTime}
+      </if>
+      <if test="staffNmShort != null &amp; staffNmShort != ''">
+          AND t1.STAFF_NM_SHORT like CONCAT('%',#{staffNmShort},'%')
+      </if>
+      <if test="prsnChnlTypeCd != null &amp; prsnChnlTypeCd != ''&amp; prsnChnlTypeCd != '00'">
+          AND  t1.PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd}
+      </if>
+      <if test="defaultServiceType != null &amp; defaultServiceType != ''">
+          AND  t1.DEFAULT_SERVICE_TYPE = #{defaultServiceType}
+      </if>
+      <if test="tenantId != null &amp; tenantId != ''">
+          AND  t1.TENANT_ID like CONCAT('%',#{tenantId},'%')
+      </if>
+  </select>
+
+
+
+  <!--角色关联的人-->
+  <select id="selectStaffIncludeRole" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select i.* from t_sam_staff_info i left join t_sam_staff_role r on i.STAFF_ID = r.STAFF_ID where i.STAFF_ID = r.STAFF_ID
+    and  r.ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </select>
+
+
+  <!--用户组-->
+  <!--未关联的人-->
+  <select id="selectStaffFreeGroup" resultMap="BaseResultMap"  parameterType="com.ai.sam.domain.TSamStaffInfoExample" >
+    SELECT  t1.*
+    FROM  t_sam_staff_info t1
+    WHERE t1.STAFF_ID NOT IN (SELECT STAFF_ID FROM t_sam_group_member where GROUP_ID=#{groupId})
+    <if test="staffId != null &amp; staffId != ''">
+      AND t1.STAFF_ID like CONCAT('%',#{staffId},'%')
+    </if>
+    <if test="staffName != null &amp; staffName != ''">
+      AND t1.STAFF_NAME like CONCAT('%',#{staffName},'%')
+    </if>
+    <if test="staffIdMin != null &amp; staffIdMin != ''">
+      and t1.STAFF_ID &gt;= #{staffIdMin}
+    </if>
+    <if test="staffIdMax != null &amp; staffIdMax != ''">
+      and t1.STAFF_ID &lt;= #{staffIdMax}
+    </if>
+    <if test="staffState != null &amp; staffState != '' &amp; staffState != '00'">
+      AND t1.STAFF_STATE = #{staffState}
+    </if>
+    <if test="staffIdStatus != null &amp; staffIdStatus != '' &amp; staffIdStatus != '00'">
+      AND t1.STAFF_ID_STATUS = #{staffIdStatus}
+    </if>
+    <if test="dlevelId != null &amp; dlevelId != ''">
+      AND t1.DLEVEL_ID = #{dlevelId}
+    </if>
+    <if test="dutyId != null &amp; dutyId != ''">
+      AND t1.DUTY_ID = #{dutyId}
+    </if>
+    <if test="secondDuty != null &amp; secondDuty != ''">
+      AND t1.SECOND_DUTY = #{secondDuty}
+    </if>
+    <if test="orgaId != null &amp; orgaId != ''">
+      AND t1.ORGA_ID  like CONCAT('%',#{orgaId},'%')
+    </if>
+    <if test="postId != null &amp; postId != '' &amp; postId != '00'">
+      AND t1.POST_ID = #{postId}
+    </if>
+    <if test="secondPost != null &amp; secondPost != ''">
+      AND t1.SECOND_POST = #{secondPost}
+    </if>
+    <if test="updaTetime != null &amp; updaTetime != ''">
+      AND t1.UPDA_TETIME = #{updaTetime}
+    </if>
+    <if test="joinDate != null &amp; joinDate != ''">
+      AND t1.JOIN_DATE = #{joinDate}
+    </if>
+    <if test="mobilePhone != null &amp; mobilePhone != ''">
+      AND t1.MOBILE_PHONE like CONCAT('%',#{mobilePhone},'%')
+    </if>
+    <if test="emailAddress != null &amp; emailAddress != ''">
+      AND  t1.EMAIL_ADDRESS like CONCAT('%',#{emailAddress},'%')
+    </if>
+    <if test="cityId != null &amp; cityId != ''">
+      AND  t1.CITY_ID = #{cityId}
+    </if>
+    <if test="proviceId != null &amp; proviceId != ''">
+      AND t1.PROVICE_ID = #{proviceId}
+    </if>
+    <if test="staffType != null &amp; staffType != ''">
+      AND  t1.STAFF_TYPE = #{staffType}
+    </if>
+    <if test="idCardNo != null &amp; idCardNo != ''">
+      AND t1.ID_CARD_NO like CONCAT('%',#{idCardNo},'%')
+    </if>
+    <if test="channelId != null &amp; channelId != '' &amp; channelId != '00'">
+      AND t1.CHANNEL_ID = #{channelId}
+    </if>
+    <if test="authenRuleId != null &amp; authenRuleId != ''">
+      AND t1.AUTHEN_RULE_ID = #{authenRuleId}
+    </if>
+    <if test="insertTime != null &amp; insertTime != ''">
+      AND t1.INSERT_TIME = #{insertTime}
+    </if>
+    <if test="staffNmShort != null &amp; staffNmShort != ''">
+      AND t1.STAFF_NM_SHORT like CONCAT('%',#{staffNmShort},'%')
+    </if>
+    <if test="prsnChnlTypeCd != null &amp; prsnChnlTypeCd != ''&amp; prsnChnlTypeCd != '00'">
+      AND  t1.PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd}
+    </if>
+    <if test="defaultServiceType != null &amp; defaultServiceType != ''">
+      AND  t1.DEFAULT_SERVICE_TYPE = #{defaultServiceType}
+    </if>
+    <if test="tenantId != null &amp; tenantId != ''">
+      AND  t1.TENANT_ID like CONCAT('%',#{tenantId},'%')
+    </if>
+  </select>
+
+  <select id="selectStaffFreeGroupCount"  resultType="java.lang.Integer" parameterType="com.ai.sam.domain.TSamStaffInfoExample" >
+    SELECT  count(*)  FROM  t_sam_staff_info t1 WHERE t1.STAFF_ID NOT IN (SELECT STAFF_ID FROM t_sam_group_member where GROUP_ID=#{groupId})
+    <if test="staffId != null &amp; staffId != ''">
+      AND t1.STAFF_ID like CONCAT('%',#{staffId},'%')
+    </if>
+    <if test="staffName != null &amp; staffName != ''">
+      AND t1.STAFF_NAME like CONCAT('%',#{staffName},'%')
+    </if>
+    <if test="staffIdMin != null &amp; staffIdMin != ''">
+      and t1.STAFF_ID &gt;= #{staffIdMin}
+    </if>
+    <if test="staffIdMax != null &amp; staffIdMax != ''">
+      and t1.STAFF_ID &lt;= #{staffIdMax}
+    </if>
+    <if test="staffState != null &amp; staffState != '' &amp; staffState != '00'">
+      AND t1.STAFF_STATE = #{staffState}
+    </if>
+    <if test="staffIdStatus != null &amp; staffIdStatus != '' &amp; staffIdStatus != '00'">
+      AND t1.STAFF_ID_STATUS = #{staffIdStatus}
+    </if>
+    <if test="dlevelId != null &amp; dlevelId != ''">
+      AND t1.DLEVEL_ID = #{dlevelId}
+    </if>
+    <if test="dutyId != null &amp; dutyId != ''">
+      AND t1.DUTY_ID = #{dutyId}
+    </if>
+    <if test="secondDuty != null &amp; secondDuty != ''">
+      AND t1.SECOND_DUTY = #{secondDuty}
+    </if>
+    <if test="orgaId != null &amp; orgaId != ''">
+      AND t1.ORGA_ID  like CONCAT('%',#{orgaId},'%')
+    </if>
+    <if test="postId != null &amp; postId != '' &amp; postId != '00'">
+      AND t1.POST_ID = #{postId}
+    </if>
+    <if test="secondPost != null &amp; secondPost != ''">
+      AND t1.SECOND_POST = #{secondPost}
+    </if>
+    <if test="updaTetime != null &amp; updaTetime != ''">
+      AND t1.UPDA_TETIME = #{updaTetime}
+    </if>
+    <if test="joinDate != null &amp; joinDate != ''">
+      AND t1.JOIN_DATE = #{joinDate}
+    </if>
+    <if test="mobilePhone != null &amp; mobilePhone != ''">
+      AND t1.MOBILE_PHONE like CONCAT('%',#{mobilePhone},'%')
+    </if>
+    <if test="emailAddress != null &amp; emailAddress != ''">
+      AND  t1.EMAIL_ADDRESS like CONCAT('%',#{emailAddress},'%')
+    </if>
+    <if test="cityId != null &amp; cityId != ''">
+      AND  t1.CITY_ID = #{cityId}
+    </if>
+    <if test="proviceId != null &amp; proviceId != ''">
+      AND t1.PROVICE_ID = #{proviceId}
+    </if>
+    <if test="staffType != null &amp; staffType != ''">
+      AND  t1.STAFF_TYPE = #{staffType}
+    </if>
+    <if test="idCardNo != null &amp; idCardNo != ''">
+      AND t1.ID_CARD_NO like CONCAT('%',#{idCardNo},'%')
+    </if>
+    <if test="channelId != null &amp; channelId != '' &amp; channelId != '00'">
+      AND t1.CHANNEL_ID = #{channelId}
+    </if>
+    <if test="authenRuleId != null &amp; authenRuleId != ''">
+      AND t1.AUTHEN_RULE_ID = #{authenRuleId}
+    </if>
+    <if test="insertTime != null &amp; insertTime != ''">
+      AND t1.INSERT_TIME = #{insertTime}
+    </if>
+    <if test="staffNmShort != null &amp; staffNmShort != ''">
+      AND t1.STAFF_NM_SHORT like CONCAT('%',#{staffNmShort},'%')
+    </if>
+    <if test="prsnChnlTypeCd != null &amp; prsnChnlTypeCd != ''&amp; prsnChnlTypeCd != '00'">
+      AND  t1.PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd}
+    </if>
+    <if test="defaultServiceType != null &amp; defaultServiceType != ''">
+      AND  t1.DEFAULT_SERVICE_TYPE = #{defaultServiceType}
+    </if>
+    <if test="tenantId != null &amp; tenantId != ''">
+      AND  t1.TENANT_ID like CONCAT('%',#{tenantId},'%')
+    </if>
+  </select>
+
+
+  <!--角色关联的人-->
+  <select id="selectStaffIncludeGroup" resultMap="BaseResultMap" parameterType="java.util.Map" >
+  select i.*, (r.ISPRINCIPAL)isprincipal from t_sam_staff_info i left join t_sam_group_member r on i.STAFF_ID = r.STAFF_ID where i.STAFF_ID = r.STAFF_ID
+    and  r.GROUP_ID = #{groupId,jdbcType=VARCHAR} and i.STAFF_ID_STATUS='01'
+    <if test="groupName != null &amp; groupName != ''">
+      AND  r.GROUP_NAME like CONCAT('%',#{groupName},'%')
+    </if>
+  </select>
+
+
+  <!--角色关联的人 工作组-->
+  <select id="selectStaffIncludeRelatedGroup" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select i.*, (r.ISPRINCIPAL)isprincipal from t_sam_staff_info i left join t_sam_group_member r on i.STAFF_ID = r.STAFF_ID where i.STAFF_ID = r.STAFF_ID
+    and  r.GROUP_ID = #{groupId,jdbcType=VARCHAR} and i.STAFF_ID_STATUS='01'
+    <if test="staffId != null &amp; staffId != ''">
+      AND  i.staff_id like CONCAT('%',#{staffId},'%')
+    </if>
+    <if test="staffName != null &amp; staffName != ''">
+      AND  i.staff_Name like CONCAT('%',#{staffName},'%')
+    </if>
+    LIMIT #{start,jdbcType=INTEGER},#{page,jdbcType=INTEGER}
+  </select>
+  <!--角色关联的责任人-->
+  <select id="selectStaffIncludeGroupForPic" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  select i.* from t_sam_staff_info i left join t_sam_group_member r on i.STAFF_ID = r.STAFF_ID where i.STAFF_ID = r.STAFF_ID
+    and  r.GROUP_ID = #{groupId,jdbcType=VARCHAR} and r.ISPRINCIPAL = 1 and i.STAFF_ID_STATUS='01'
+  </select>
+
+
+
+  <!--角色id查询关联的人-->
+  <select id="selectStaffForRoleId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  select s.* from t_sam_staff_info s,t_sam_staff_role r where s.STAFF_ID = r.STAFF_ID and r.ROLE_ID = #{roleId,jdbcType=VARCHAR} and s.STAFF_ID_STATUS ='01'
+  </select>
+
+
+  <select id="selectStaffForOrgaId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  select s.* from t_sam_staff_info s where s.ORGA_ID =  #{orgaId,jdbcType=VARCHAR}
+  </select>
+
+
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamStaffInfo" >
+    insert into t_sam_staff_info (STAFF_ID, STAFF_NAME, STAFF_STATE, 
+      STAFF_ID_STATUS, DLEVEL_ID, DUTY_ID, 
+      SECOND_DUTY, ORGA_ID, POST_ID, 
+      SECOND_POST, UPDA_TETIME, JOIN_DATE, 
+      MOBILE_PHONE, EMAIL_ADDRESS, CITY_ID, 
+      PROVICE_ID, STAFF_TYPE, ID_CARD_NO, 
+      CHANNEL_ID, AUTHEN_RULE_ID, INSERT_TIME, 
+      STAFF_NM_SHORT, PRSN_CHNL_TYPE_CD, DEFAULT_SERVICE_TYPE, 
+      TENANT_ID)
+    values (#{staffId,jdbcType=VARCHAR}, #{staffName,jdbcType=VARCHAR}, #{staffState,jdbcType=CHAR}, 
+      #{staffIdStatus,jdbcType=CHAR}, #{dlevelId,jdbcType=VARCHAR}, #{dutyId,jdbcType=VARCHAR}, 
+      #{secondDuty,jdbcType=VARCHAR}, #{orgaId,jdbcType=VARCHAR}, #{postId,jdbcType=VARCHAR}, 
+      #{secondPost,jdbcType=VARCHAR}, #{updaTetime,jdbcType=TIMESTAMP}, #{joinDate,jdbcType=TIMESTAMP}, 
+      #{mobilePhone,jdbcType=VARCHAR}, #{emailAddress,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, 
+      #{proviceId,jdbcType=VARCHAR}, #{staffType,jdbcType=VARCHAR}, #{idCardNo,jdbcType=VARCHAR}, 
+      #{channelId,jdbcType=VARCHAR}, #{authenRuleId,jdbcType=INTEGER}, #{insertTime,jdbcType=TIMESTAMP}, 
+      #{staffNmShort,jdbcType=VARCHAR}, #{prsnChnlTypeCd,jdbcType=VARCHAR}, #{defaultServiceType,jdbcType=VARCHAR}, 
+      #{tenantId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamStaffInfo" >
+    insert into t_sam_staff_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="staffId != null" >
+        STAFF_ID,
+      </if>
+      <if test="staffName != null" >
+        STAFF_NAME,
+      </if>
+      <if test="staffState != null" >
+        STAFF_STATE,
+      </if>
+      <if test="staffIdStatus != null" >
+        STAFF_ID_STATUS,
+      </if>
+      <if test="dlevelId != null" >
+        DLEVEL_ID,
+      </if>
+      <if test="dutyId != null" >
+        DUTY_ID,
+      </if>
+      <if test="secondDuty != null" >
+        SECOND_DUTY,
+      </if>
+      <if test="orgaId != null" >
+        ORGA_ID,
+      </if>
+      <if test="postId != null" >
+        POST_ID,
+      </if>
+      <if test="secondPost != null" >
+        SECOND_POST,
+      </if>
+      <if test="updaTetime != null" >
+        UPDA_TETIME,
+      </if>
+      <if test="joinDate != null" >
+        JOIN_DATE,
+      </if>
+      <if test="mobilePhone != null" >
+        MOBILE_PHONE,
+      </if>
+      <if test="emailAddress != null" >
+        EMAIL_ADDRESS,
+      </if>
+      <if test="cityId != null" >
+        CITY_ID,
+      </if>
+      <if test="proviceId != null" >
+        PROVICE_ID,
+      </if>
+      <if test="staffType != null" >
+        STAFF_TYPE,
+      </if>
+      <if test="idCardNo != null" >
+        ID_CARD_NO,
+      </if>
+      <if test="channelId != null" >
+        CHANNEL_ID,
+      </if>
+      <if test="authenRuleId != null" >
+        AUTHEN_RULE_ID,
+      </if>
+      <if test="insertTime != null" >
+        INSERT_TIME,
+      </if>
+      <if test="staffNmShort != null" >
+        STAFF_NM_SHORT,
+      </if>
+      <if test="prsnChnlTypeCd != null" >
+        PRSN_CHNL_TYPE_CD,
+      </if>
+      <if test="defaultServiceType != null" >
+        DEFAULT_SERVICE_TYPE,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="staffId != null" >
+        #{staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="staffName != null" >
+        #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffState != null" >
+        #{staffState,jdbcType=CHAR},
+      </if>
+      <if test="staffIdStatus != null" >
+        #{staffIdStatus,jdbcType=CHAR},
+      </if>
+      <if test="dlevelId != null" >
+        #{dlevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyId != null" >
+        #{dutyId,jdbcType=VARCHAR},
+      </if>
+      <if test="secondDuty != null" >
+        #{secondDuty,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaId != null" >
+        #{orgaId,jdbcType=VARCHAR},
+      </if>
+      <if test="postId != null" >
+        #{postId,jdbcType=VARCHAR},
+      </if>
+      <if test="secondPost != null" >
+        #{secondPost,jdbcType=VARCHAR},
+      </if>
+      <if test="updaTetime != null" >
+        #{updaTetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="joinDate != null" >
+        #{joinDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobilePhone != null" >
+        #{mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="emailAddress != null" >
+        #{emailAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="proviceId != null" >
+        #{proviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="staffType != null" >
+        #{staffType,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardNo != null" >
+        #{idCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="authenRuleId != null" >
+        #{authenRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffNmShort != null" >
+        #{staffNmShort,jdbcType=VARCHAR},
+      </if>
+      <if test="prsnChnlTypeCd != null" >
+        #{prsnChnlTypeCd,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultServiceType != null" >
+        #{defaultServiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamStaffInfoExample" resultType="java.lang.Integer" >
+    select count(*) from t_sam_staff_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_sam_staff_info
+    <set >
+      <if test="record.staffId != null" >
+        STAFF_ID = #{record.staffId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffName != null" >
+        STAFF_NAME = #{record.staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffState != null" >
+        STAFF_STATE = #{record.staffState,jdbcType=CHAR},
+      </if>
+      <if test="record.staffIdStatus != null" >
+        STAFF_ID_STATUS = #{record.staffIdStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.dlevelId != null" >
+        DLEVEL_ID = #{record.dlevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyId != null" >
+        DUTY_ID = #{record.dutyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secondDuty != null" >
+        SECOND_DUTY = #{record.secondDuty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgaId != null" >
+        ORGA_ID = #{record.orgaId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postId != null" >
+        POST_ID = #{record.postId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secondPost != null" >
+        SECOND_POST = #{record.secondPost,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updaTetime != null" >
+        UPDA_TETIME = #{record.updaTetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.joinDate != null" >
+        JOIN_DATE = #{record.joinDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mobilePhone != null" >
+        MOBILE_PHONE = #{record.mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.emailAddress != null" >
+        EMAIL_ADDRESS = #{record.emailAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityId != null" >
+        CITY_ID = #{record.cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.proviceId != null" >
+        PROVICE_ID = #{record.proviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffType != null" >
+        STAFF_TYPE = #{record.staffType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardNo != null" >
+        ID_CARD_NO = #{record.idCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelId != null" >
+        CHANNEL_ID = #{record.channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authenRuleId != null" >
+        AUTHEN_RULE_ID = #{record.authenRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="record.insertTime != null" >
+        INSERT_TIME = #{record.insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.staffNmShort != null" >
+        STAFF_NM_SHORT = #{record.staffNmShort,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prsnChnlTypeCd != null" >
+        PRSN_CHNL_TYPE_CD = #{record.prsnChnlTypeCd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.defaultServiceType != null" >
+        DEFAULT_SERVICE_TYPE = #{record.defaultServiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_sam_staff_info
+    set STAFF_ID = #{record.staffId,jdbcType=VARCHAR},
+      STAFF_NAME = #{record.staffName,jdbcType=VARCHAR},
+      STAFF_STATE = #{record.staffState,jdbcType=CHAR},
+      STAFF_ID_STATUS = #{record.staffIdStatus,jdbcType=CHAR},
+      DLEVEL_ID = #{record.dlevelId,jdbcType=VARCHAR},
+      DUTY_ID = #{record.dutyId,jdbcType=VARCHAR},
+      SECOND_DUTY = #{record.secondDuty,jdbcType=VARCHAR},
+      ORGA_ID = #{record.orgaId,jdbcType=VARCHAR},
+      POST_ID = #{record.postId,jdbcType=VARCHAR},
+      SECOND_POST = #{record.secondPost,jdbcType=VARCHAR},
+      UPDA_TETIME = #{record.updaTetime,jdbcType=TIMESTAMP},
+      JOIN_DATE = #{record.joinDate,jdbcType=TIMESTAMP},
+      MOBILE_PHONE = #{record.mobilePhone,jdbcType=VARCHAR},
+      EMAIL_ADDRESS = #{record.emailAddress,jdbcType=VARCHAR},
+      CITY_ID = #{record.cityId,jdbcType=VARCHAR},
+      PROVICE_ID = #{record.proviceId,jdbcType=VARCHAR},
+      STAFF_TYPE = #{record.staffType,jdbcType=VARCHAR},
+      ID_CARD_NO = #{record.idCardNo,jdbcType=VARCHAR},
+      CHANNEL_ID = #{record.channelId,jdbcType=VARCHAR},
+      AUTHEN_RULE_ID = #{record.authenRuleId,jdbcType=INTEGER},
+      INSERT_TIME = #{record.insertTime,jdbcType=TIMESTAMP},
+      STAFF_NM_SHORT = #{record.staffNmShort,jdbcType=VARCHAR},
+      PRSN_CHNL_TYPE_CD = #{record.prsnChnlTypeCd,jdbcType=VARCHAR},
+      DEFAULT_SERVICE_TYPE = #{record.defaultServiceType,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamStaffInfo" >
+    update t_sam_staff_info
+    <set >
+      <if test="staffName != null" >
+        STAFF_NAME = #{staffName,jdbcType=VARCHAR},
+      </if>
+      <if test="staffState != null" >
+        STAFF_STATE = #{staffState,jdbcType=CHAR},
+      </if>
+      <if test="staffIdStatus != null" >
+        STAFF_ID_STATUS = #{staffIdStatus,jdbcType=CHAR},
+      </if>
+      <if test="dlevelId != null" >
+        DLEVEL_ID = #{dlevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyId != null" >
+        DUTY_ID = #{dutyId,jdbcType=VARCHAR},
+      </if>
+      <if test="secondDuty != null" >
+        SECOND_DUTY = #{secondDuty,jdbcType=VARCHAR},
+      </if>
+      <if test="orgaId != null" >
+        ORGA_ID = #{orgaId,jdbcType=VARCHAR},
+      </if>
+      <if test="postId != null" >
+        POST_ID = #{postId,jdbcType=VARCHAR},
+      </if>
+      <if test="secondPost != null" >
+        SECOND_POST = #{secondPost,jdbcType=VARCHAR},
+      </if>
+      <if test="updaTetime != null" >
+        UPDA_TETIME = #{updaTetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="joinDate != null" >
+        JOIN_DATE = #{joinDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mobilePhone != null" >
+        MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="emailAddress != null" >
+        EMAIL_ADDRESS = #{emailAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        CITY_ID = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="proviceId != null" >
+        PROVICE_ID = #{proviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="staffType != null" >
+        STAFF_TYPE = #{staffType,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardNo != null" >
+        ID_CARD_NO = #{idCardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        CHANNEL_ID = #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="authenRuleId != null" >
+        AUTHEN_RULE_ID = #{authenRuleId,jdbcType=INTEGER},
+      </if>
+      <if test="insertTime != null" >
+        INSERT_TIME = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="staffNmShort != null" >
+        STAFF_NM_SHORT = #{staffNmShort,jdbcType=VARCHAR},
+      </if>
+      <if test="prsnChnlTypeCd != null" >
+        PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultServiceType != null" >
+        DEFAULT_SERVICE_TYPE = #{defaultServiceType,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where STAFF_ID = #{staffId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamStaffInfo" >
+    update t_sam_staff_info
+    set STAFF_NAME = #{staffName,jdbcType=VARCHAR},
+      STAFF_STATE = #{staffState,jdbcType=CHAR},
+      STAFF_ID_STATUS = #{staffIdStatus,jdbcType=CHAR},
+      DLEVEL_ID = #{dlevelId,jdbcType=VARCHAR},
+      DUTY_ID = #{dutyId,jdbcType=VARCHAR},
+      SECOND_DUTY = #{secondDuty,jdbcType=VARCHAR},
+      ORGA_ID = #{orgaId,jdbcType=VARCHAR},
+      POST_ID = #{postId,jdbcType=VARCHAR},
+      SECOND_POST = #{secondPost,jdbcType=VARCHAR},
+      UPDA_TETIME = #{updaTetime,jdbcType=TIMESTAMP},
+      JOIN_DATE = #{joinDate,jdbcType=TIMESTAMP},
+      MOBILE_PHONE = #{mobilePhone,jdbcType=VARCHAR},
+      EMAIL_ADDRESS = #{emailAddress,jdbcType=VARCHAR},
+      CITY_ID = #{cityId,jdbcType=VARCHAR},
+      PROVICE_ID = #{proviceId,jdbcType=VARCHAR},
+      STAFF_TYPE = #{staffType,jdbcType=VARCHAR},
+      ID_CARD_NO = #{idCardNo,jdbcType=VARCHAR},
+      CHANNEL_ID = #{channelId,jdbcType=VARCHAR},
+      AUTHEN_RULE_ID = #{authenRuleId,jdbcType=INTEGER},
+      INSERT_TIME = #{insertTime,jdbcType=TIMESTAMP},
+      STAFF_NM_SHORT = #{staffNmShort,jdbcType=VARCHAR},
+      PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd,jdbcType=VARCHAR},
+      DEFAULT_SERVICE_TYPE = #{defaultServiceType,jdbcType=VARCHAR},
+      TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+    where STAFF_ID = #{staffId,jdbcType=VARCHAR}
+  </update>
+
+
+  <select id="queryStaffInfo" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select * from t_sam_staff_info where 1=1
+    <if test="staffId != null &amp; staffId != ''">
+      AND STAFF_ID = #{staffId}
+    </if>
+    <if test="staffName != null &amp; staffName != ''">
+      AND STAFF_NAME like CONCAT('%',#{staffName},'%')
+    </if>
+    <if test="staffIdMin != null &amp; staffIdMin != ''">
+      and STAFF_ID &gt;= #{staffIdMin}
+    </if>
+    <if test="staffIdMax != null &amp; staffIdMax != ''">
+      and STAFF_ID &lt;= #{staffIdMax}
+    </if>
+    <if test="staffState != null &amp; staffState != '' &amp; staffState != '00'">
+      AND STAFF_STATE = #{staffState}
+    </if>
+    <if test="staffIdStatus != null &amp; staffIdStatus != '' &amp; staffIdStatus != '00'">
+      AND STAFF_ID_STATUS = #{staffIdStatus}
+    </if>
+    <if test="dlevelId != null &amp; dlevelId != ''">
+      AND DLEVEL_ID = #{dlevelId}
+    </if>
+    <if test="dutyId != null &amp; dutyId != ''">
+      AND DUTY_ID = #{dutyId}
+    </if>
+    <if test="secondDuty != null &amp; secondDuty != ''">
+      AND SECOND_DUTY = #{secondDuty}
+    </if>
+    <if test="orgaId != null &amp; orgaId != ''">
+      AND ORGA_ID = #{orgaId}
+    </if>
+    <if test="postId != null &amp; postId != ''">
+      AND POST_ID = #{postId}
+    </if>
+    <if test="secondPost != null &amp; secondPost != ''">
+      AND SECOND_POST = #{secondPost}
+    </if>
+    <if test="updaTetime != null &amp; updaTetime != ''">
+      AND UPDA_TETIME = #{updaTetime}
+    </if>
+    <if test="joinDate != null &amp; joinDate != ''">
+      AND JOIN_DATE = #{joinDate}
+    </if>
+    <if test="mobilePhone != null &amp; mobilePhone != ''">
+      AND MOBILE_PHONE like CONCAT('%',#{mobilePhone},'%')
+    </if>
+    <if test="emailAddress != null &amp; emailAddress != ''">
+      AND  EMAIL_ADDRESS = #{emailAddress}
+    </if>
+    <if test="cityId != null &amp; cityId != ''">
+      AND  CITY_ID = #{cityId}
+    </if>
+    <if test="proviceId != null &amp; proviceId != ''">
+      AND PROVICE_ID = #{proviceId}
+    </if>
+    <if test="staffType != null &amp; staffType != ''">
+      AND  STAFF_TYPE = #{staffType}
+    </if>
+    <if test="idCardNo != null &amp; idCardNo != ''">
+      AND ID_CARD_NO = #{idCardNo}
+    </if>
+    <if test="channelId != null &amp; channelId != ''">
+      AND CHANNEL_ID = #{channelId}
+    </if>
+    <if test="authenRuleId != null &amp; authenRuleId != ''">
+      AND AUTHEN_RULE_ID = #{authenRuleId}
+    </if>
+    <if test="insertTime != null &amp; insertTime != ''">
+      AND INSERT_TIME = #{insertTime}
+    </if>
+    <if test="staffNmShort != null &amp; staffNmShort != ''">
+      AND STAFF_NM_SHORT = #{staffNmShort}
+    </if>
+    <if test="prsnChnlTypeCd != null &amp; prsnChnlTypeCd != ''">
+      AND  PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd}
+    </if>
+    <if test="defaultServiceType != null &amp; defaultServiceType != ''">
+      AND  DEFAULT_SERVICE_TYPE = #{defaultServiceType}
+    </if>
+    <if test="tenantId != null &amp; tenantId != ''">
+      AND  TENANT_ID = #{tenantId}
+    </if>
+    <if test="limit != null and limit != '' " >
+      limit ${start},${limit}
+    </if>
+  </select>
+  <!--查询人员信息用于前台展示-->
+  <select id="queryStaffInfo2" resultMap="StaffOrgaMap" parameterType="java.util.Map" >
+    select
+    t1.STAFF_ID,
+    t1.STAFF_NAME,
+    t1.DLEVEL_ID,
+    t1.DUTY_ID,
+    t1.SECOND_DUTY,
+    t1.POST_ID,
+    t1.SECOND_POST,
+    t1.UPDA_TETIME,
+    t1.JOIN_DATE,
+    t1.MOBILE_PHONE,
+    t1.EMAIL_ADDRESS,
+    t1.CITY_ID,
+    t1.PROVICE_ID,
+    t1.STAFF_TYPE,
+    t1.ID_CARD_NO,
+    t1.CHANNEL_ID,
+    t1.AUTHEN_RULE_ID,
+    t1.INSERT_TIME,
+    t1.STAFF_NM_SHORT,
+    t1.PRSN_CHNL_TYPE_CD,
+    t1.DEFAULT_SERVICE_TYPE,
+    t1.TENANT_ID,
+    t1.STAFF_STATE,
+    t1.STAFF_ID_STATUS,
+    t2.ORGA_ID,t2.ORGA_NAME,t2.ORGA_TYPE_ID,t2.ORGA_DESC
+    FROM t_sam_staff_info t1
+    LEFT JOIN t_sam_orga_info t2 ON t1.ORGA_ID=t2.ORGA_ID
+    where 1=1
+    <if test="staffId != null &amp; staffId != ''">
+      AND t1.STAFF_ID like CONCAT('%',#{staffId},'%')
+    </if>
+    <if test="staffName != null &amp; staffName != ''">
+      AND t1.STAFF_NAME like CONCAT('%',#{staffName},'%')
+    </if>
+    <if test="staffIdMin != null &amp; staffIdMin != ''">
+      and t1.STAFF_ID &gt;= #{staffIdMin}
+    </if>
+    <if test="staffIdMax != null &amp; staffIdMax != ''">
+      and t1.STAFF_ID &lt;= #{staffIdMax}
+    </if>
+    <if test="staffState != null &amp; staffState != '' &amp; staffState != '00'">
+      AND t1.STAFF_STATE = #{staffState}
+    </if>
+    <if test="staffIdStatus != null &amp; staffIdStatus != '' &amp; staffIdStatus != '00'">
+      AND t1.STAFF_ID_STATUS = #{staffIdStatus}
+    </if>
+    <if test="dlevelId != null &amp; dlevelId != ''">
+      AND t1.DLEVEL_ID = #{dlevelId}
+    </if>
+    <if test="dutyId != null &amp; dutyId != ''">
+      AND t1.DUTY_ID = #{dutyId}
+    </if>
+    <if test="secondDuty != null &amp; secondDuty != ''">
+      AND t1.SECOND_DUTY = #{secondDuty}
+    </if>
+    <if test="orgaId != null &amp; orgaId != ''">
+      AND t1.ORGA_ID  like CONCAT('%',#{orgaId},'%')
+    </if>
+    <if test="postId != null &amp; postId != '' &amp; postId != '00'">
+      AND t1.POST_ID = #{postId}
+    </if>
+    <if test="secondPost != null &amp; secondPost != ''">
+      AND t1.SECOND_POST = #{secondPost}
+    </if>
+    <if test="updaTetime != null &amp; updaTetime != ''">
+      AND t1.UPDA_TETIME = #{updaTetime}
+    </if>
+    <if test="joinDate != null &amp; joinDate != ''">
+      AND t1.JOIN_DATE = #{joinDate}
+    </if>
+    <if test="mobilePhone != null &amp; mobilePhone != ''">
+      AND t1.MOBILE_PHONE like CONCAT('%',#{mobilePhone},'%')
+    </if>
+    <if test="emailAddress != null &amp; emailAddress != ''">
+      AND  t1.EMAIL_ADDRESS like CONCAT('%',#{emailAddress},'%')
+    </if>
+    <if test="cityId != null &amp; cityId != ''">
+      AND  t1.CITY_ID = #{cityId}
+    </if>
+    <if test="proviceId != null &amp; proviceId != ''">
+      AND t1.PROVICE_ID = #{proviceId}
+    </if>
+    <if test="staffType != null &amp; staffType != ''">
+      AND  t1.STAFF_TYPE = #{staffType}
+    </if>
+    <if test="idCardNo != null &amp; idCardNo != ''">
+      AND t1.ID_CARD_NO like CONCAT('%',#{idCardNo},'%')
+    </if>
+    <if test="channelId != null &amp; channelId != '' &amp; channelId != '00'">
+      AND t1.CHANNEL_ID = #{channelId}
+    </if>
+    <if test="authenRuleId != null &amp; authenRuleId != ''">
+      AND t1.AUTHEN_RULE_ID = #{authenRuleId}
+    </if>
+    <if test="insertTime != null &amp; insertTime != ''">
+      AND t1.INSERT_TIME = #{insertTime}
+    </if>
+    <if test="staffNmShort != null &amp; staffNmShort != ''">
+      AND t1.STAFF_NM_SHORT like CONCAT('%',#{staffNmShort},'%')
+    </if>
+    <if test="prsnChnlTypeCd != null &amp; prsnChnlTypeCd != ''&amp; prsnChnlTypeCd != '00'">
+      AND  t1.PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd}
+    </if>
+    <if test="defaultServiceType != null &amp; defaultServiceType != ''">
+      AND  t1.DEFAULT_SERVICE_TYPE = #{defaultServiceType}
+    </if>
+    <if test="tenantId != null &amp; tenantId != ''">
+      AND  t1.TENANT_ID like CONCAT('%',#{tenantId},'%')
+    </if>
+     order by t1.UPDA_TETIME desc ,t1.INSERT_TIME desc
+    <if test="limit != null and limit != '' " >
+      limit ${start},${limit}
+    </if>
+  </select>
+
+  <select id="queryStaffInfoCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(*) from t_sam_staff_info where 1=1
+    <if test="staffId != null &amp; staffId != ''">
+      AND STAFF_ID like CONCAT('%',#{staffId},'%')
+    </if>
+    <if test="staffName != null &amp; staffName != ''">
+      AND STAFF_NAME like CONCAT('%',#{staffName},'%')
+    </if>
+    <if test="staffIdMin != null &amp; staffIdMin != ''">
+      and STAFF_ID &gt;= #{staffIdMin}
+    </if>
+    <if test="staffIdMax != null &amp; staffIdMax != ''">
+      and STAFF_ID &lt;= #{staffIdMax}
+    </if>
+    <if test="staffState != null &amp; staffState != '' &amp; staffState != '00'">
+      AND STAFF_STATE = #{staffState}
+    </if>
+    <if test="staffIdStatus != null &amp; staffIdStatus != '' &amp; staffIdStatus != '00'">
+      AND STAFF_ID_STATUS = #{staffIdStatus}
+    </if>
+    <if test="dlevelId != null &amp; dlevelId != ''">
+      AND DLEVEL_ID = #{dlevelId}
+    </if>
+    <if test="dutyId != null &amp; dutyId != ''">
+      AND DUTY_ID = #{dutyId}
+    </if>
+    <if test="secondDuty != null &amp; secondDuty != ''">
+      AND SECOND_DUTY = #{secondDuty}
+    </if>
+    <if test="orgaId != null &amp; orgaId != ''">
+      AND ORGA_ID  like CONCAT('%',#{orgaId},'%')
+    </if>
+    <if test="postId != null &amp; postId != '' &amp; postId != '00'">
+      AND POST_ID = #{postId}
+    </if>
+    <if test="secondPost != null &amp; secondPost != ''">
+      AND SECOND_POST = #{secondPost}
+    </if>
+    <if test="updaTetime != null &amp; updaTetime != ''">
+      AND UPDA_TETIME = #{updaTetime}
+    </if>
+    <if test="joinDate != null &amp; joinDate != ''">
+      AND JOIN_DATE = #{joinDate}
+    </if>
+    <if test="mobilePhone != null &amp; mobilePhone != ''">
+      AND MOBILE_PHONE like CONCAT('%',#{mobilePhone},'%')
+    </if>
+    <if test="emailAddress != null &amp; emailAddress != ''">
+      AND  EMAIL_ADDRESS like CONCAT('%',#{emailAddress},'%')
+    </if>
+    <if test="cityId != null &amp; cityId != ''">
+      AND  CITY_ID = #{cityId}
+    </if>
+    <if test="proviceId != null &amp; proviceId != ''">
+      AND PROVICE_ID = #{proviceId}
+    </if>
+    <if test="staffType != null &amp; staffType != ''">
+      AND  STAFF_TYPE = #{staffType}
+    </if>
+    <if test="idCardNo != null &amp; idCardNo != ''">
+      AND ID_CARD_NO = #{idCardNo}
+    </if>
+    <if test="channelId != null &amp; channelId != '' &amp; channelId != '00'">
+      AND CHANNEL_ID = #{channelId}
+    </if>
+    <if test="authenRuleId != null &amp; authenRuleId != ''">
+      AND AUTHEN_RULE_ID = #{authenRuleId}
+    </if>
+    <if test="insertTime != null &amp; insertTime != ''">
+      AND INSERT_TIME = #{insertTime}
+    </if>
+    <if test="staffNmShort != null &amp; staffNmShort != ''">
+      AND STAFF_NM_SHORT like CONCAT('%',#{staffNmShort},'%')
+    </if>
+    <if test="prsnChnlTypeCd != null &amp; prsnChnlTypeCd != ''&amp; prsnChnlTypeCd != '00'">
+      AND  PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd}
+    </if>
+    <if test="defaultServiceType != null &amp; defaultServiceType != ''">
+      AND  DEFAULT_SERVICE_TYPE = #{defaultServiceType}
+    </if>
+    <if test="tenantId != null &amp; tenantId != ''">
+      AND  TENANT_ID like CONCAT('%',#{tenantId},'%')
+    </if>
+  </select>
+
+  <!--参数校验-->
+  <select id="getStaffInfoByParams" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    t1.STAFF_ID,
+    t1.MOBILE_PHONE,
+    t1.EMAIL_ADDRESS,
+    t1.ID_CARD_NO
+    FROM t_sam_staff_info t1
+    where t1.STAFF_ID = #{staffId}
+    union
+    select
+    t2.STAFF_ID,
+    t2.MOBILE_PHONE,
+    t2.EMAIL_ADDRESS,
+    t2.ID_CARD_NO
+    FROM t_sam_staff_info t2
+    where t2.EMAIL_ADDRESS = #{emailAddress}
+    union
+    select
+    t3.STAFF_ID,
+    t3.MOBILE_PHONE,
+    t3.EMAIL_ADDRESS,
+    t3.ID_CARD_NO
+    FROM t_sam_staff_info t3
+    where t3.MOBILE_PHONE = #{mobilePhone}
+    union
+    select
+    t4.STAFF_ID,
+    t4.MOBILE_PHONE,
+    t4.EMAIL_ADDRESS,
+    t4.ID_CARD_NO
+    FROM t_sam_staff_info t4
+    where t4.ID_CARD_NO = #{idCardNo}
+  </select>
+
+  <select id="getStaffInfoRest" resultMap="StaffOrgaMap" parameterType="java.util.Map" >
+    select
+    t1.STAFF_ID,
+    t1.STAFF_NAME,
+    t1.DLEVEL_ID,
+    t1.DUTY_ID,
+    t1.SECOND_DUTY,
+    t1.POST_ID,
+    t1.SECOND_POST,
+    t1.UPDA_TETIME,
+    t1.JOIN_DATE,
+    t1.MOBILE_PHONE,
+    t1.EMAIL_ADDRESS,
+    t1.CITY_ID,
+    t1.PROVICE_ID,
+    t1.STAFF_TYPE,
+    t1.ID_CARD_NO,
+    t1.CHANNEL_ID,
+    t1.AUTHEN_RULE_ID,
+    t1.INSERT_TIME,
+    t1.STAFF_NM_SHORT,
+    t1.PRSN_CHNL_TYPE_CD,
+    t1.DEFAULT_SERVICE_TYPE,
+    t1.TENANT_ID,
+    t1.STAFF_STATE,
+    t1.STAFF_ID_STATUS,
+    t2.ORGA_ID,t2.ORGA_NAME,t2.ORGA_TYPE_ID,t2.ORGA_DESC,
+    t3.PLATFORM_ID
+    FROM t_sam_staff_info t1
+    LEFT JOIN t_sam_orga_info t2 ON t1.ORGA_ID=t2.ORGA_ID
+    LEFT JOIN t_sam_platform_rel t3 ON t1.STAFF_ID=t3.STAFF_ID
+    where  t1.STAFF_ID =#{staffId}
+  </select>
+  <select id="qryStaffByOrgaIdRest" resultMap="StaffOrgaMap" parameterType="java.util.Map" >
+    select
+    t1.STAFF_ID,
+    t1.STAFF_NAME,
+    t1.DLEVEL_ID,
+    t1.DUTY_ID,
+    t1.SECOND_DUTY,
+    t1.POST_ID,
+    t1.SECOND_POST,
+    t1.UPDA_TETIME,
+    t1.JOIN_DATE,
+    t1.MOBILE_PHONE,
+    t1.EMAIL_ADDRESS,
+    t1.CITY_ID,
+    t1.PROVICE_ID,
+    t1.STAFF_TYPE,
+    t1.ID_CARD_NO,
+    t1.CHANNEL_ID,
+    t1.AUTHEN_RULE_ID,
+    t1.INSERT_TIME,
+    t1.STAFF_NM_SHORT,
+    t1.PRSN_CHNL_TYPE_CD,
+    t1.DEFAULT_SERVICE_TYPE,
+    t1.TENANT_ID,
+    t1.STAFF_STATE,
+    t1.STAFF_ID_STATUS,
+    t2.ORGA_ID,t2.ORGA_NAME,t2.ORGA_TYPE_ID,t2.ORGA_DESC,
+    t3.PLATFORM_ID
+    FROM t_sam_staff_info t1
+    LEFT JOIN t_sam_orga_info t2 ON t1.ORGA_ID=t2.ORGA_ID
+    LEFT JOIN t_sam_platform_rel t3 ON t1.STAFF_ID=t3.STAFF_ID
+    where  t1.ORGA_ID =#{orgaId}
+    <if test="limit != null and limit != '' " >
+      limit ${start},${limit}
+    </if>
+  </select>
+    <select id="qryStaffByOrgaIdCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+        select count(*) from t_sam_staff_info where
+             ORGA_ID =#{orgaId}
+    </select>
+</mapper>

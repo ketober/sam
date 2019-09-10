@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.sam.dao.TSamServiceSystemMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamServiceSystem" >
+    <result column="SERVICE_ID" property="serviceId" jdbcType="VARCHAR" />
+    <result column="SERVICE_NAME" property="serviceName" jdbcType="VARCHAR" />
+    <result column="SERVICE_DESC" property="serviceDesc" jdbcType="VARCHAR" />
+    <result column="CLIENT_ID" property="clientId" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="BaseServiceMap" type="java.util.Map" >
+    <result column="SERVICE_ID" property="serviceId" jdbcType="VARCHAR" />
+    <result column="SERVICE_NAME" property="serviceName" jdbcType="VARCHAR" />
+    <result column="SERVICE_DESC" property="serviceDesc" jdbcType="VARCHAR" />
+    <result column="CLIENT_ID" property="clientId" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    SERVICE_ID, SERVICE_NAME, SERVICE_DESC, CLIENT_ID, STATE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamServiceSystemExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_service_system
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamServiceSystemExample" >
+    delete from t_sam_service_system
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamServiceSystem" >
+    insert into t_sam_service_system (SERVICE_ID, SERVICE_NAME, SERVICE_DESC, 
+      CLIENT_ID, STATE)
+    values (#{serviceId,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, #{serviceDesc,jdbcType=VARCHAR}, 
+      #{clientId,jdbcType=VARCHAR}, #{state,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamServiceSystem" >
+    insert into t_sam_service_system
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serviceId != null" >
+        SERVICE_ID,
+      </if>
+      <if test="serviceName != null" >
+        SERVICE_NAME,
+      </if>
+      <if test="serviceDesc != null" >
+        SERVICE_DESC,
+      </if>
+      <if test="clientId != null" >
+        CLIENT_ID,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null" >
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDesc != null" >
+        #{serviceDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="clientId != null" >
+        #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamServiceSystemExample" resultType="java.lang.Integer" >
+    select count(*) from t_sam_service_system
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_sam_service_system
+    <set >
+      <if test="record.serviceId != null" >
+        SERVICE_ID = #{record.serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceName != null" >
+        SERVICE_NAME = #{record.serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceDesc != null" >
+        SERVICE_DESC = #{record.serviceDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.clientId != null" >
+        CLIENT_ID = #{record.clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        STATE = #{record.state,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_sam_service_system
+    set SERVICE_ID = #{record.serviceId,jdbcType=VARCHAR},
+      SERVICE_NAME = #{record.serviceName,jdbcType=VARCHAR},
+      SERVICE_DESC = #{record.serviceDesc,jdbcType=VARCHAR},
+      CLIENT_ID = #{record.clientId,jdbcType=VARCHAR},
+      STATE = #{record.state,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <select id="selectServiceSystem" resultMap="BaseServiceMap" parameterType="java.util.Map" >
+    select * from t_sam_service_system t1 where 1=1
+    <if test="serviceId != null &amp; serviceId != ''">
+      AND t1.SERVICE_ID like CONCAT('%',#{serviceId},'%')
+    </if>
+    <if test="serviceName != null &amp; serviceName != ''">
+      AND t1.SERVICE_NAME like CONCAT('%',#{serviceName},'%')
+    </if>
+    <if test="clientId != null &amp; clientId != ''">
+      AND t1.CLIENT_ID like CONCAT('%',#{clientId},'%')
+    </if>
+    <if test="state != null &amp; state != ''&amp; state != '00'">
+      AND  t1.STATE = #{state}
+    </if>
+    <if test="serviceDesc != null &amp; serviceDesc != ''">
+      AND  t1.SERVICE_DESC like CONCAT('%',#{serviceDesc},'%')
+    </if>
+    <if test="limit != null and limit != '' " >
+      limit ${start},${limit}
+    </if>
+  </select>
+  <select id="selectServiceSystem2" resultMap="BaseServiceMap" parameterType="java.util.Map" >
+    select * from t_sam_service_system t1 where 1=1
+    <if test="serviceId != null &amp; serviceId != ''">
+      AND t1.SERVICE_ID =#{serviceId}
+    </if>
+    <if test="serviceName != null &amp; serviceName != ''">
+      AND t1.SERVICE_NAME =#{serviceName}
+    </if>
+  </select>
+  <select id="selectServiceSystemCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(*) from t_sam_service_system t1 where 1=1
+    <if test="serviceId != null &amp; serviceId != ''">
+      AND t1.SERVICE_ID like CONCAT('%',#{serviceId},'%')
+    </if>
+    <if test="serviceName != null &amp; serviceName != ''">
+      AND t1.SERVICE_NAME like CONCAT('%',#{serviceName},'%')
+    </if>
+    <if test="clientId != null &amp; clientId != ''">
+      AND t1.CLIENT_ID like CONCAT('%',#{clientId},'%')
+    </if>
+    <if test="state != null &amp; state != '' &amp; state != '00'">
+      AND  t1.STATE = #{state}
+    </if>
+    <if test="serviceDesc != null &amp; serviceDesc != ''">
+      AND  t1.SERVICE_DESC like CONCAT('%',#{serviceDesc},'%')
+    </if>
+  </select>
+
+  <update id="updateServiceSystem" parameterType="java.util.Map" >
+    update t_sam_service_system
+    <set >
+      <if test="serviceName != null" >
+        SERVICE_NAME = #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDesc != null" >
+        SERVICE_DESC = #{serviceDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="clientId != null" >
+        CLIENT_ID = #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=CHAR},
+      </if>
+    </set>
+    where SERVICE_ID = #{serviceId,jdbcType=VARCHAR}
+  </update>
+  <insert id="insertServiceSystem" parameterType="java.util.Map"  >
+    insert into t_sam_service_system
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serviceId != null" >
+        SERVICE_ID,
+      </if>
+      <if test="serviceName != null" >
+        SERVICE_NAME,
+      </if>
+      <if test="serviceDesc != null" >
+        SERVICE_DESC,
+      </if>
+      <if test="clientId != null" >
+        CLIENT_ID,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceName != null" >
+        #{serviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDesc != null" >
+        #{serviceDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="clientId != null" >
+        #{clientId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteServiceSystem" parameterType="java.lang.String" >
+    delete from t_sam_service_system
+    where SERVICE_ID = #{serviceId,jdbcType=VARCHAR}
+  </delete>
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.sam.dao.TSamGroupTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamGroupType" >
+    <id column="GROUP_TYPE_ID" property="groupTypeId" jdbcType="VARCHAR" />
+    <result column="GROUP_TYPE_NAME" property="groupTypeName" jdbcType="VARCHAR" />
+    <result column="GROUP_TYPE_DESC" property="groupTypeDesc" jdbcType="VARCHAR" />
+    <result column="SYS_NO" property="sysNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    GROUP_TYPE_ID, GROUP_TYPE_NAME, GROUP_TYPE_DESC, SYS_NO
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamGroupTypeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_group_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sam_group_type
+    where GROUP_TYPE_ID = #{groupTypeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_sam_group_type
+    where GROUP_TYPE_ID = #{groupTypeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamGroupTypeExample" >
+    delete from t_sam_group_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamGroupType" >
+    insert into t_sam_group_type (GROUP_TYPE_ID, GROUP_TYPE_NAME, GROUP_TYPE_DESC, 
+      SYS_NO)
+    values (#{groupTypeId,jdbcType=VARCHAR}, #{groupTypeName,jdbcType=VARCHAR}, #{groupTypeDesc,jdbcType=VARCHAR}, 
+      #{sysNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamGroupType" >
+    insert into t_sam_group_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="groupTypeId != null" >
+        GROUP_TYPE_ID,
+      </if>
+      <if test="groupTypeName != null" >
+        GROUP_TYPE_NAME,
+      </if>
+      <if test="groupTypeDesc != null" >
+        GROUP_TYPE_DESC,
+      </if>
+      <if test="sysNo != null" >
+        SYS_NO,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="groupTypeId != null" >
+        #{groupTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="groupTypeName != null" >
+        #{groupTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupTypeDesc != null" >
+        #{groupTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sysNo != null" >
+        #{sysNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamGroupTypeExample" resultType="java.lang.Integer" >
+    select count(*) from t_sam_group_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_sam_group_type
+    <set >
+      <if test="record.groupTypeId != null" >
+        GROUP_TYPE_ID = #{record.groupTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupTypeName != null" >
+        GROUP_TYPE_NAME = #{record.groupTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groupTypeDesc != null" >
+        GROUP_TYPE_DESC = #{record.groupTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sysNo != null" >
+        SYS_NO = #{record.sysNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_sam_group_type
+    set GROUP_TYPE_ID = #{record.groupTypeId,jdbcType=VARCHAR},
+      GROUP_TYPE_NAME = #{record.groupTypeName,jdbcType=VARCHAR},
+      GROUP_TYPE_DESC = #{record.groupTypeDesc,jdbcType=VARCHAR},
+      SYS_NO = #{record.sysNo,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamGroupType" >
+    update t_sam_group_type
+    <set >
+      <if test="groupTypeName != null" >
+        GROUP_TYPE_NAME = #{groupTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupTypeDesc != null" >
+        GROUP_TYPE_DESC = #{groupTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sysNo != null" >
+        SYS_NO = #{sysNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where GROUP_TYPE_ID = #{groupTypeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamGroupType" >
+    update t_sam_group_type
+    set GROUP_TYPE_NAME = #{groupTypeName,jdbcType=VARCHAR},
+      GROUP_TYPE_DESC = #{groupTypeDesc,jdbcType=VARCHAR},
+      SYS_NO = #{sysNo,jdbcType=VARCHAR}
+    where GROUP_TYPE_ID = #{groupTypeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

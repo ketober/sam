@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>信息列表</title>
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/cmcui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/iconfont/iconfont.css"/>
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body id="layout_content">
+<div data-options="region:'center'" style="overflow: auto;">
+    <div id="page_content" data-options="region:'center'">
+    </div>
+</div>
+<div data-options="region:'north'" id="pop-window" style="display:none">
+    <div id="win_content" style="overflow:auto">
+    </div>
+</div>
+<div data-options="region:'north'" id="service-window" style="display:none">
+    <div id="service_content" style="overflow:auto">
+    </div>
+</div>
+</body>
+
+<script type="text/javascript" src="../js/path.src.js"></script>
+<script type="text/javascript" src="../../common/require/require.min.js" data-main="../js/service/safeQuery"></script>
+</html>

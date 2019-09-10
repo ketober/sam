@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.sam.dao.TSamPermitMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamPermit" >
+    <id column="PERMIT_ID" property="permitId" jdbcType="VARCHAR" />
+    <result column="PERMIT_TYPE" property="permitType" jdbcType="CHAR" />
+    <result column="ENTITY_ID" property="entityId" jdbcType="VARCHAR" />
+    <result column="AUTH_OBJ_ID" property="authObjId" jdbcType="VARCHAR" />
+    <result column="MODULE_ID" property="moduleId" jdbcType="VARCHAR" />
+    <result column="APPLICATIONID" property="applicationid" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="PermitSaffMap" type="java.util.Map"  >
+    <id column="PERMIT_ID" property="permitId" jdbcType="VARCHAR" />
+    <result column="PERMIT_TYPE" property="permitType" jdbcType="CHAR" />
+    <result column="ENTITY_ID" property="entityId" jdbcType="VARCHAR" />
+    <result column="AUTH_OBJ_ID" property="authObjId" jdbcType="VARCHAR" />
+    <result column="MODULE_ID" property="moduleId" jdbcType="VARCHAR" />
+    <result column="APPLICATIONID" property="applicationid" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="STAFF_NAME" property="staffName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="PermitRoleMap" type="java.util.Map"  >
+    <id column="PERMIT_ID" property="permitId" jdbcType="VARCHAR" />
+    <result column="PERMIT_TYPE" property="permitType" jdbcType="CHAR" />
+    <result column="ENTITY_ID" property="entityId" jdbcType="VARCHAR" />
+    <result column="AUTH_OBJ_ID" property="authObjId" jdbcType="VARCHAR" />
+    <result column="MODULE_ID" property="moduleId" jdbcType="VARCHAR" />
+    <result column="APPLICATIONID" property="applicationid" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+    <result column="ROLE_CODE" property="roleCode" jdbcType="VARCHAR" />
+    <result column="SUPER_CODE" property="superCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="PermitAuthMap" type="java.util.Map"  >
+    <id column="PERMIT_ID" property="permitId" jdbcType="VARCHAR" />
+    <result column="PERMIT_TYPE" property="permitType" jdbcType="CHAR" />
+    <result column="ENTITY_ID" property="entityId" jdbcType="VARCHAR" />
+    <result column="AUTH_OBJ_ID" property="authObjId" jdbcType="VARCHAR" />
+    <result column="MODULE_ID" property="moduleId" jdbcType="VARCHAR" />
+    <result column="APPLICATIONID" property="applicationid" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="ELEMENT_NAME" property="elementName" jdbcType="VARCHAR" />
+    <result column="ELEMENT_CODE" property="elementCode" jdbcType="VARCHAR" />
+    <result column="SUPER_ELEMENT_CODE" property="superElementCode" jdbcType="VARCHAR" />
+    <result column="MENU_FLAG" property="menuFlag" jdbcType="VARCHAR" />
+    <result column="ELEMENT_URL" property="elementUrl" jdbcType="VARCHAR" />
+      <result column="DISPLAY_NO" property="displayNo" jdbcType="SMALLINT" />
+      <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    PERMIT_ID, PERMIT_TYPE, ENTITY_ID, AUTH_OBJ_ID, MODULE_ID, APPLICATIONID, TENANT_ID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamPermitExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_permit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sam_permit
+    where PERMIT_ID = #{permitId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_sam_permit
+    where PERMIT_ID = #{permitId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamPermitExample" >
+    delete from t_sam_permit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamPermit" >
+    insert into t_sam_permit (PERMIT_ID, PERMIT_TYPE, ENTITY_ID, 
+      AUTH_OBJ_ID, MODULE_ID, APPLICATIONID, 
+      TENANT_ID)
+    values (#{permitId,jdbcType=VARCHAR}, #{permitType,jdbcType=CHAR}, #{entityId,jdbcType=VARCHAR}, 
+      #{authObjId,jdbcType=VARCHAR}, #{moduleId,jdbcType=VARCHAR}, #{applicationid,jdbcType=VARCHAR}, 
+      #{tenantId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamPermit" >
+    insert into t_sam_permit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="permitId != null" >
+        PERMIT_ID,
+      </if>
+      <if test="permitType != null" >
+        PERMIT_TYPE,
+      </if>
+      <if test="entityId != null" >
+        ENTITY_ID,
+      </if>
+      <if test="authObjId != null" >
+        AUTH_OBJ_ID,
+      </if>
+      <if test="moduleId != null" >
+        MODULE_ID,
+      </if>
+      <if test="applicationid != null" >
+        APPLICATIONID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="permitId != null" >
+        #{permitId,jdbcType=VARCHAR},
+      </if>
+      <if test="permitType != null" >
+        #{permitType,jdbcType=CHAR},
+      </if>
+      <if test="entityId != null" >
+        #{entityId,jdbcType=VARCHAR},
+      </if>
+      <if test="authObjId != null" >
+        #{authObjId,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleId != null" >
+        #{moduleId,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationid != null" >
+        #{applicationid,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamPermitExample" resultType="java.lang.Integer" >
+    select count(*) from t_sam_permit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_sam_permit
+    <set >
+      <if test="record.permitId != null" >
+        PERMIT_ID = #{record.permitId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.permitType != null" >
+        PERMIT_TYPE = #{record.permitType,jdbcType=CHAR},
+      </if>
+      <if test="record.entityId != null" >
+        ENTITY_ID = #{record.entityId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authObjId != null" >
+        AUTH_OBJ_ID = #{record.authObjId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.moduleId != null" >
+        MODULE_ID = #{record.moduleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicationid != null" >
+        APPLICATIONID = #{record.applicationid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_sam_permit
+    set PERMIT_ID = #{record.permitId,jdbcType=VARCHAR},
+      PERMIT_TYPE = #{record.permitType,jdbcType=CHAR},
+      ENTITY_ID = #{record.entityId,jdbcType=VARCHAR},
+      AUTH_OBJ_ID = #{record.authObjId,jdbcType=VARCHAR},
+      MODULE_ID = #{record.moduleId,jdbcType=VARCHAR},
+      APPLICATIONID = #{record.applicationid,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamPermit" >
+    update t_sam_permit
+    <set >
+      <if test="permitType != null" >
+        PERMIT_TYPE = #{permitType,jdbcType=CHAR},
+      </if>
+      <if test="entityId != null" >
+        ENTITY_ID = #{entityId,jdbcType=VARCHAR},
+      </if>
+      <if test="authObjId != null" >
+        AUTH_OBJ_ID = #{authObjId,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleId != null" >
+        MODULE_ID = #{moduleId,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationid != null" >
+        APPLICATIONID = #{applicationid,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PERMIT_ID = #{permitId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamPermit" >
+    update t_sam_permit
+    set PERMIT_TYPE = #{permitType,jdbcType=CHAR},
+      ENTITY_ID = #{entityId,jdbcType=VARCHAR},
+      AUTH_OBJ_ID = #{authObjId,jdbcType=VARCHAR},
+      MODULE_ID = #{moduleId,jdbcType=VARCHAR},
+      APPLICATIONID = #{applicationid,jdbcType=VARCHAR},
+      TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+    where PERMIT_ID = #{permitId,jdbcType=VARCHAR}
+  </update>
+  <delete id="deleteEntityAuth" parameterType="java.util.Map">
+    DELETE FROM t_sam_permit WHERE ENTITY_ID=#{entityId}  and PERMIT_TYPE=#{permitType}
+  </delete>
+  <delete id="deleteByEntityId" parameterType="java.util.Map">
+    DELETE FROM t_sam_permit WHERE ENTITY_ID=#{staffId}
+  </delete>
+    <delete id="deleteEntityAuth1" parameterType="java.util.Map">
+    DELETE FROM t_sam_permit WHERE ENTITY_ID=#{entityId} and
+    MODULE_ID=#{moduleId} and PERMIT_TYPE=#{permitType}
+  </delete>
+  <delete id="deleteAuthEntity" parameterType="java.util.Map">
+    DELETE FROM t_sam_permit WHERE AUTH_OBJ_ID=#{authId} and
+    MODULE_ID=#{moduleId} and PERMIT_TYPE=#{permitType} and ENTITY_ID=#{entityId}
+  </delete>
+    <select id="isExistAuthEntity"  parameterType="java.util.Map"  resultType="java.lang.Integer" >
+        select count(*) from t_sam_permit where
+        AUTH_OBJ_ID=#{authId} and
+    MODULE_ID=#{moduleId} and PERMIT_TYPE=#{permitType} and ENTITY_ID=#{entityId}
+    </select>
+
+  <insert id="insertEntityAuth" parameterType="java.util.Map">
+    INSERT INTO
+    t_sam_permit(PERMIT_ID,PERMIT_TYPE,ENTITY_ID,AUTH_OBJ_ID,MODULE_ID,TENANT_ID)
+    VALUES(#{permitId},#{permitType},#{entityId},#{authId},#{moduleId},#{tenantId})
+  </insert>
+
+
+    <insert id="insertEntityAuthBatch" parameterType="java.util.List">
+        INSERT INTO
+        t_sam_permit(PERMIT_ID,PERMIT_TYPE,ENTITY_ID,AUTH_OBJ_ID,MODULE_ID,TENANT_ID) VALUES
+        <foreach collection="tSamPermitList" item="TSamPermit" separator=",">
+            (#{TSamPermit.permitId},#{TSamPermit.permitType},#{TSamPermit.entityId},#{TSamPermit.authObjId},#{TSamPermit.moduleId},#{TSamPermit.tenantId})
+        </foreach>
+    </insert>
+
+    <select id="selectStaffByAuthId" resultMap="PermitSaffMap" parameterType="java.util.Map" >
+        select m.PERMIT_ID,m.PERMIT_TYPE,m.ENTITY_ID,m.AUTH_OBJ_ID,m.MODULE_ID,m.TENANT_ID,n.STAFF_NAME
+        from t_sam_permit m
+        left join t_sam_staff_info n
+        on m.ENTITY_ID = n.STAFF_ID
+        where 1=1
+        <if test="entityId != null &amp; entityId != ''">
+            AND m.ENTITY_ID = #{entityId}
+        </if>
+        <if test="authId != null &amp; authId != ''">
+            AND m.AUTH_OBJ_ID = #{authId}
+        </if>
+        <if test="permitType != null &amp; permitType != ''">
+            AND m.PERMIT_TYPE = #{permitType}
+        </if>
+        <if test="moduleId != null &amp; moduleId != ''">
+            AND m.MODULE_ID = #{moduleId}
+        </if>
+        <if test="tenantId != null &amp; tenantId != ''">
+            AND m.TENANT_ID = #{tenantId}
+        </if>
+      <if test="limit != null and limit != '' " >
+        limit ${start},${limit}
+      </if>
+    </select>
+
+    <select id="selectRoleByAuthId" resultMap="PermitRoleMap" parameterType="java.util.Map" >
+        select m.PERMIT_ID,m.PERMIT_TYPE,m.ENTITY_ID,m.AUTH_OBJ_ID,m.MODULE_ID,m.TENANT_ID,
+        n.ROLE_NAME,
+        n.ROLE_CODE,
+        n.SUPER_CODE
+        from t_sam_permit m
+        left join t_sam_role n
+        on m.ENTITY_ID = n.ROLE_ID
+        where 1=1
+        <if test="entityId != null &amp; entityId != ''">
+            AND m.ENTITY_ID = #{entityId}
+        </if>
+        <if test="authId != null &amp; authId != ''">
+            AND m.AUTH_OBJ_ID = #{authId}
+        </if>
+        <if test="permitType != null &amp; permitType != ''">
+            AND m.PERMIT_TYPE = #{permitType}
+        </if>
+        <if test="moduleId != null &amp; moduleId != ''">
+            AND m.MODULE_ID = #{moduleId}
+        </if>
+        <if test="tenantId != null &amp; tenantId != ''">
+            AND m.TENANT_ID = #{tenantId}
+        </if>
+      <if test="limit != null and limit != '' " >
+        limit ${start},${limit}
+      </if>
+    </select>
+
+    <select id="selectAuthByEntityId" resultMap="PermitAuthMap" parameterType="java.util.Map" >
+        select m.PERMIT_ID,m.PERMIT_TYPE,m.ENTITY_ID,m.AUTH_OBJ_ID,m.MODULE_ID,m.TENANT_ID,
+        n.ELEMENT_NAME,
+        n.ELEMENT_CODE,
+        n.SUPER_ELEMENT_CODE,
+        n.MENU_FLAG,
+        n.ELEMENT_URL,
+        p.DISPLAY_NO,
+        p.PARENT_ID
+        from t_sam_permit m
+        left join t_sam_auth_element n
+        on m.AUTH_OBJ_ID = n.ELEMENT_ID
+        left join t_sam_menu p
+        on m.AUTH_OBJ_ID = p.MENU_ID
+        where 1=1
+        <if test="entityId != null &amp; entityId != ''">
+            AND m.ENTITY_ID = #{entityId}
+        </if>
+        <if test="authId != null &amp; authId != ''">
+            AND m.AUTH_OBJ_ID = #{authId}
+        </if>
+        <if test="permitType != null &amp; permitType != ''">
+            AND m.PERMIT_TYPE = #{permitType}
+        </if>
+        <if test="moduleId != null &amp; moduleId != ''">
+            AND m.MODULE_ID = #{moduleId}
+        </if>
+        <if test="tenantId != null &amp; tenantId != ''">
+            AND m.TENANT_ID = #{tenantId}
+        </if>
+        <if test="keyWords != null &amp; keyWords != ''">
+            AND p.MENU_DESCRIPTION LIKE   CONCAT('%',#{keyWords},'%')
+        </if>
+        <if test="level != null &amp; level != ''">
+            AND p.DISPLAY_NO = #{level}
+        </if>
+        ORDER BY
+        case when p.DISPLAY_NO=1 then 0
+        when p.DISPLAY_NO=2 then 1
+        when p.DISPLAY_NO=3 then 2
+        when p.DISPLAY_NO=4 then 3
+        else 4 end,
+        n.ELEMENT_CODE ASC
+    </select>
+
+
+    <select id="selectAuthByRoleIds" resultMap="PermitAuthMap" parameterType="java.util.Map" >
+        select m.PERMIT_ID,m.PERMIT_TYPE,m.ENTITY_ID,m.AUTH_OBJ_ID,m.MODULE_ID,m.TENANT_ID,
+        n.ELEMENT_NAME,
+        n.ELEMENT_CODE,
+        n.SUPER_ELEMENT_CODE,
+        n.MENU_FLAG,
+        n.ELEMENT_URL
+        from t_sam_permit m
+        left join t_sam_auth_element n
+        on m.AUTH_OBJ_ID = n.ELEMENT_ID
+        where 1=1
+        <if test="roleIds != null &amp; entityId != ''">
+          AND m.ENTITY_ID in (
+          <foreach collection="roleIds" index="index" item="roleId" separator=",">
+            #{roleId}
+          </foreach>
+          )
+        </if>
+        <if test="permitType != null &amp; permitType != ''">
+            AND m.PERMIT_TYPE = #{permitType}
+        </if>
+    </select>
+    <!--不分实体类型批量删除-->
+    <delete id="deleteByAuthIds" parameterType="java.util.Map">
+    DELETE FROM t_sam_permit
+        WHERE
+        AUTH_OBJ_ID in (
+        <foreach collection="authIds" index="index" item="authId" separator=",">
+            #{authId}
+        </foreach>
+        )
+  </delete>
+
+    <select id="selectPerMitByAuthObjId"  parameterType="java.util.Map"  resultType="java.lang.Integer" >
+        select count(*) from t_sam_permit where AUTH_OBJ_ID= #{authObjId,jdbcType=VARCHAR} and PERMIT_TYPE = #{permitType,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

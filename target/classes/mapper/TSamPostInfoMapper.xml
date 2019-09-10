@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.sam.dao.TSamPostInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamPostInfo" >
+    <id column="POST_ID" property="postId" jdbcType="VARCHAR" />
+    <result column="POST_NAME" property="postName" jdbcType="VARCHAR" />
+    <result column="POST_CODE" property="postCode" jdbcType="VARCHAR" />
+    <result column="SUPER_POST_CODE" property="superPostCode" jdbcType="VARCHAR" />
+    <result column="POST_STATE" property="postState" jdbcType="VARCHAR" />
+    <result column="POST_DESC" property="postDesc" jdbcType="VARCHAR" />
+    <result column="POST_DESC_ID" property="postDescId" jdbcType="VARCHAR" />
+    <result column="DUTY_LEVEL_ID" property="dutyLevelId" jdbcType="VARCHAR" />
+    <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    POST_ID, POST_NAME, POST_CODE, SUPER_POST_CODE, POST_STATE, POST_DESC, POST_DESC_ID, 
+    DUTY_LEVEL_ID, TENANT_ID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamPostInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_post_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sam_post_info
+    where POST_ID = #{postId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_sam_post_info
+    where POST_ID = #{postId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamPostInfoExample" >
+    delete from t_sam_post_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamPostInfo" >
+    insert into t_sam_post_info (POST_ID, POST_NAME, POST_CODE, 
+      SUPER_POST_CODE, POST_STATE, POST_DESC, 
+      POST_DESC_ID, DUTY_LEVEL_ID, TENANT_ID
+      )
+    values (#{postId,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, 
+      #{superPostCode,jdbcType=VARCHAR}, #{postState,jdbcType=VARCHAR}, #{postDesc,jdbcType=VARCHAR}, 
+      #{postDescId,jdbcType=VARCHAR}, #{dutyLevelId,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamPostInfo" >
+    insert into t_sam_post_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        POST_ID,
+      </if>
+      <if test="postName != null" >
+        POST_NAME,
+      </if>
+      <if test="postCode != null" >
+        POST_CODE,
+      </if>
+      <if test="superPostCode != null" >
+        SUPER_POST_CODE,
+      </if>
+      <if test="postState != null" >
+        POST_STATE,
+      </if>
+      <if test="postDesc != null" >
+        POST_DESC,
+      </if>
+      <if test="postDescId != null" >
+        POST_DESC_ID,
+      </if>
+      <if test="dutyLevelId != null" >
+        DUTY_LEVEL_ID,
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="postId != null" >
+        #{postId,jdbcType=VARCHAR},
+      </if>
+      <if test="postName != null" >
+        #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="superPostCode != null" >
+        #{superPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="postState != null" >
+        #{postState,jdbcType=VARCHAR},
+      </if>
+      <if test="postDesc != null" >
+        #{postDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="postDescId != null" >
+        #{postDescId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyLevelId != null" >
+        #{dutyLevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamPostInfoExample" resultType="java.lang.Integer" >
+    select count(*) from t_sam_post_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_sam_post_info
+    <set >
+      <if test="record.postId != null" >
+        POST_ID = #{record.postId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postName != null" >
+        POST_NAME = #{record.postName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postCode != null" >
+        POST_CODE = #{record.postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.superPostCode != null" >
+        SUPER_POST_CODE = #{record.superPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postState != null" >
+        POST_STATE = #{record.postState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postDesc != null" >
+        POST_DESC = #{record.postDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postDescId != null" >
+        POST_DESC_ID = #{record.postDescId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyLevelId != null" >
+        DUTY_LEVEL_ID = #{record.dutyLevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null" >
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_sam_post_info
+    set POST_ID = #{record.postId,jdbcType=VARCHAR},
+      POST_NAME = #{record.postName,jdbcType=VARCHAR},
+      POST_CODE = #{record.postCode,jdbcType=VARCHAR},
+      SUPER_POST_CODE = #{record.superPostCode,jdbcType=VARCHAR},
+      POST_STATE = #{record.postState,jdbcType=VARCHAR},
+      POST_DESC = #{record.postDesc,jdbcType=VARCHAR},
+      POST_DESC_ID = #{record.postDescId,jdbcType=VARCHAR},
+      DUTY_LEVEL_ID = #{record.dutyLevelId,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamPostInfo" >
+    update t_sam_post_info
+    <set >
+      <if test="postName != null" >
+        POST_NAME = #{postName,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        POST_CODE = #{postCode,jdbcType=VARCHAR},
+      </if>
+      <if test="superPostCode != null" >
+        SUPER_POST_CODE = #{superPostCode,jdbcType=VARCHAR},
+      </if>
+      <if test="postState != null" >
+        POST_STATE = #{postState,jdbcType=VARCHAR},
+      </if>
+      <if test="postDesc != null" >
+        POST_DESC = #{postDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="postDescId != null" >
+        POST_DESC_ID = #{postDescId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyLevelId != null" >
+        DUTY_LEVEL_ID = #{dutyLevelId,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null" >
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where POST_ID = #{postId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamPostInfo" >
+    update t_sam_post_info
+    set POST_NAME = #{postName,jdbcType=VARCHAR},
+      POST_CODE = #{postCode,jdbcType=VARCHAR},
+      SUPER_POST_CODE = #{superPostCode,jdbcType=VARCHAR},
+      POST_STATE = #{postState,jdbcType=VARCHAR},
+      POST_DESC = #{postDesc,jdbcType=VARCHAR},
+      POST_DESC_ID = #{postDescId,jdbcType=VARCHAR},
+      DUTY_LEVEL_ID = #{dutyLevelId,jdbcType=VARCHAR},
+      TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+    where POST_ID = #{postId,jdbcType=VARCHAR}
+  </update>
+</mapper>

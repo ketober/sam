@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ai.sam.dao.TSamRoleMutexMapper" >
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamRoleMutex" >
+    <id column="MUTEX_ID" property="mutexId" jdbcType="VARCHAR" />
+    <result column="ROLEID" property="roleid" jdbcType="VARCHAR" />
+    <result column="MUTEX_ROLE_ID" property="mutexRoleId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    MUTEX_ID, ROLEID, MUTEX_ROLE_ID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamRoleMutexExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_role_mutex
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sam_role_mutex
+    where MUTEX_ID = #{mutexId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_sam_role_mutex
+    where MUTEX_ID = #{mutexId,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByRoleId" parameterType="java.lang.String" >
+    delete from t_sam_role_mutex
+    where ROLEID = #{roleId,jdbcType=VARCHAR}
+  </delete>
+
+  <select id="selectStaffCountByRoleId" parameterType="java.lang.String"  resultType="java.lang.Integer">
+    select count(*) from t_sam_role_mutex
+    where ROLEID = #{roleId,jdbcType=VARCHAR}
+  </select>
+
+
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamRoleMutexExample" >
+    delete from t_sam_role_mutex
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamRoleMutex" >
+    insert into t_sam_role_mutex (MUTEX_ID, ROLEID, MUTEX_ROLE_ID
+      )
+    values (#{mutexId,jdbcType=VARCHAR}, #{roleid,jdbcType=VARCHAR}, #{mutexRoleId,jdbcType=VARCHAR}
+      )
+  </insert>
+
+
+
+
+  <insert id="addRoleMutexBatch"  parameterType="java.util.List">
+    insert into t_sam_role_mutex(MUTEX_ID,ROLEID,MUTEX_ROLE_ID) VALUES
+    <foreach collection="tSamRoleMutexList" item="TSamRoleMutex" separator=",">
+      (#{TSamRoleMutex.mutexId},#{TSamRoleMutex.roleid},#{TSamRoleMutex.mutexRoleId})
+    </foreach>
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamRoleMutex" >
+    insert into t_sam_role_mutex
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mutexId != null" >
+        MUTEX_ID,
+      </if>
+      <if test="roleid != null" >
+        ROLEID,
+      </if>
+      <if test="mutexRoleId != null" >
+        MUTEX_ROLE_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mutexId != null" >
+        #{mutexId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="mutexRoleId != null" >
+        #{mutexRoleId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamRoleMutexExample" resultType="java.lang.Integer" >
+    select count(*) from t_sam_role_mutex
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_sam_role_mutex
+    <set >
+      <if test="record.mutexId != null" >
+        MUTEX_ID = #{record.mutexId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleid != null" >
+        ROLEID = #{record.roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mutexRoleId != null" >
+        MUTEX_ROLE_ID = #{record.mutexRoleId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_sam_role_mutex
+    set MUTEX_ID = #{record.mutexId,jdbcType=VARCHAR},
+      ROLEID = #{record.roleid,jdbcType=VARCHAR},
+      MUTEX_ROLE_ID = #{record.mutexRoleId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamRoleMutex" >
+    update t_sam_role_mutex
+    <set >
+      <if test="roleid != null" >
+        ROLEID = #{roleid,jdbcType=VARCHAR},
+      </if>
+      <if test="mutexRoleId != null" >
+        MUTEX_ROLE_ID = #{mutexRoleId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where MUTEX_ID = #{mutexId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamRoleMutex" >
+    update t_sam_role_mutex
+    set ROLEID = #{roleid,jdbcType=VARCHAR},
+      MUTEX_ROLE_ID = #{mutexRoleId,jdbcType=VARCHAR}
+    where MUTEX_ID = #{mutexId,jdbcType=VARCHAR}
+  </update>
+  <select id="selecMutexByRoleId"  resultType="java.lang.String"  parameterType="java.util.Map" >
+     select MUTEX_ROLE_ID
+    from t_sam_role_mutex
+    where ROLEID = #{roleId,jdbcType=VARCHAR}
+   UNION all
+    select ROLEID    from t_sam_role_mutex
+    where MUTEX_ROLE_ID=#{roleId,jdbcType=VARCHAR}
+  </select>
+
+
+
+  <select id="selecMutexByRoleIdS" resultMap="BaseResultMap"  parameterType="java.lang.String" >
+    select * from t_sam_role_mutex where ROLEID = #{roleId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selecMutexByMutexRoleId" resultMap="BaseResultMap"  parameterType="java.lang.String" >
+    select * from t_sam_role_mutex where MUTEX_ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </select>
+
+
+</mapper>

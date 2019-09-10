@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>菜单项维护</title>
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/cmcui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/iconfont/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="../../common/ztree/css/cmcStyle/tree1.css"/>
+    <link href="../css/style.css" rel="stylesheet">
+</head>
+<body id="layout_content" style="height: 650px">
+<div data-options="region:'west',split:true,title:'菜单项'" style="width: 230px; height:600px;overflow:auto" class="panel-body layout-body">
+    <input  type='text' id="searchMenu" name='searchMenu'  class="easyui-textbox" placeholder="请输入菜单关键词" style='width:58%;height:30px;margin-left:4%;margin-top:2.5%'/>
+    <a id='search'  href='javascript:void(0)'  class='btn btn-secondary radius mt-l-20' style="margin-top:2.5%">搜索</a>
+    <div>
+        <ul id="menuTree" class="ztree1"></ul>
+    </div>
+</div>
+<div data-options="region:'center'" style="height: 600px">
+    <div id="page_content" data-options="region:'center'">
+    </div>
+</div>
+<div data-options="region:'north'" id="pop-window" style="display:none">
+    <div id="win_content" style="overflow:auto">
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../js/path.src.js"></script>
+<script type="text/javascript" src="../../common/require/require.min.js" data-main="../js/service/menu"></script>
+</html>

@@ -1,0 +1,17 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.ai.sam.common.ClusterConfigProperties",
+      "name": "spring.redis.cluster",
+      "type": "com.ai.sam.common.ClusterConfigProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.ai.sam.common.ClusterConfigProperties",
+      "name": "spring.redis.cluster.nodes",
+      "type": "java.util.List<java.lang.String>"
+    }
+  ]
+}

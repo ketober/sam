@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/cmcui.css">
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/demo.css">
+<link rel="stylesheet" type="text/css" href="../../common/ztree/css/cmcStyle/tree1.css"/>
+<link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/iconfont/iconfont.css">
+<script type="text/javascript" src="../../common/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../../common/ztree/js/jquery.ztree.all.js"></script>
+<script type="text/javascript" src="../../common/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../common/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../common/easyui/plugins/jquery.messager.js"></script>
+<script type="text/javascript" src="../../sam/js/ajaxUtilsTemp.js"></script>
+<script type="text/javascript" src="../../common/layer/layer.js"></script>
+
+<body>
+    <div class="easyui-layout" data-options="fit:true,border:false"style="overflow-y:scroll;">
+        <div id="tt" class="easyui-tabs" >
+            <div title="修改角色" >
+                <div class='panel-search'style="height: 300px;">
+                    <form id='basicData' method='POST' class='form form-horizontal'>
+                        <div class="row cl">
+                            <label class="form-label col-4">角色名称：</label>
+                            <div class="formControls col-6">
+                                <input type="hidden" class="roleId" style="height:30px" />
+                                <input type="hidden" class="roleCode" style="height:30px" />
+                                <input type="hidden" class="superCode" style="height:30px" />
+                                <input type="text" class="easyui-textbox roleName" style="height:30px" />
+                            </div>
+                            <div class="formControls col-2" style="padding-top: 10px;">
+                                <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-4">角色描述：</label>
+                            <div class="formControls col-6">
+                                <input class="easyui-textbox description" data-options="multiline:true"  style="height:100px;"></input>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+
+                <div class="col" style="height: 80px">
+                    <div  style="text-align:center;">
+                        <a href="javascript:void(0)"  onclick="dynameicRoleOperation()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                            <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>
+                        <a href="javascript:void(0)" onclick="resultForm()"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                            <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div title="分配人员权限" data-options="closable:false" style="overflow:auto;padding:20px;height: 1400px;">
+                <div  class="easyui-layout" style="width:100%;">
+                <div class="container">
+                    <div class="align-items-start">
+                        <!--<div class="col" style="height: 80px">-->
+                            <!--<div class="panel-search" style="height: 40px;">-->
+                                <!--<div class="col" style="float:left;">-->
+                                    <!--人员名称：-->
+                                    <!--<input class="easyui-textbox" data-options="prompt:'输入关键字查询'" style="width:400px;height:30px" id="searchStaffName" />-->
+                                <!--</div>-->
+
+                                <!--<div class="col" style="float: left;margin-top: -10px;margin-left: 10px;">-->
+                                    <!--<div class="mt-10 text-c ">-->
+                                        <!--<a href="javascript:void(0)"  onclick="searchStaffNameGrid();" class="btn btn-green radius l-btn l-btn-small">-->
+                                 <!--<span class="l-btn-left">-->
+                                       <!--<i class="iconfont iconfont-search2">查询</i>-->
+                                  <!--</span>-->
+                                        <!--</a>-->
+                                        <!--<a onclick="resultSearch()" class="btn btn-default radius mt-l-20  l-btn l-btn-small" >-->
+                                   <!--<span class="l-btn-text">-->
+                                       <!--<i class="iconfont iconfont-zhongzuo">重置</i>-->
+                                    <!--</span>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                            <!--</div>-->
+
+                        <!--</div>-->
+
+
+                        <div class='panel-search'>
+                            <form class='form form-horizontal'>
+                                <div class='row cl'>
+                                    <label class='form-label col-2'>账号ID：</label>
+                                    <div class='formControls col-2'><input type='text' name='staffId' class='easyui-textbox staffId2'  style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>账号区间：</label>
+                                    <div class='formControls col-2'><input type='text' name='staffIdMin' class='easyui-textbox staffIdMin2' style='width:42%;height:30px'> - <input type='text' name='staffIdMax' class='easyui-textbox staffIdMax2' style='width:42%;height:30px'></div>
+                                    <label class='form-label col-2'>人员姓名：</label>
+                                    <div class='formControls col-2'><input type='text' name='staffName' class='easyui-textbox staffName2'  style='width:90%;height:30px' ></div>
+                                </div>
+                                <div class='row cl'>
+
+                                    <label class='form-label col-2'>组织机构：</label>
+                                    <div class='formControls col-2'><input type='text' class='easyui-textbox' id="orgaId" name='orgaId' style='width:90%;height:30px' ></div>
+                                    <label class='form-label col-2'>账号状态：</label>
+                                    <div class='formControls col-2'><select class='easyui-combobox staffIdStatus2' id='staffIdStatus' name='staffIdStatus' data-options='panelHeight:"auto"' style='width:90%;height:30px'><option value='00'>选择类型</option><option value='01'>正常</option><option value='02'>停用</option><option value='03'>作废</option><option value='04'>锁定</option><option value='05'>解锁</option><option value='06'>失效</option><option value='07'>未启用</option></select></div>
+                                </div>
+                                <div class='row cl'>
+                                    <div class='mt-10 text-c '>
+                                        <a href='javascript:void(0)' onclick="searchStaffNameGrid();" class='btn btn-green radius'><i class='iconfont iconfont-search2'></i>查询</a>
+                                        <a href='javascript:void(0)' onclick="resultSearch();" class='btn btn-default radius mt-l-20 '><i class='iconfont iconfont-zhongzuo' ></i>重置</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col" style="height: 400px;padding-top: 10px;">
+                            <div style="float:left;width:45%;">
+                                    <div class="easyui-panel" title="待分配人员列表"  style="width:100%;height:490px;" >
+                                    <table id="freeRole" class="easyui-datagrid" style="width:100%;height:460px;">
+                                    </table>
+                                    </div>
+                                </div>
+
+                            <div style=" float:left;width:5%; padding-top:100px;padding-left: 15px;">
+                                    <div class="fr">
+                                    <a href="javascript:void(0)" style="margin-left:80px;" class="btn btn-secondary radius" onclick="gridDataRight();"><i class="iconfont iconfont-arrow2-right"></i></a>
+                                    <a href="javascript:void(0)" style="margin-left:80px;margin-top: 10px;" class="btn btn-secondary radius" onclick="gridDataLeft();"><i class="iconfont iconfont-arrow2-left"></i></a>
+                                    </div>
+                                </div>
+
+                            <div style=" float:right;width:45%;">
+                                    <div class="easyui-panel" title="已分配人员列表"  style="width:100%;height:485px;" >
+                                    <table id="IncludeRole" class="easyui-datagrid" style="width:100%;height:425px;">
+                                    </table>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="col" style="height: 40px;padding-top: 100px;">
+                            <div  style="text-align:center;">
+                                <a href="javascript:void(0)"  onclick="saveRoleStaff()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                                    <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>
+                                <a href="javascript:void(0)" onclick="resultSearch()"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                                    <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                </div>
+            </div>
+
+
+
+
+
+            <div title="分配角色权限" data-options="closable:false" style="padding:20px;">
+                <div  class="easyui-layout" style="height:100%;">
+                    <div class="container">
+                        <div class="align-items-start">
+                            <div class="col" style="height: 60px">
+                                <div class="panel-search">
+                                    角色名称：<a class="showroleNamePX"></a>
+                                </div>
+                            </div>
+                            <div class="col" style="height: 450px;">
+                                <div style="float:left;width:70%;height: 450px;">
+                                    <div class="easyui-panel" title="菜单"  style="width:100%;height: 100%;" >
+                                        <div style="overflow-y: scroll;height: 410px;">
+                                            <ul id="menuTree" class="ztree1" style="height: 400px;"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col" style="padding-top: 10px;">
+                                <div  style="text-align:center;">
+                                    <a href="javascript:void(0)"  onclick="saveroleMenuRelated()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                                        <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>
+                                    <a href="javascript:void(0)" onclick="resultRoleMenuRelated()"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                                        <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+            <div title="配置互斥角色" data-options="closable:false" style="padding:20px;">
+                <div  class="easyui-layout" style="height:100%;">
+                    <div class="container">
+                        <div class="align-items-start">
+                            <div class="col" style="height: 50px">
+                                <div class="panel-search">
+                                    角色名称：<a class="showroleName"></a>
+                                </div>
+                            </div>
+                            <div class="col" style="height: 450px;">
+                                <div style="float:left;width:70%;height: 450px;">
+                                    <div class="easyui-panel" title="角色树"  style="width:100%;height: 100%" >
+                                        <div style="overflow-y: scroll;height: 410px;">
+                                            <ul id="roleTree" class="ztree1" style="height: 400px;"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col" style="padding-top: 10px;">
+                                <div  style="text-align:center;">
+                                    <a href="javascript:void(0)"  onclick="saveMutuallyExclusiveRole()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                                        <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>
+                                    <a href="javascript:void(0)" onclick="resultMutuallyExclusiveRole()"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                                        <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript" src="../../sam/js/service/samRoleEdit.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        //初始化下拉框
+        //loadModelSelect();
+        initCombotree();
+        initMenuTree();
+        var roleId = getQueryString("roleId");
+        showEditRoleInfo(roleId);
+        //initMenuTree($(".modelId").combobox('getValue'));
+        roleMutexTree(roleId);
+
+    });
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+</script>
+
+</html>
