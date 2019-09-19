@@ -36,6 +36,8 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
     private TSamPlatformRelMapper tsamplatformrelmapper;
     @Autowired
     private TSamGroupInfoMapper tSamGroupInfoMapper;
+    @Autowired
+    private TSamOrgaInfoMapper tSamOrgaInfoMapper;
 
     @Override
 	public  TSamStaffInfo getById(Integer id) throws Exception  {
@@ -89,12 +91,19 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
     }
     @Override
     public int createStaffInfo(TSamStaffInfo staffInfo) throws Exception {
+        TSamOrgaInfo tSamOrgaInfo = tSamOrgaInfoMapper.selectByPrimaryKey(staffInfo.getOrgaId());
+        staffInfo.setTenantId(tSamOrgaInfo.getTenantId());
         int count= tsamstaffinfomapper.insert(staffInfo);
         return count;
     }
 
     @Override
-    public int updateStaffInfo(TSamStaffInfo staffInfo) throws Exception {
+    public int updateStaffInfo(String opUserId,TSamStaffInfo staffInfo) throws Exception {
+        List<String> list = tsamstaffinfomapper.opUserTenantAuth(staffInfo.getOrgaId());
+        if(!list.contains(opUserId))
+        {
+           throw new Exception("当前员工没有改人员组织的租户权限！");
+        }
         int count= tsamstaffinfomapper.updateByPrimaryKeySelective(staffInfo);
         return count;
     }

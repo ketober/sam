@@ -62,6 +62,7 @@
     <result column="ORGA_CODE" property="orgaCode" jdbcType="VARCHAR" />
     <result column="ORGA_DESC" property="orgaDesc" jdbcType="VARCHAR" />
     <result column="PLATFORM_ID" property="platformId" jdbcType="VARCHAR" />
+    <result column="TENANT_NAME" property="tenantName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -968,7 +969,15 @@
     where STAFF_ID = #{staffId,jdbcType=VARCHAR}
   </update>
 
-
+  <select id="opUserTenantAuth" parameterType="java.lang.String" resultType="java.lang.String">
+       SELECT STAFFID
+       FROM t_sam_tenantauth
+       WHERE TENANT_ID
+       in
+       (
+            SELECT TENANT_ID FROM t_sam_orga_info WHERE ORGA_ID = #{orgaId}
+       )
+  </select>
   <select id="queryStaffInfo" resultMap="BaseResultMap" parameterType="java.util.Map" >
     select * from t_sam_staff_info where 1=1
     <if test="staffId != null &amp; staffId != ''">
@@ -1083,9 +1092,11 @@
     t1.TENANT_ID,
     t1.STAFF_STATE,
     t1.STAFF_ID_STATUS,
-    t2.ORGA_ID,t2.ORGA_NAME,t2.ORGA_TYPE_ID,t2.ORGA_DESC
+    t2.ORGA_ID,t2.ORGA_NAME,t2.ORGA_TYPE_ID,t2.ORGA_DESC,
+    t3.TENANT_NAME
     FROM t_sam_staff_info t1
     LEFT JOIN t_sam_orga_info t2 ON t1.ORGA_ID=t2.ORGA_ID
+    LEFT JOIN t_sam_tenant_info t3 ON t1.TENANT_ID=t3.TENANT_ID
     where 1=1
     <if test="staffId != null &amp; staffId != ''">
       AND t1.STAFF_ID like CONCAT('%',#{staffId},'%')

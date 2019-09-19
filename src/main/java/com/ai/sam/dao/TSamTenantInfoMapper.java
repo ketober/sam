@@ -3,6 +3,8 @@ import tk.mybatis.mapper.common.Mapper;
 import com.ai.sam.domain.TSamTenantInfo;
 import com.ai.sam.domain.TSamTenantInfoExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface TSamTenantInfoMapper extends Mapper<TSamTenantInfo>  {
@@ -27,4 +29,8 @@ public interface TSamTenantInfoMapper extends Mapper<TSamTenantInfo>  {
     int updateByPrimaryKeySelective(TSamTenantInfo record);
 
     int updateByPrimaryKey(TSamTenantInfo record);
+
+    int batchDeleteByTenantIds (Map<String,Object> params);
+
+    List<TSamTenantInfo>  selectAllTenantInfo();
 }

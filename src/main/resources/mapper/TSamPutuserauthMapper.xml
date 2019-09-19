@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai.sam.dao.TSamPutuserauthMapper">
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamPutuserauth">
+    <id column="DBL_CEN_ID" jdbcType="VARCHAR" property="dblCenId" />
+    <result column="STAFFID" jdbcType="VARCHAR" property="staffid" />
+    <result column="MODULEID" jdbcType="VARCHAR" property="moduleid" />
+    <result column="TENANT_ID" jdbcType="VARCHAR" property="tenantId" />
+    <result column="AUTHID" jdbcType="VARCHAR" property="authid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    DBL_CEN_ID, STAFFID, MODULEID, TENANT_ID, AUTHID
+  </sql>
+  <select id="selectByExample" parameterType="com.ai.sam.domain.TSamPutuserauthExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_putuserauth
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sam_putuserauth
+    where DBL_CEN_ID = #{dblCenId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_sam_putuserauth
+    where DBL_CEN_ID = #{dblCenId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamPutuserauthExample">
+    delete from t_sam_putuserauth
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamPutuserauth">
+    <selectKey keyProperty="dblCenId" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_sam_putuserauth (DBL_CEN_ID, STAFFID, MODULEID, 
+      TENANT_ID, AUTHID)
+    values (#{dblCenId,jdbcType=VARCHAR}, #{staffid,jdbcType=VARCHAR}, #{moduleid,jdbcType=VARCHAR}, 
+      #{tenantId,jdbcType=VARCHAR}, #{authid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamPutuserauth">
+    <selectKey keyProperty="dblCenId" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_sam_putuserauth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      DBL_CEN_ID,
+      <if test="staffid != null">
+        STAFFID,
+      </if>
+      <if test="moduleid != null">
+        MODULEID,
+      </if>
+      <if test="tenantId != null">
+        TENANT_ID,
+      </if>
+      <if test="authid != null">
+        AUTHID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{dblCenId,jdbcType=VARCHAR},
+      <if test="staffid != null">
+        #{staffid,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleid != null">
+        #{moduleid,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="authid != null">
+        #{authid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamPutuserauthExample" resultType="java.lang.Long">
+    select count(*) from t_sam_putuserauth
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_sam_putuserauth
+    <set>
+      <if test="record.dblCenId != null">
+        DBL_CEN_ID = #{record.dblCenId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffid != null">
+        STAFFID = #{record.staffid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.moduleid != null">
+        MODULEID = #{record.moduleid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authid != null">
+        AUTHID = #{record.authid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_sam_putuserauth
+    set DBL_CEN_ID = #{record.dblCenId,jdbcType=VARCHAR},
+      STAFFID = #{record.staffid,jdbcType=VARCHAR},
+      MODULEID = #{record.moduleid,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      AUTHID = #{record.authid,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamPutuserauth">
+    update t_sam_putuserauth
+    <set>
+      <if test="staffid != null">
+        STAFFID = #{staffid,jdbcType=VARCHAR},
+      </if>
+      <if test="moduleid != null">
+        MODULEID = #{moduleid,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+      <if test="authid != null">
+        AUTHID = #{authid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DBL_CEN_ID = #{dblCenId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamPutuserauth">
+    update t_sam_putuserauth
+    set STAFFID = #{staffid,jdbcType=VARCHAR},
+      MODULEID = #{moduleid,jdbcType=VARCHAR},
+      TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      AUTHID = #{authid,jdbcType=VARCHAR}
+    where DBL_CEN_ID = #{dblCenId,jdbcType=VARCHAR}
+  </update>
+</mapper>

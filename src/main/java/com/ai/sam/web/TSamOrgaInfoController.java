@@ -154,12 +154,14 @@ public class  TSamOrgaInfoController extends BaseAction {
 	@ResponseBody
 	public String selectTSamOrgaGrid (HttpServletRequest request)  {
 		String orgaName = request.getParameter("orgaName");
+		String tenantName = request.getParameter("tenantName");
 		String nodeId = request.getParameter("nodeId");
 		String page = request.getParameter("page");
 		String start = request.getParameter("start");
 		Map<String,Object> hashMap = new HashMap<String,Object>();
 		TSamOrgaInfo tSamOrgaInfo = new TSamOrgaInfo();
 		tSamOrgaInfo.setOrgaCode(nodeId);
+		tSamOrgaInfo.setTenantName(tenantName);
 		tSamOrgaInfo.setOrgaName(orgaName);
 		tSamOrgaInfo.setPage(Integer.valueOf(page));
 		tSamOrgaInfo.setStart(Integer.valueOf(start)-1);

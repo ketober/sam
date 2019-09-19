@@ -100,4 +100,6 @@ public interface TSamStaffInfoMapper extends Mapper<TSamStaffInfo>  {
      */
     List<TSamStaffInfo> selectStaffForOrgaId(String orgaId);
 
+    List<String> opUserTenantAuth(String orgaId);
+
 }

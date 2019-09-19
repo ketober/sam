@@ -152,6 +152,8 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             "<div class='formControls col-2'><select class='easyui-combobox' id='staffIdStatus' name='staffIdStatus' data-options='panelHeight:\"auto\"' style='width:90%;height:30px'><option value='00'>选择类型</option><option value='01'>正常</option><option value='02'>停用</option><option value='03'>作废</option><option value='04'>锁定</option><option value='05'>解锁</option><option value='06'>失效</option><option value='07'>未启用</option></select></div>",
             // "<label class='form-label col-2'>岗位：</label>"+
             // "<div class='formControls col-2'><select class='easyui-combobox' id='postId1' name='postId' data-options='panelHeight:\"auto\"' style='width:90%;height:30px'><option value='00'>选择类型</option><option value='01'>组长</option><option value='02'>职员</option></select></div>",
+            "<label class='form-label col-2'>所属租户：</label>"+
+            "<div class='formControls col-2'><input  type='text'  name='tenantId'  class='easyui-combobox' style='width:90%;height:30px'/></div>"+
             "</div>",
 
             "<div class='row cl'>",
@@ -183,13 +185,48 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             })
         });
         $search.find("a.btn").linkbutton();
+        $('input.easyui-combobox[name="tenantId"]').combobox({
+            // url: '../../data/skill-priority.json',
+            valueField: 'codeValue',
+            textField: 'codeName',
+            panelHeight: 'auto',
+            editable: true,
+            missingMessage: '请选择',
+            loader: function (param, success, error) {
+                param = {
+
+                };
+                $.ajax({
+                    url: "/sam/tsamtenantinfo/qrytenantinfo",
+                    dataType: 'json',
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        var items = $.map(data.list, function (item, index) {
+                            return {
+                                codeValue: item["tenantId"],
+                                codeName: item["tenantName"]
+                            };
+                        });
+                        success(items);
+                    },
+                    error: function () {
+                        error.apply(this, arguments);
+                    }
+                });
+            },
+            onLoadSuccess: function (data) {
+            }
+        });
     }
     /**
      * 获取查询参数
      * easyui组件会将真实的值存放在一个类名为textbox-value的input
      */
     function getParams($document) {
-        var param = {};
+        var param = {
+            "opUserId":"hk1001"
+        };
 
         $document && $document.find("input").each(function() {
             var $item  = $(this);
@@ -228,7 +265,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 {field: 'CK', checkbox:'true', width: '3%'},
                 {field: 'staffId', title: '账号ID', width: '10%'},
                 {field: 'staffName', title: '人员姓名', width: '13%'},
-                {field: 'staffState', title: '人员状态', width: '8%',
+                {field: 'staffState', title: '人员状态', width: '5%',
                     formatter:function(value,row,index){
                         return statePrioritys[value];
                     }},
@@ -238,7 +275,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                     formatter:function(value,row,index){
                         return channelIdPrioritys[value];
                     }},
-                {field: 'staffIdStatus', title: '账号状态', width: '8%',
+                {field: 'staffIdStatus', title: '账号状态', width: '5%',
                     formatter:function(value,row,index){
                         return idStatusPrioritys[value];
                     }},
@@ -246,7 +283,8 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                     formatter:function(value,row,index){
                         return postIdPrioritys[value];
                     }},
-                {field: 'opera', title: '操作', width: '12%',formatter: rowformater},
+                {field: 'tenantName', title: '所属租户', width: '10%'},
+                {field: 'opera', title: '操作', width: '8%',formatter: rowformater},
             ]],
             fitColumns:true,
             rownumbers: true,
@@ -460,6 +498,10 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             "<label class='form-label col-2'>岗位</label>"+
             "<div class='formControls col-2'><select class='easyui-combobox' id='postId' name='postId' data-options='panelHeight:\"auto\"' style='width:90%;height:30px'><option value='00'>请选择</option><option value='01'>组长</option><option value='02'>职员</option></select></div>",
             "</div>",
+            "<div class='row cl'>",
+            /*"<label class='form-label col-2'>所属租户</label>"+
+            "<div class='formControls col-2'><input  type='text'  name='tenantId'  class='easyui-combobox' style='width:90%;height:30px'/><span style='color:red;padding-left:2px'>*</span></div>"+
+            "</div>"*/,
             "</form>",
             "</div>"
         ].join("")).appendTo($popWindow);
@@ -522,6 +564,39 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 t.tree('expand', node.target);
             }
         });
+/*        $('input.easyui-combobox[name="tenantId"]').combobox({
+            // url: '../../data/skill-priority.json',
+            valueField: 'codeValue',
+            textField: 'codeName',
+            panelHeight: 'auto',
+            editable: true,
+            missingMessage: '请选择',
+            loader: function (param, success, error) {
+                param = {
+
+                };
+                $.ajax({
+                    url: "/sam/tsamtenantinfo/qrytenantinfo",
+                    dataType: 'json',
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        var items = $.map(data.list, function (item, index) {
+                            return {
+                                codeValue: item["tenantId"],
+                                codeName: item["tenantName"]
+                            };
+                        });
+                        success(items);
+                    },
+                    error: function () {
+                        error.apply(this, arguments);
+                    }
+                });
+            },
+            onLoadSuccess: function (data) {
+            }
+        });*/
         $("#staffState").combobox({
             data:[['0','离职'],['1','在职']],
             valueField: 0,
@@ -939,6 +1014,12 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 "            </div>\n" +
                 "        </div>\n" +
                 "    </div>\n" +
+                "<div title=\"租户配置\"  style=\"overflow:auto;padding:20px;\">\n" +
+                "        <div data-options=\"region:'center'\" style=\"overflow: auto;\">\n" +
+                "            <div id=\"tenant_page_content\" data-options=\"region:'center'\">\n" +
+                "            </div>\n" +
+                "        </div>\n" +
+                "    </div>\n" +
                 "    <div title=\"角色权限查看\" style=\"padding:20px;\">\n" +
                 "        <div id=\"cc\" class=\"easyui-layout\" style=\"width:98%;height:280px;\">\n" +
                 "            <div data-options=\"region:'west',title:'人员工号',split:true\" style=\"width:50%;\">\n" +
@@ -975,11 +1056,13 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
         var $authPage;
         var $groupPage;
         var $platPage;
+        var $tenantPage;
         var $westAuthPage;
         var cmm_code_id;
         $updatePage = $("<div></div>").appendTo($("#update_page_content"));
         $rolePage = $("<div></div>").appendTo($("#role_page_content"));
         $authPage = $("<div></div>").appendTo($("#auth_page_content"));
+        $tenantPage = $("<div></div>").appendTo($("#tenant_page_content"));
         $groupPage = $("<div></div>").appendTo($("#group_page_content"));
         $platPage = $("<div></div>").appendTo($("#plat_page_content"));
         $westAuthPage = $("<div></div>").appendTo($("#west_page_content"));
@@ -988,7 +1071,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
         //权限配置页面
         var root,moduleId;
         var m = [],modules = [];
-        var zTreeObj,roleTree,roleTree3,groupTree,staffAuthTree,roleAuthTree;
+        var zTreeObj,roleTree,roleTree3,groupTree,staffAuthTree,roleAuthTree,tenantTree;
 
         var token = AjaxUtils.getToken();
         initSearchGrid();
@@ -1001,7 +1084,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 "<div class='panel-search'>",
                 "<form class='form form-horizontal'>",
                 "<div class='row cl'>"+
-                "<label class='form-label col-2'>账号ID:</label>",
+                "<label class='form-label col-2'>账号11ID:</label>",
                 "<div class='formControls col-2'><input type='text' id='staffId5' name='staffId5' class='easyui-textbox'  disabled='true' style='width:90%;height:30px' ></div>",
                 "<label class='form-label col-2'>人员姓名:</label>"+
                 "<div class='formControls col-2'><input  type='text' id='staffName5' name='staffName5' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
@@ -1032,7 +1115,10 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 "<label class='form-label col-2'>岗位:</label>"+
                 "<div class='formControls col-2'><select class='easyui-combobox' id='postId5' name='postId5' data-options='panelHeight:\"auto\"' style='width:90%;height:30px'><option value='00'>选择类型</option><option value='01'>组长</option><option value='02'>职员</option></select></div>",
                 "</div>",
-
+                "<div class='row cl'>"+
+               /* "<label class='form-label col-2'>所属租户1：</label>"+
+                "<div class='formControls col-2'><input  type='text'  id='tenantId1' name='tenantId'  class='easyui-combobox' style='width:90%;height:30px'/><span style='color:red;padding-left:2px'>*</span></div>"+*/
+                "</div>",
                 "<div class='row cl'>",
                 "<div class='mt-10 text-c '>" +
                 "<a href='javascript:void(0)' id='global' class='btn btn-green radius mt-l-20' >" +
@@ -1078,6 +1164,8 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 $("#channelId5").val(data.list[0].channelId);
                 $("#prsnchnltypecd5").val(data.list[0].prsnChnlTypeCd);
                 $("#postId5").val(data.list[0].postId);
+                $("#tenantId1").combobox('setValue',data.list[0].tenantId);
+                $("#tenantId1").combobox('setText',data.list[0].tenantName);
             },function () {
                 $.messager.alert("提示","查询人员信息失败!");
             },'json');
@@ -1120,6 +1208,40 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                     t.tree('expand', node.target);
                 }
             });
+            $update.find('input.easyui-combobox[name="tenantId"]').combobox({
+                // url: '../../data/skill-priority.json',
+                valueField: 'codeValue',
+                textField: 'codeName',
+                panelHeight: 'auto',
+                editable: true,
+                missingMessage: '请选择',
+                loader: function (param, success, error) {
+                    param = {
+
+                    };
+                    $.ajax({
+                        url: "/sam/tsamtenantinfo/qrytenantinfo",
+                        dataType: 'json',
+                        type: "POST",
+                        data: param,
+                        success: function (data) {
+                            var items = $.map(data.list, function (item, index) {
+                                return {
+                                    codeValue: item["tenantId"],
+                                    codeName: item["tenantName"]
+                                };
+                            });
+                            success(items);
+                        },
+                        error: function () {
+                            error.apply(this, arguments);
+                        }
+                    });
+                },
+                onLoadSuccess: function (data) {
+                }
+            });
+
         }
         function initUpdateWindowEvent(){
             $update.on("click", "#global", function() {
@@ -1211,7 +1333,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             });
 
         }
-
+        initTenantModule();
         initAuthModule();
         initRoleTab();
         initGroupTab();
@@ -1223,6 +1345,122 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
         initPlatTab();
         initPlatEvent();
 
+        //租户页面
+        function initTenantModule() {
+            $([
+                "<div class='panel-search'>",
+                "<form class='form form-horizontal'>",
+                "<div class='row cl'>",
+                "<label class='form-label col-2'>当前工号：</label>",
+                "<div class='formControls col-2'><input type='text'id='staffId3' disabled='true' name='staffId3' class='easyui-textbox'  style='width:90%;height:30px' ></div>",
+                "</div>",
+                "<div>",
+                "<ul id='tenantTree' class='ztree1'></ul>",
+                "</div>",
+                "<div class='mt-10 test-c'>",
+                "<label class='form-label col-5'></label>",
+                "<a href='javascript:void(0)' id='global5' class='btn btn-green radius mt-l-20' >保存</a>",
+                "<span>          </span>",
+                "<a href='javascript:void(0)' id='cancel5' class='btn btn-secondary radius mt-l-20' >" +
+                "取消</a>",
+                "</div>",
+                "</form>",
+                "</div>",
+            ].join("")).appendTo($tenantPage);
+            $("#staffId3").val(staffId);
+            initTenantTree();
+        }
+        function initTenantTree(){
+            var setting = {
+                async: {
+                    dataType:"json",
+                    enable: true,
+                    url:"/sam/tsamtenantinfo/selectTenantTreeByStaffId?staffId="+staffId+"&access_token="+token,
+                    autoParam:["id"],
+                },
+                view: {
+                    dblClickExpand: false,
+                    selectedMulti: false
+                },
+                check: {
+                    enable: true,
+                    autoCheckTrigger: true
+                },
+                data:{ // 必须使用data
+                    simpleData : {
+                        enable : true,
+                        idKey : "id", // id编号命名 默认
+                        pIdKey : "pId", // 父id编号命名 默认
+                        rootPId : 0	// 用于修正根节点父节点数据，即 pIdKey 指定的属性值
+                    }
+                },
+                // 回调函数
+                callback : {
+                    onClick : function(event, treeId, treeNode, clickFlag) {
+                        // 判断是否父节点
+                        // initGroupGrid(treeNode.id);
+                    },
+                    //捕获异步加载出现异常错误的事件回调函数 和 成功的回调函数
+                    onAsyncError : zTreeOnAsyncError,
+                    onAsyncSuccess : zTreeOnAsyncSuccess
+                }
+            };
+
+            // 加载错误提示
+            function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+                alert("加载错误：" + XMLHttpRequest);
+            };
+            function zTreeOnAsyncSuccess(event, treeId, treeNode, msg){
+                var treeObj = $.fn.zTree.getZTreeObj(treeId);
+                var nodes = treeObj.getNodes();
+                if (nodes.length>0) {
+                    for(var i=0;i<nodes.length;i++){
+                        if(nodes[i].pId == "0"){
+                            treeObj.expandNode(nodes[i], true, false, false);//默认展开第一级节点
+                        }
+                    }
+                }
+            }
+
+
+            // 过滤函数
+            function filter(treeId, parentNode, childNodes) {
+                if (!childNodes)
+                    return null;
+                for ( var i = 0, l = childNodes.length; i < l; i++) {
+                    childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+                }
+                return childNodes;
+            }
+            tenantTree = $.fn.zTree.init( $("#tenantTree"), setting);
+
+        };
+        //租户树保存按钮
+        var btn5 = document.getElementById("global5");
+        btn5.addEventListener('click',function(){
+            var checked = tenantTree.getCheckedNodes(true);
+            var str="";
+            for (var i = 0; i < checked.length; i++) {
+                str += checked[i].id+ ",";
+            }
+            //去掉最后一个逗号(如果不需要去掉，就不用写)
+            if (str.length > 0) {
+                str = str.substr(0, str.length - 1);
+            }
+            var params ={};
+            params.staffId=staffId;
+            params.tenantIds=str;
+            AjaxUtils.commonAjax('post','/sam/tsamtenantinfo/updateUserTenantAuth',params,function (data) {
+                if(data.resultVal==="1"){
+                    initTenantTree();
+                    $.messager.alert('提示','操作成功!');
+                }else{
+                    $.messager.alert('提示',data.resultMsg);
+                }
+            },function () {
+                $.messager.alert("提示","分配租户失败!");
+            },'json');
+        },false);
         //权限页面
         function initAuthModule() {
             $([
@@ -1248,7 +1486,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 "</div>"
             ].join("")).appendTo($authPage);
             $("#staffId1").val(staffId);
-            queryXzqh();
+            queryXzqh()
         }
         //查询模块信息
         function queryXzqh(){

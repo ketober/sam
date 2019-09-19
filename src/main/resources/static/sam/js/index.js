@@ -57,6 +57,8 @@
 	{ id:44, pId:3, name:"订单信息", file:"../sam/html/myOrder.html"},
 	{ id:44, pId:3, name:"订单审批", file:"../sam/html/myOrder.html"},
 	{ id:44, pId:3, name:"返修退换货", file:"../sam/html/myOrder.html"},
+	{ id:45, pId:3, name:"租户管理", file:"../sam/html/tenantinfo.html"},
+
 	];
 	function setCheck() {
 	setting.check.chkStyle = $("#r1").attr("checked")? "checkbox":"radio";

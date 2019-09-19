@@ -1,4 +1,5 @@
 package com.ai.sam.domain;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,7 +16,7 @@ public class TSamTenantInfo {
     @Id
     @Column(name = "`TENANT_ID`")
     @ApiModelProperty(name = "TENANTID", value = "", required = true, example = "")
-    @JsonProperty("TENANTID")
+    //@JsonProperty("TENANTID")
     private String tenantId;
 
     /**
@@ -23,7 +24,7 @@ public class TSamTenantInfo {
      */
     @Column(name = "`TENANT_NAME`")
     @ApiModelProperty(name = "TENANTNAME", value = "", required = true, example = "")
-    @JsonProperty("TENANTNAME")
+    //@JsonProperty("TENANTNAME")
     private String tenantName;
 
     /**
@@ -31,7 +32,7 @@ public class TSamTenantInfo {
      */
     @Column(name = "`CRT_USER_ID`")
     @ApiModelProperty(name = "CRTUSERID", value = "", required = true, example = "")
-    @JsonProperty("CRTUSERID")
+    //@JsonProperty("CRTUSERID")
     private String crtUserId;
 
     /**
@@ -39,7 +40,8 @@ public class TSamTenantInfo {
      */
     @Column(name = "`CRT_TIME`")
     @ApiModelProperty(name = "CRTTIME", value = "", required = true, example = "")
-    @JsonProperty("CRTTIME")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    //@JsonProperty("CRTTIME")
     private Date crtTime;
 
     /**
@@ -47,16 +49,45 @@ public class TSamTenantInfo {
      */
     @Column(name = "`MODF_USER_ID`")
     @ApiModelProperty(name = "MODFUSERID", value = "", required = true, example = "")
-    @JsonProperty("MODFUSERID")
+    //@JsonProperty("MODFUSERID")
     private String modfUserId;
 
     /**
      * MODF_TIME
      */
     @Column(name = "`MODF_TIME`")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @ApiModelProperty(name = "MODFTIME", value = "", required = true, example = "")
-    @JsonProperty("MODFTIME")
+   // @JsonProperty("MODFTIME")
     private Date modfTime;
+
+
+    /**
+     * TENANT_DESC
+     */
+    @Column(name = "`TENANT_DESC`")
+    @ApiModelProperty(name = "TENANTDESC", value = "", required = true, example = "")
+   // @JsonProperty("TENANTDESC")
+    private String tenantDesc;
+
+    private String startIndex;
+    private String pageNum;
+
+    public String getStartIndex() {
+        return startIndex;
+    }
+
+    public String getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(String pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public void setStartIndex(String startIndex) {
+        this.startIndex = startIndex;
+    }
 
     /**
      * 获取TENANT_ID
@@ -130,6 +161,14 @@ public class TSamTenantInfo {
         this.crtTime = crtTime;
     }
 
+    public String getTenantDesc() {
+        return tenantDesc;
+    }
+
+    public void setTenantDesc(String tenantDesc) {
+        this.tenantDesc = tenantDesc;
+    }
+
     /**
      * 获取MODF_USER_ID
      *
@@ -165,4 +204,5 @@ public class TSamTenantInfo {
     public void setModfTime(Date modfTime) {
         this.modfTime = modfTime;
     }
+
 }

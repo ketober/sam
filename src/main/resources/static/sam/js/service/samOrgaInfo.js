@@ -5,6 +5,39 @@
  * 初始化资源树
  */
 function initOrgainfoTree(){
+    $('#tenantId').combobox({
+        // url: '../../data/skill-priority.json',
+        valueField: 'codeValue',
+        textField: 'codeName',
+        panelHeight: 'auto',
+        editable: true,
+        missingMessage: '请选择',
+        loader: function (param, success, error) {
+            param = {
+
+            };
+            $.ajax({
+                url: "/sam/tsamtenantinfo/qrytenantinfo",
+                dataType: 'json',
+                type: "POST",
+                data: param,
+                success: function (data) {
+                    var items = $.map(data.list, function (item, index) {
+                        return {
+                            codeValue: item["tenantId"],
+                            codeName: item["tenantName"]
+                        };
+                    });
+                    success(items);
+                },
+                error: function () {
+                    error.apply(this, arguments);
+                }
+            });
+        },
+        onLoadSuccess: function (data) {
+        }
+    });
     var token = AjaxUtilsTemp.getToken();
     var setting = {
         async : {
@@ -52,7 +85,6 @@ function initOrgainfoTree(){
     $.fn.zTree.init( $("#menuTree"), setting);
 }
 
-
 function selectOrga(){
     var zTree = $.fn.zTree.getZTreeObj("menuTree");
     var nodes = zTree.getSelectedNodes();
@@ -84,8 +116,9 @@ function initOrgainfoGrid(id){
             {field :'ck',checkbox : true,width : '10%' },
             {field:'orgaId',title:'组织机构编号',width:'23%'},
             {field:'orgaName',title:'组织机构名称',width:'25%'},
-            {field:'orgaTypeName',title:'组织机构类型',width:'20%'},
-            {field:'orgaStateName',title:'组织机构状态',width:'20%'},
+            {field:'orgaTypeName',title:'组织机构类型',width:'10%'},
+            {field:'orgaStateName',title:'组织机构状态',width:'10%'},
+            {field:'tenantName',title:'所属租户',width:'20%'},
             {field: 'opera', title: '操作', width: '10%',formatter: rowformater}
         ]],
         onLoadSuccess: function (data) {
@@ -99,7 +132,11 @@ function initOrgainfoGrid(id){
         loader: function (param, success) {
             var start = (param.page - 1) * param.rows + 1;
             var pageNum = param.rows;
-            var params={orgaName:$("#searchOrgaName").val(),"page":pageNum,"start":start};
+            var params={
+                "orgaName":$("#searchOrgaName").val(),
+                "tenantName":$("#searchTenantName").val(),
+                "page":pageNum,
+                "start":start};
             // $.ajax({
             //     url: "/tsamorgainfo/selectTSamOrgaGrid?nodeId="+id, //获取数据后台接口
             //     method: "GET",
@@ -142,6 +179,8 @@ function  openOrgaEditView(orgaId) {
         $(".orgaTypeId").combobox('setValue', data.ORGATYPEID);
         $(".orgaState").combobox('setValue', data.ORGASTATE);
         $(".orgaDesc").textbox('setValue', data.ORGANAME);
+        $("#tenantId").combobox('setText', data.tenantName);
+        $("#tenantId").combobox('setValue', data.TENANTID);
       },'json');
 
 
@@ -244,14 +283,19 @@ function saveOrgaInfo(){
         $.messager.alert('提示', '请选择组织机构类型。');
         return;
     }
+    var tenantId = $("#tenantId").combobox('getValue');
 
+    if(tenantId == "" || tenantId == null){
+        $.messager.alert('提示', '请选择组所属租户。');
+        return;
+    }
     ajaxLoading();
     if(nodes[0] != null){
         SUPERORGACODE = nodes[0].id;
     }else{
         SUPERORGACODE = '1';
     }
-    var data = {SUPERORGACODE:""+SUPERORGACODE+"",TENANTID:1,ORGANAME:$(".orgaName").val(), ORGASTATE:$(".orgaState").combobox('getValue'),ORGATYPEID:$('.orgaTypeId').combobox('getValue'),orgaDesc:$(".orgaDesc").val()};
+    var data = {SUPERORGACODE:""+SUPERORGACODE+"",TENANTID:tenantId,ORGANAME:$(".orgaName").val(), ORGASTATE:$(".orgaState").combobox('getValue'),ORGATYPEID:$('.orgaTypeId').combobox('getValue'),orgaDesc:$(".orgaDesc").val()};
     AjaxUtilsTemp.commonAjax('POST','/sam/tsamorgainfo/insterTSamOrgaInfo',JSON.stringify(data),true,'application/json',function (data) {
         ajaxLoadEnd();
         if(data.flag == 1){
@@ -318,6 +362,8 @@ function selectRepeatOrgaName(orgaName,nodeId){
 
 //修改
 function updateOrgaInfo(){
+
+
     if($(".orgaName").val() == "" || $(".orgaName").val() == null){
         $.messager.alert('提示', '组织机构名称必填。');
         return;
@@ -339,9 +385,15 @@ function updateOrgaInfo(){
         $.messager.alert('提示', '组织机构状态。');
         return;
     }
+    var tenantId = $("#tenantId").combobox('getValue');
+    var tenantId1 = $("#tenantId").combobox('getText');
+    if(tenantId == "" || tenantId == null){
+        $.messager.alert('提示', '请选择组所属租户。');
+        return;
+    }
     ajaxLoading();
     //选中那个节点就绑定在哪个节点下，没有选就默认是最顶级。
-    var data = {TENANTID:1,SUPERORGACODE:$(".superOrgaCode").val(),ORGACODE:$(".orgaCode").val(),ORGAID:$(".orgaId").val(),ORGANAME:$(".orgaName").val(), ORGASTATE:$(".orgaState").combobox('getValue'),ORGATYPEID:$(".orgaTypeId").combobox('getValue'),orgaDesc:$(".orgaDesc").val()};
+    var data = {TENANTID:tenantId,SUPERORGACODE:$(".superOrgaCode").val(),ORGACODE:$(".orgaCode").val(),ORGAID:$(".orgaId").val(),ORGANAME:$(".orgaName").val(), ORGASTATE:$(".orgaState").combobox('getValue'),ORGATYPEID:$(".orgaTypeId").combobox('getValue'),orgaDesc:$(".orgaDesc").val()};
 
 
     AjaxUtilsTemp.commonAjax('POST','/sam/tsamorgainfo/updateTSamOrgaInfo',JSON.stringify(data),true,'application/json',function (data) {

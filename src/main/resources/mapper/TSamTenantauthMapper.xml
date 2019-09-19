@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai.sam.dao.TSamTenantauthMapper">
+  <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamTenantauth">
+    <id column="DBL_CEN_ID" jdbcType="VARCHAR" property="dblCenId" />
+    <result column="STAFFID" jdbcType="VARCHAR" property="staffid" />
+    <result column="TENANT_ID" jdbcType="VARCHAR" property="tenantId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    DBL_CEN_ID, STAFFID, TENANT_ID
+  </sql>
+  <select id="selectByExample" parameterType="com.ai.sam.domain.TSamTenantauthExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_sam_tenantauth
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_sam_tenantauth
+    where DBL_CEN_ID = #{dblCenId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_sam_tenantauth
+    where DBL_CEN_ID = #{dblCenId,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteByStaffId" parameterType="java.lang.String">
+      delete from t_sam_tenantauth
+      where
+      STAFFID = #{staffId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamTenantauthExample">
+    delete from t_sam_tenantauth
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+    <select id="getTenantInfoByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select distinct t.TENANT_ID,t.STAFFID,t1.TENANT_NAME from t_sam_tenantauth t
+        left join t_sam_tenant_info t1 on t1.TENANT_ID = t.TENANT_ID
+        where
+        STAFFID = #{staffId,jdbcType=VARCHAR}
+    </select>
+  <insert id="insert" parameterType="com.ai.sam.domain.TSamTenantauth">
+    <selectKey keyProperty="dblCenId" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_sam_tenantauth (DBL_CEN_ID, STAFFID, TENANT_ID
+      )
+    values (#{dblCenId,jdbcType=VARCHAR}, #{staffid,jdbcType=VARCHAR}, #{tenantId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamTenantauth">
+    <selectKey keyProperty="dblCenId" order="BEFORE" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_sam_tenantauth
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      DBL_CEN_ID,
+      <if test="staffid != null">
+        STAFFID,
+      </if>
+      <if test="tenantId != null">
+        TENANT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{dblCenId,jdbcType=VARCHAR},
+      <if test="staffid != null">
+        #{staffid,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+    <insert id="batchInsert"  parameterType="java.util.Map">
+        insert into t_sam_tenantauth (DBL_CEN_ID, STAFFID, TENANT_ID)
+        values <foreach collection="list" item="item" index="index" separator="," >
+        (#{item.dblCenId,jdbcType=VARCHAR}, #{item.staffId,jdbcType=VARCHAR},
+        #{item.tenantId,jdbcType=VARCHAR})
+    </foreach>
+    </insert>
+  <select id="countByExample" parameterType="com.ai.sam.domain.TSamTenantauthExample" resultType="java.lang.Long">
+    select count(*) from t_sam_tenantauth
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_sam_tenantauth
+    <set>
+      <if test="record.dblCenId != null">
+        DBL_CEN_ID = #{record.dblCenId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffid != null">
+        STAFFID = #{record.staffid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tenantId != null">
+        TENANT_ID = #{record.tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_sam_tenantauth
+    set DBL_CEN_ID = #{record.dblCenId,jdbcType=VARCHAR},
+      STAFFID = #{record.staffid,jdbcType=VARCHAR},
+      TENANT_ID = #{record.tenantId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ai.sam.domain.TSamTenantauth">
+    update t_sam_tenantauth
+    <set>
+      <if test="staffid != null">
+        STAFFID = #{staffid,jdbcType=VARCHAR},
+      </if>
+      <if test="tenantId != null">
+        TENANT_ID = #{tenantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DBL_CEN_ID = #{dblCenId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ai.sam.domain.TSamTenantauth">
+    update t_sam_tenantauth
+    set STAFFID = #{staffid,jdbcType=VARCHAR},
+      TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+    where DBL_CEN_ID = #{dblCenId,jdbcType=VARCHAR}
+  </update>
+</mapper>

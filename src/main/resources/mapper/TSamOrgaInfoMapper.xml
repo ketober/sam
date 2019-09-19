@@ -14,6 +14,7 @@
     <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="INSERT_TIME" property="insertTime" jdbcType="TIMESTAMP" />
     <result column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
+    <result column="TENANT_NAME" property="tenantName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -93,8 +94,10 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    <include refid="Base_Column_List" />
-    from t_sam_orga_info
+    t.ORGA_ID, t.ORGA_NAME, t.ORGA_TYPE_ID, t.ORGA_STATE, t.ORGA_CODE, t.SUPER_ORGA_CODE, t.ORGA_DESC,
+    t.UPDATE_TIME, t.INSERT_TIME, t.TENANT_ID, t1.TENANT_NAME
+    from t_sam_orga_info t
+    left join t_sam_tenant_info t1 on t1.TENANT_ID = t.TENANT_ID
     where ORGA_ID = #{orgaId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
@@ -230,10 +233,15 @@
     select  case o.ORGA_TYPE_ID when '1' then '公司'  when '2' then '省份'  when '3' then '地市'  when '4' then '组织' when '5' then '班组'
     end as ORGA_TYPE_NAME ,
     case o.ORGA_STATE when '0' then '在用' when '1' then '废弃' when '2' then '暂停' end as ORGA_STATE_NAME,
-    o.ORGA_ID, o.ORGA_NAME,o.ORGA_CODE, o.SUPER_ORGA_CODE, o.ORGA_DESC, o.UPDATE_TIME, o.INSERT_TIME, o.TENANT_ID
-    from t_sam_orga_info o  where o.SUPER_ORGA_CODE =#{orgaCode,jdbcType=VARCHAR}
+    o.ORGA_ID, o.ORGA_NAME,o.ORGA_CODE, o.SUPER_ORGA_CODE, o.ORGA_DESC, o.UPDATE_TIME, o.INSERT_TIME, o.TENANT_ID,t.TENANT_NAME
+    from t_sam_orga_info o
+    LEFT JOIN t_sam_tenant_info t ON t.TENANT_ID = o.TENANT_ID
+    where o.SUPER_ORGA_CODE =#{orgaCode,jdbcType=VARCHAR}
     <if test="orgaName != null and  orgaName!='' " >
       and o.ORGA_NAME  LIKE CONCAT('%',#{orgaName},'%')
+    </if>
+    <if test="tenantName != null and  tenantName!='' " >
+      and o.TENANT_ID  in (select TENANT_ID from t_sam_tenant_info where TENANT_NAME like CONCAT('%',#{tenantName},'%'))
     </if>
    ORDER BY o.ORGA_ID DESC LIMIT #{start,jdbcType=INTEGER},#{page,jdbcType=INTEGER}
   </select>

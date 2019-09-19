@@ -1,5 +1,6 @@
 package com.ai.sam.web;
 import com.ai.sam.common.StaticValue;
+import com.ai.sam.domain.TSamOrgaInfo;
 import com.ai.sam.domain.TSamStaffInfoExample;
 import com.ai.sam.service.TSamPasswordService;
 import com.ai.sam.service.TSamStaffRoleService;
@@ -55,6 +56,7 @@ public class  TSamStaffInfoController extends BaseAction {
         String postId = request.getParameter("postId");
         String orgaId = request.getParameter("orgaId");
         String orgaCode = request.getParameter("orgaCode");
+        String tenantId = request.getParameter("tenantId");
         if (StringUtils.isEmpty(orgaId)&&!("0".equals(orgaCode))){
             orgaId=orgaCode;
         }
@@ -79,6 +81,7 @@ public class  TSamStaffInfoController extends BaseAction {
         params.put("staffIdStatus",staffIdStatus);
         params.put("channelId",channelId);
         params.put("postId",postId);
+        params.put("tenantId",tenantId);
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             //
@@ -172,6 +175,7 @@ public class  TSamStaffInfoController extends BaseAction {
         String channelId = request.getParameter("channelId");
         String prsn_chnl_type_cd = request.getParameter("prsn_chnl_type_cd");
         String default_service_type = request.getParameter("default_service_type");
+        //String tenantId = request.getParameter("tenantId");
         Map<String, Object> result = new HashMap<String, Object>();
         //参数校验
         //id不能重复
@@ -228,7 +232,7 @@ public class  TSamStaffInfoController extends BaseAction {
         staffInfo.setChannelId(channelId);
         staffInfo.setPrsnChnlTypeCd(prsn_chnl_type_cd);
         staffInfo.setStaffIdStatus("01");
-        staffInfo.setTenantId("1");
+        //staffInfo.setTenantId(tenantId);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             staffInfo.setJoinDate(sdf.parse(joinDate));
@@ -258,6 +262,7 @@ public class  TSamStaffInfoController extends BaseAction {
     @ResponseBody
     @RequestMapping("/updateStaffInfo")
     public Map<String, Object> updateStaffInfo(HttpServletRequest request) {
+	    String opUserId =request.getParameter("opUserId");
         String staffId = request.getParameter("staffId5");
         String staffName = request.getParameter("staffName5");
         String staffState = request.getParameter("staffState5");
@@ -270,6 +275,7 @@ public class  TSamStaffInfoController extends BaseAction {
         String channelId = request.getParameter("channelId5");
         String prsn_chnl_type_cd = request.getParameter("prsnchnltypecd5");
         String default_service_type = request.getParameter("defaultServiceType5");
+        String tenantId = request.getParameter("tenantId");
         TSamStaffInfo staffInfo = new TSamStaffInfo();
         staffInfo.setStaffId(staffId);
         staffInfo.setStaffName(staffName);
@@ -284,10 +290,11 @@ public class  TSamStaffInfoController extends BaseAction {
         staffInfo.setUpdaTetime(new Date());
         staffInfo.setDefaultServiceType(default_service_type);
         staffInfo.setPostId(postId);
+        staffInfo.setTenantId(tenantId);
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            //
-            int message = tsamstaffinfoservice.updateStaffInfo(staffInfo);
+            //判断操作人是否有当前组织机构的租户操作权限
+            int message = tsamstaffinfoservice.updateStaffInfo(opUserId,staffInfo);
             if (message==1){
                 result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
                 result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
@@ -300,6 +307,11 @@ public class  TSamStaffInfoController extends BaseAction {
             result.put(StaticValue.RESULT_MSG,e.getMessage());
         }
         return result;
+    }
+    private boolean opUserOrgaTenantAuth(String opUserId,String orgaId)throws Exception
+    {
+
+        return false;
     }
     //物理删除
 	@ResponseBody

@@ -22,7 +22,7 @@ public interface TSamStaffInfoService {
 
    int createStaffInfo(TSamStaffInfo staffInfo)throws Exception;
 
-   int updateStaffInfo(TSamStaffInfo staffInfo)throws Exception;
+   int updateStaffInfo(String opUserId,TSamStaffInfo staffInfo)throws Exception;
 
    void deleteStaffInfo(List<String> staffIds)throws Exception;
 

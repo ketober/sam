@@ -36,10 +36,14 @@
                 <div class="panel-search" style="height: 40px;">
                     <div class="col" style="float:left;">
                         组织机构名称：
-                        <input class="easyui-textbox" data-options="prompt:'输入关键字查询'" style="width:400px;height:30px" id="searchOrgaName"/>
+                        <input class="easyui-textbox" data-options="prompt:'请输入组织机构名称'" style="width:200px;height:30px" id="searchOrgaName"/>
+                    </div>
+                    <div class="col" style="float:left;">
+                        租户名称：
+                        <input class="easyui-textbox" data-options="prompt:'请输入租户名称'" style="width:200px;height:30px" id="searchTenantName"/>
                     </div>
 
-                    <div class="col" style="float: left;margin-top: -10px;margin-left: 10px;">
+                    <div class="col" style="float: right;margin-top: -10px;margin-left: 10px;">
                         <div class="mt-10 text-c ">
                             <a href="javascript:void(0)"  onclick="selectOrga();" class="btn btn-green radius l-btn l-btn-small">
                                  <span class="l-btn-left">
@@ -124,6 +128,15 @@
                                 <option value="2">暂停</option>
                             </select>
                         </div>
+                        <div  style="padding-top: 10px;position: initial;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                    <label class='form-label col-4'>租户名称1：</label>
+                    <div class='formControls col-6' >
+                    <input type='text' class='easyui-combobox' id= "tenantId" name='tenantId'style="height:30px" >
+                    </div>
                         <div  style="padding-top: 10px;position: initial;">
                             <span style='color:red;padding-left:25px;text-align: center'>*</span>
                         </div>

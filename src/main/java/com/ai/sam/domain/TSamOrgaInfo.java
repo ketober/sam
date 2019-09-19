@@ -11,6 +11,17 @@ import javax.persistence.*;
 @Table(name = "`t_sam_orga_info`")
 @ApiModel
 public class TSamOrgaInfo extends Page {
+
+
+    public String getTenantName() {
+        return tenantName;
+    }
+
+    public void setTenantName(String tenantName) {
+        this.tenantName = tenantName;
+    }
+
+    private String tenantName;
     /**
      * 组织机构编号。
      */

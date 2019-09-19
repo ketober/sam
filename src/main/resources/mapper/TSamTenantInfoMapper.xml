@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.ai.sam.domain.TSamTenantInfo" >
     <id column="TENANT_ID" property="tenantId" jdbcType="VARCHAR" />
     <result column="TENANT_NAME" property="tenantName" jdbcType="VARCHAR" />
+    <result column="TENANT_DESC" property="tenantDesc" jdbcType="VARCHAR" />
     <result column="CRT_USER_ID" property="crtUserId" jdbcType="VARCHAR" />
     <result column="CRT_TIME" property="crtTime" jdbcType="TIMESTAMP" />
     <result column="MODF_USER_ID" property="modfUserId" jdbcType="VARCHAR" />
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    TENANT_ID, TENANT_NAME, CRT_USER_ID, CRT_TIME, MODF_USER_ID, MODF_TIME
+    TENANT_ID, TENANT_NAME, CRT_USER_ID, CRT_TIME, MODF_USER_ID, MODF_TIME,TENANT_DESC
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.ai.sam.domain.TSamTenantInfoExample" >
     select
@@ -83,6 +84,14 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <if test="pageNum != null and pageNum != '' " >
+      limit ${startIndex},${pageNum}
+    </if>
+  </select>
+  <select id="selectAllTenantInfo" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from t_sam_tenant_info
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -100,12 +109,22 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+  <!--不分实体类型批量删除-->
+  <delete id="batchDeleteByTenantIds" parameterType="java.util.Map">
+    DELETE FROM t_sam_tenant_info
+    WHERE
+    TENANT_ID in (
+    <foreach collection="tenantIds" index="index" item="tenantId" separator=",">
+      #{tenantId}
+    </foreach>
+    )
+  </delete>
   <insert id="insert" parameterType="com.ai.sam.domain.TSamTenantInfo" >
     insert into t_sam_tenant_info (TENANT_ID, TENANT_NAME, CRT_USER_ID, 
-      CRT_TIME, MODF_USER_ID, MODF_TIME
+      CRT_TIME, MODF_USER_ID, MODF_TIME, TENANT_DESC
       )
     values (#{tenantId,jdbcType=VARCHAR}, #{tenantName,jdbcType=VARCHAR}, #{crtUserId,jdbcType=VARCHAR}, 
-      #{crtTime,jdbcType=TIMESTAMP}, #{modfUserId,jdbcType=VARCHAR}, #{modfTime,jdbcType=TIMESTAMP}
+      #{crtTime,jdbcType=TIMESTAMP}, #{modfUserId,jdbcType=VARCHAR}, #{modfTime,jdbcType=TIMESTAMP},#{tenantDesc,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.ai.sam.domain.TSamTenantInfo" >
@@ -212,6 +231,9 @@
       </if>
       <if test="modfTime != null" >
         MODF_TIME = #{modfTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenantDesc != null" >
+        TENANT_DESC = #{tenantDesc,jdbcType=VARCHAR},
       </if>
     </set>
     where TENANT_ID = #{tenantId,jdbcType=VARCHAR}

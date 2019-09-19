@@ -14,7 +14,24 @@ public class TSamTenantInfoExample {
     public TSamTenantInfoExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
+    public String startIndex;
+    public String pageNum;
 
+    public String getStartIndex() {
+        return startIndex;
+    }
+
+    public String getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(String pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public void setStartIndex(String startIndex) {
+        this.startIndex = startIndex;
+    }
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
     }
