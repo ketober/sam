@@ -1,9 +1,12 @@
 package com.ai.sam.service.impl;
 
+import com.ai.sam.common.StaticValue;
 import com.ai.sam.dao.*;
 import com.ai.sam.domain.*;
+import com.ai.sam.service.TSamDataAuthElementService;
 import com.ai.sam.service.TSamStaffInfoService;
 
+import com.github.pagehelper.util.StringUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +41,13 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
     private TSamGroupInfoMapper tSamGroupInfoMapper;
     @Autowired
     private TSamOrgaInfoMapper tSamOrgaInfoMapper;
-
+    @Autowired
+    private TSamTenantauthMapper tSamTenantauthMapper;
+    @Autowired
+    private TSamDataAuthElementService tSamDataAuthElementService;
     @Override
-	public  TSamStaffInfo getById(Integer id) throws Exception  {
-       return null;
+	public  TSamStaffInfo getById(String id) throws Exception  {
+       return tsamstaffinfomapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -51,6 +57,8 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
     }
     @Override
     public List<Map<String,Object>> getStaffInfo2(Map<String,Object> params) throws Exception {
+        TSamStaffInfo tSamStaffInfo = tsamstaffinfomapper.selectByPrimaryKey(params.get("opStaffId").toString());
+        params.put("tenantId",tSamStaffInfo.getTenantId());
         List<Map<String,Object>> list =tsamstaffinfomapper.queryStaffInfo2(params);
         return list;
     }
@@ -81,7 +89,15 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
     }
     @Override
     public int getStaffInfoCount(Map<String, Object> params) throws Exception {
+        TSamStaffInfo tSamStaffInfo = tsamstaffinfomapper.selectByPrimaryKey(params.get("opStaffId").toString());
+        params.put("tenantId",tSamStaffInfo.getTenantId());
         int count= tsamstaffinfomapper.queryStaffInfoCount(params);
+        return count;
+    }
+
+    @Override
+    public int getStaffInfoAssignCount(Map<String, Object> params) throws Exception {
+        int count= tsamstaffinfomapper.queryStaffInfoAssignCount(params);
         return count;
     }
     @Override
@@ -91,6 +107,7 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
     }
     @Override
     public int createStaffInfo(TSamStaffInfo staffInfo) throws Exception {
+        //根据所属组织机构的租户权限给新增人员归属租户信息
         TSamOrgaInfo tSamOrgaInfo = tSamOrgaInfoMapper.selectByPrimaryKey(staffInfo.getOrgaId());
         staffInfo.setTenantId(tSamOrgaInfo.getTenantId());
         int count= tsamstaffinfomapper.insert(staffInfo);
@@ -98,21 +115,47 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
     }
 
     @Override
-    public int updateStaffInfo(String opUserId,TSamStaffInfo staffInfo) throws Exception {
-        List<String> list = tsamstaffinfomapper.opUserTenantAuth(staffInfo.getOrgaId());
-        if(!list.contains(opUserId))
+    public Map<String, Object> updateStaffInfo(String opStaffId,TSamStaffInfo staffInfo) throws Exception {
+        Map<String, Object> result =  new HashMap<String, Object>();
+        TSamOrgaInfo tSamOrgaInfo = tSamOrgaInfoMapper.selectByPrimaryKey(staffInfo.getOrgaId());
+        staffInfo.setTenantId(tSamOrgaInfo.getTenantId());
+        if(!tSamDataAuthElementService.checkUserDataAuth(opStaffId,staffInfo.getOrgaId()))
         {
-           throw new Exception("当前员工没有改人员组织的租户权限！");
+            result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_FAIL_VAL);
+            result.put(StaticValue.RESULT_MSG,"当前登录工号没有该组织机构权限");
+            return result;
         }
-        int count= tsamstaffinfomapper.updateByPrimaryKeySelective(staffInfo);
-        return count;
+        //当前操作人是否有租户权限
+        if(!tSamDataAuthElementService.checkUserDataAuth(opStaffId,staffInfo.getTenantId()))
+        {
+            result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_FAIL_VAL);
+            result.put(StaticValue.RESULT_MSG,"当前登录工号没有该租户权限");
+            return result;
+        }
+        //选用当前组织机构的所属租户更新租户信息
+        tsamstaffinfomapper.updateByPrimaryKeySelective(staffInfo);
+        result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
+        result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
+        return result;
     }
 
     @Override
-    public void deleteStaffInfo(List<String> staffIds) throws Exception {
+    public Map<String, Object> deleteStaffInfo(List<String> staffIds,String opStaffId) throws Exception {
         Map<String,Object> params =new HashMap<>();
-
+        Map<String, Object> result = new HashMap<String, Object>();
+        String resultStr = new String("");
         for (String staffId:staffIds ) {
+            TSamStaffInfo tSamStaffInfo = tsamstaffinfomapper.selectByPrimaryKey(staffId);
+            if(!tSamDataAuthElementService.checkUserDataAuth(opStaffId,tSamStaffInfo.getOrgaId()))
+            {
+                resultStr += "工号： "+opStaffId+" 没有组织机构ID为："+tSamStaffInfo.getOrgaId()+"的权限</br>";
+                continue;
+            }
+            if(!tSamDataAuthElementService.checkUserDataAuth(opStaffId,tSamStaffInfo.getTenantId()))
+            {
+                resultStr += "工号： "+opStaffId+" 没有租户ID为："+tSamStaffInfo.getTenantId()+"的权限</br>";
+                continue;
+            }
             params.put("staffId",staffId);
             tsamstaffinfomapper.deleteByPrimaryKey(staffId);
             //删除用户密码
@@ -125,8 +168,19 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
             tsampermitmapper.deleteByEntityId(params);
             //释放平台工号
             tsamplatformrelmapper.deleteStaffPlatform(params);
+            //删除租户权限
+            tSamTenantauthMapper.deleteByStaffId(staffId);
 
         }
+        result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
+        if(resultStr.isEmpty()) {
+            result.put(StaticValue.RESULT_MSG, StaticValue.RESULT_SUCCESS_MSG);
+        }
+        else
+        {
+            result.put(StaticValue.RESULT_MSG, resultStr);
+        }
+        return result;
     }
     @Override
     public void updateStaffStatus(List<String> staffIds) throws Exception {
@@ -206,6 +260,61 @@ public class TSamStaffInfoServiceImpl implements TSamStaffInfoService {
     @Override
     public List<TSamStaffInfo> selectStaffForRoleId(String roleId) {
         return tsamstaffinfomapper.selectStaffForRoleId(roleId);
+    }
+
+    @Override
+    public String updateStaffOrgaInfo(String staffIds, String orgaId) throws Exception
+    {
+        String resultStr = new String("");
+        String[] s = staffIds.split(",");
+        List<String> list = new ArrayList<String>();
+        List<String> listParam = new ArrayList<String>();
+        Collections.addAll(list, s);
+        Iterator<String> it = list.iterator();
+        //查询组织机构的租户
+        TSamOrgaInfo tSamOrgaInfo = tSamOrgaInfoMapper.selectByPrimaryKey(orgaId);
+        String orgaTenantId = tSamOrgaInfo.getTenantId();
+        while (it.hasNext())
+        {
+            String CurrentStaffId = it.next();
+            //组织机构权限检查
+            if(!tSamDataAuthElementService.checkUserDataAuth(CurrentStaffId,orgaId))
+            {
+                  resultStr += "工号： "+CurrentStaffId+" 没有组织机构ID为："+orgaId+"的权限</br>";
+                  continue;
+            }
+            TSamStaffInfo tSamStaffInfo = tsamstaffinfomapper.selectByPrimaryKey(CurrentStaffId);
+            //租户属性检查(当前分配人员的租户和组织机构是否是同一个租户)
+            if(!orgaTenantId.equals(tSamStaffInfo.getTenantId()))
+            {
+                resultStr += "工号： "+CurrentStaffId+" 和组织机构ID为： "+orgaId+" 不属于同一个租户</br>";
+                continue;
+            }
+            listParam.add(CurrentStaffId);
+        }
+        Map<String,Object> param = new HashMap();
+        if(listParam.isEmpty())
+        {
+            return resultStr;
+        }
+        param.put("staffIds",listParam);
+        param.put("orgaId",orgaId);
+
+        //组织机构是否有人员的权限，租户是否有人员的权限
+        tsamstaffinfomapper.batchUpdateByStaffIds(param);
+        return resultStr;
+
+    }
+
+    //账号权限查询
+    private boolean staffIdAuthSelect(String staffId,String authCode)
+    {
+        TSamPermitExample example = new TSamPermitExample();
+        TSamPermitExample.Criteria criteria = example.createCriteria();
+        criteria.andEntityIdEqualTo(staffId);
+        criteria.andAuthObjIdEqualTo(authCode);
+        List<TSamPermit> permitList = tsampermitmapper.selectByExample(example);
+        return permitList.isEmpty()?false:true;
     }
 
 

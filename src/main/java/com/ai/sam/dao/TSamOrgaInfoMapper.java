@@ -34,11 +34,13 @@ public interface TSamOrgaInfoMapper extends Mapper<TSamOrgaInfo>  {
 
     List<TSamOrgaInfo> selectByTSamOrgaInfoBySuperCode(TSamOrgaInfo record);
 
-    List<TSamOrgaInfo>  selectSuperNode();
+    List<TSamOrgaInfo>  selectSuperNode(String opStaffId);
 
-    List<TSamOrgaInfo>  selectSuperNodeByChildren(String superOrgaCode);
+    List<TSamOrgaInfo>  selectSuperNodeByChildren(@Param("superOrgaCode")String superOrgaCode,@Param("opStaffId")String opStaffId);
 
 
     int selectRepeatOrgaName(Map<String,String> hashMap);
+
+    int deleteByTenantId(String tenantId);
 
 }

@@ -44,10 +44,10 @@ public class  TSamOrgaInfoController extends BaseAction {
 	@RequestMapping(value ="/deleteByPrimaryKey", method = RequestMethod.GET)
 	public Map<String, Object> deleteStaffInfo(HttpServletRequest request) {
 		String orgaId = request.getParameter("orgaId");
-
+        String opStaffId = request.getParameter("opStaffId");
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			tsamorgainfoservice.deleteByPrimaryKey(orgaId);
+			tsamorgainfoservice.deleteByPrimaryKey(orgaId,opStaffId);
 			result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
 			result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
 		} catch (Exception e) {
@@ -123,8 +123,18 @@ public class  TSamOrgaInfoController extends BaseAction {
 
 	@RequestMapping(value = "updateTSamOrgaInfo", consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public int updateTSamOrgaInfo (@RequestBody TSamOrgaInfo tSamOrgaInfo) throws Exception {
-		return tsamorgainfoservice.update(tSamOrgaInfo);
+	public Map<String, Object> updateTSamOrgaInfo (@RequestBody TSamOrgaInfo tSamOrgaInfo) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			tsamorgainfoservice.update(tSamOrgaInfo);
+			result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
+			result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
+		} catch (Exception e) {
+			result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_FAIL_VAL);
+			result.put(StaticValue.RESULT_MSG,e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 
@@ -132,22 +142,33 @@ public class  TSamOrgaInfoController extends BaseAction {
 	@ResponseBody
 	public String selectSamOrgaTree (HttpServletRequest request)  {
 		String id = request.getParameter("id");
-		return tsamorgainfoservice.selectTSamOrgaTree(id);
+		String opStaffId = request.getParameter("opStaffId");
+		return tsamorgainfoservice.selectTSamOrgaTree(id,opStaffId);
 	}
 
 
 	@RequestMapping(value = "selectSamOrgaTreeForCombotree")
 	@ResponseBody
-	public String selectSamOrgaTreeForCombotree ()  {
-		return tsamorgainfoservice.selectTSamOrgaTreeForCombotree();
+	public String selectSamOrgaTreeForCombotree (HttpServletRequest request)  {
+        String opStaffId = request.getParameter("opStaffId");
+		return tsamorgainfoservice.selectTSamOrgaTreeForCombotree(opStaffId);
 	}
 
-
+    @ResponseBody
 	@RequestMapping(value = "deleteOrga")
-	public Map<String, Object> deleteOrga(HttpServletRequest request) throws Exception {
+	public Map<String, Object> deleteOrga(HttpServletRequest request) {
 		String orgaIds = request.getParameter("orgaIds");
-		return tsamorgainfoservice.deleteByPrimaryKey(orgaIds);
-	}
+		String opStaffId = request.getParameter("opStaffId");
+        Map<String, Object> result = new HashMap<String, Object>();
+        try {
+			result = tsamorgainfoservice.deleteByPrimaryKey(orgaIds,opStaffId);
+        } catch (Exception e) {
+            result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_FAIL_VAL);
+            result.put(StaticValue.RESULT_MSG,e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 
 	@RequestMapping(value = "selectTSamOrgaGrid", method = RequestMethod.GET)

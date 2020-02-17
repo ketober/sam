@@ -144,6 +144,10 @@
     delete from t_sam_group_info
     where GROUP_ID = #{groupId,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteByTenantId" parameterType="java.lang.String">
+    delete from t_sam_group_info
+    where TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamGroupInfoExample" >
     delete from t_sam_group_info
     <if test="_parameter != null" >

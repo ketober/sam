@@ -28,7 +28,6 @@
             </div>
 
         </div>
-
         <!-- 右侧表格-->
         <div data-options="region:'center',border:false" style="height: 800px;">
             <div class="cl">
@@ -83,7 +82,7 @@
 
 
     <!--新增弹出窗口-->
-    <div id="pop-window" class="easyui-window" title="新增" data-options="modal:true,closed:true,collapsible:false" style="width:600px;height:400px;padding:10px">
+    <div id="pop-window1" class="easyui-window" title="新增" data-options="modal:true,closed:true,collapsible:false" style="width:600px;height:400px;padding:10px">
         <div class="easyui-layout" data-options="fit:true,border:false">
             <div class='panel-search'style="height: 300px;">
                 <form action="" method="post" class="form form-horizontal">
@@ -133,9 +132,9 @@
                         </div>
                     </div>
                     <div class="row cl">
-                    <label class='form-label col-4'>租户名称1：</label>
+                    <label class='form-label col-4'>租户名称：</label>
                     <div class='formControls col-6' >
-                    <input type='text' class='easyui-combobox' id= "tenantId" name='tenantId'style="height:30px" >
+                    <input type='text' class='easyui-combobox' id= "tenantId1" name='tenantId1'readonly="readonly" style="height:30px" >
                     </div>
                         <div  style="padding-top: 10px;position: initial;">
                             <span style='color:red;padding-left:25px;text-align: center'>*</span>
@@ -153,10 +152,14 @@
             <div data-options="region:'south',border:false" style="text-align:center;">
                 <a href="javascript:void(0)"  onclick="dynameicOrgaOperation()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
                     <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>
-                <a href="javascript:void(0)" onclick="$('#pop-window').window('close');"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                <a href="javascript:void(0)" onclick="$('#pop-window1').window('close');"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
                     <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
             </div>
         </div>
+    </div>
+</div>
+<div data-options="region:'north'" id="pop-window" style="display:none">
+    <div id="win_content" style="overflow:auto">
     </div>
 </div>
 </body>

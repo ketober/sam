@@ -32,6 +32,34 @@
                 }
             });
         },
+        commonAjaxAsync: function myAjax(method, url,async, data, successCallback,errorCallback, type) {
+            var tokenInfo;
+            var arr,reg=new RegExp("(^| )"+"tokenInfo"+"=([^;]*)(;|$)"); //正则匹配
+            if(arr=document.cookie.match(reg)){
+                tokenInfo= unescape(arr[2]);
+            }
+            var token='';
+            if(typeof tokenInfo == 'undefined'){
+                token='';
+            }else{
+                token = JSON.parse(tokenInfo).access_token;
+            }
+            $.ajax({
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+                type: method,
+                url: url,
+                data: data,
+                async: async,
+                error: function (request) {
+                    errorCallback();
+                },
+                success: function (result) {
+                    successCallback(result);
+                }
+            });
+        },
         getToken: function myAjax(method, url, data, callback, type) {
             var tokenInfo;
             var arr,reg=new RegExp("(^| )"+"tokenInfo"+"=([^;]*)(;|$)"); //正则匹配
@@ -49,7 +77,10 @@
             }else{
                 token = JSON.parse(tokenInfo).access_token;
             }
-            return token;
+            return "token";
+        },
+        getOpStaffId:function () {
+            return "bjt1001";
         }
 
     };

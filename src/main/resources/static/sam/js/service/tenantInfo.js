@@ -188,7 +188,12 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
             $(this).linkbutton({disabled: true});
 
             var selections = $page.find("#account").datagrid("getSelections");
-
+            if(selections.length > 1)
+            {
+                $.messager.alert('提示', '只允许选择一个租户！');
+                $(this).linkbutton({disabled: false});
+                return;
+            }
             if (selections.length > 0) {
                 var ids = [];
                 selections.each(function (index) {
@@ -219,8 +224,8 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
             $page.find("#account").datagrid("clearSelections");
             serviceAccount = null;
             $("#win_content").show().window({
-                width: 850,
-                height: 500,
+                width: 550,
+                height: 350,
                 modal: true,
                 title: "新增租户配置"
             });
@@ -239,8 +244,8 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
                 serviceId = selections[0]['serviceId'];
                 serviceAccount = selections[0];
                 $("#win_content").show().window({
-                    width: 850,
-                    height: 500,
+                    width: 550,
+                    height: 350,
                     modal: true,
                     title: "修改租户配置"
                 });
@@ -274,15 +279,19 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
             "</div>",
             "<div class='row cl'>",
             "<label class='form-label col-2'>租户ID</label>",
-            "<div class='formControls col-2'><input  type='text' id='tenantId' name='tenantId' class='easyui-textbox'  style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
-            "<label class='form-label col-2'>租户名称</label>" +
-            "<div class='formControls col-2'><input  type='text' id='tenantName' name='tenantName' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
-            "<label class='form-label col-2'>创建员工</label>" +
-            "<div class='formControls col-2'><input  type='text' id='crtUserId' name='crtUserId' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+            "<div class='formControls col-10'><input  type='text' id='tenantId' name='tenantId' class='easyui-textbox'  style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
             "</div>",
             "<div class='row cl'>",
+            "<label class='form-label col-2'>租户名称</label>" +
+            "<div class='formControls col-10'><input  type='text' id='tenantName' name='tenantName' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+            "</div>",
+/*            "<div class='row cl'>",
+            "<label class='form-label col-2'>创建员工</label>" +
+            "<div class='formControls col-10'><input  type='text' id='crtUserId' name='crtUserId' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+            "</div>",*/
+            "<div class='row cl'>",
             "<label class='form-label col-2'>备注</label>" +
-            "<div class='formControls col-8'><input  type='text' id ='tenantDesc' name='tenantDesc' class='easyui-textbox' style='width:100%;height:55px' /></div>" +
+            "<div class='formControls col-10'><input  type='text' id ='tenantDesc' name='tenantDesc' class='easyui-textbox' style='width:90%;height:65px' /></div>" +
             "</div>",
             "</form>",
             "</div>"
@@ -329,15 +338,19 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
             "</div>",
             "<div class='row cl'>",
             "<label class='form-label col-2'>租户ID</label>",
-            "<div class='formControls col-2'><input  type='text' id='tenantId' name='tenantId' class='easyui-textbox'  style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
-            "<label class='form-label col-2'>租户名称</label>" +
-            "<div class='formControls col-2'><input  type='text' id='tenantName' name='tenantName' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
-            "<label class='form-label col-2'>创建员工</label>" +
-            "<div class='formControls col-2'><input  type='text' id='crtUserId' name='crtUserId' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+            "<div class='formControls col-10'><input  type='text' id='tenantId' name='tenantId' disabled='true' class='easyui-textbox'  style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
             "</div>",
             "<div class='row cl'>",
+            "<label class='form-label col-2'>租户名称</label>" +
+            "<div class='formControls col-10'><input  type='text' id='tenantName' name='tenantName'  class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+            "</div>",
+            /*"<div class='row cl'>",
+            "<label class='form-label col-2'>创建员工</label>" +
+            "<div class='formControls col-10'><input  type='text' id='crtUserId' name='crtUserId' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+            "</div>",*/
+            "<div class='row cl'>",
             "<label class='form-label col-2'>备注</label>" +
-            "<div class='formControls col-8'><input  type='text' id ='tenantDesc' name='tenantDesc' class='easyui-textbox' style='width:100%;height:55px' /></div>" +
+            "<div class='formControls col-10'><input  type='text' id ='tenantDesc' name='tenantDesc' class='easyui-textbox' style='width:90%;height:55px' /></div>" +
             "</div>",
             "</form>",
             "</div>"
@@ -382,7 +395,7 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
 
             var tenantId = $popWindow.find("input[id='tenantId']").val().trim();
             var tenantName = $popWindow.find("input[name='tenantName']").val().trim();
-            var crtUserId = $popWindow.find("input[name='crtUserId']").val().trim();
+            var crtUserId = AjaxUtils.getOpStaffId();
             var tenantDesc=$popWindow.find("input[id='tenantDesc']").val().trim();
             if (!tenantId) {
                 $.messager.alert('提示', '请填写租户ID！');
@@ -395,6 +408,7 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
                 $(this).linkbutton({disabled: false});
             } else {
                 var sd = getParams($popWindow);
+                sd.crtUserId = crtUserId;
                 AjaxUtils.commonAjax('post','/sam/tsamtenantinfo/addTenant',sd,function (data) {
                     $("#global").linkbutton({disabled: false});
                     if (data.resultVal === "1") {
@@ -435,7 +449,7 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
 
             var tenantId = $popWindow.find("input[name='tenantId']").val().trim();
             var tenantName = $popWindow.find("input[name='tenantName']").val().trim();
-            var crtUserId = $popWindow.find("input[name='crtUserId']").val().trim();
+            var crtUserId = AjaxUtils.getOpStaffId();
             if (!tenantId) {
                 $.messager.alert('提示', '请填写租户ID！');
                 $(this).linkbutton({disabled: false});
@@ -447,6 +461,7 @@ require(["load", "request", "jquery", 'ajaxUtils','crm', 'common-enum', 'easyui'
                 $(this).linkbutton({disabled: false});
             } else {
                 var sd = getParams($popWindow);
+                sd.modfUserId = crtUserId;
                 AjaxUtils.commonAjax('post','/sam/tsamtenantinfo/updateTenant',sd,function (data) {
                     $("#global").linkbutton({disabled: false});
 

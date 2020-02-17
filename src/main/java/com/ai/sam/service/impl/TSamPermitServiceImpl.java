@@ -1,9 +1,13 @@
 package com.ai.sam.service.impl;
 
 import com.ai.sam.common.StaticValue;
+import com.ai.sam.dao.TSamStaffInfoMapper;
 import com.ai.sam.dao.TSamStaffRoleMapper;
 import com.ai.sam.domain.TSamPermit;
+import com.ai.sam.domain.TSamPermitExample;
+import com.ai.sam.domain.TSamStaffInfo;
 import com.ai.sam.domain.TSamStaffRole;
+import com.ai.sam.service.TSamDataAuthElementService;
 import com.ai.sam.service.TSamPermitService;
 import com.ai.sam.dao.TSamPermitMapper;
 
@@ -31,7 +35,10 @@ public class TSamPermitServiceImpl implements TSamPermitService {
 	private TSamStaffRoleMapper tsamstaffrolemapper;
     @Autowired
     private SequenceUtils sequenceUtils;
-
+    @Autowired
+    private TSamStaffInfoMapper tSamStaffInfoMapper;
+    @Autowired
+    private TSamDataAuthElementService tSamDataAuthElementService;
     @Override
 	public  TSamPermit getById(Integer id) throws Exception  {
        return null;
@@ -102,7 +109,7 @@ public class TSamPermitServiceImpl implements TSamPermitService {
     }
 
     @Override
-    public Map<String, Object> updateAuthPermitEntity(String moduleId,String permitType,String subAuthIds,String parentAuthIds,String addEntityIds,String delEntityIds) throws Exception {
+    public Map<String, Object> updateAuthPermitEntity(String moduleId,String permitType,String subAuthIds,String parentAuthIds,String addEntityIds,String delEntityIds,String opStaffId) throws Exception {
         Map<String,Object> params1 = new HashMap<>();
         Map<String,Object> params2 = new HashMap<>();
         Map<String,Object> result = new HashMap<>();
@@ -111,12 +118,39 @@ public class TSamPermitServiceImpl implements TSamPermitService {
         params1.put("permitType", permitType);
         params2.put("moduleId",moduleId);
         params2.put("permitType", permitType);
+        //检查操作人是否有租户权限
+        TSamStaffInfo tSamStaffInfo = tSamStaffInfoMapper.selectByPrimaryKey(opStaffId);
+        String checkAuthFail = "";
+        String opStaffTenantId = tSamStaffInfo.getTenantId();
         //添加要新增的实体(人员或角色)和权限及父的映射
         String addEntityArr[],parentAuthArr[];
         addEntityArr = addEntityIds.split(",");
         parentAuthArr = parentAuthIds.split(",");
+        //删除要去掉的实体(人员或角色)和权限及子的映射
+        TSamPermitExample example = new TSamPermitExample();
+        TSamPermitExample.Criteria criteria = example.createCriteria();
+        criteria.andAuthObjIdEqualTo(subAuthIds);
+        criteria.andModuleIdEqualTo(moduleId);
+        criteria.andPermitTypeEqualTo(permitType);
+        tsampermitmapper.deleteByExample(example);
         if (addEntityArr.length > 0) {
             for (int i = 0; i < addEntityArr.length; i++) {
+                if("1".equals(permitType))
+                {
+                    if(!tSamDataAuthElementService.checkUserDataAuth(addEntityArr[i],opStaffTenantId))
+                    {
+                        checkAuthFail += "操作人无员工ID为："+addEntityArr[i]+"的数据权限</br>";
+                        continue;
+                    }
+                }
+                else
+                {
+                    if(!tSamDataAuthElementService.checkRoleDataAuth(addEntityArr[i],opStaffTenantId))
+                    {
+                        checkAuthFail += "操作人无角色ID为："+addEntityArr[i]+"的数据权限</br>";
+                        continue;
+                    }
+                }
                 for(int j = 0;j<parentAuthArr.length;j++) {
                     if (!StringUtils.isEmpty(addEntityArr[i])) {
                         long key = sequenceUtils.getSequence("t_sam_permit");
@@ -147,7 +181,12 @@ public class TSamPermitServiceImpl implements TSamPermitService {
             }
         }
         result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
-        result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
+        if(checkAuthFail.isEmpty()) {
+            result.put(StaticValue.RESULT_MSG, StaticValue.RESULT_SUCCESS_MSG);
+        }
+        else {
+            result.put(StaticValue.RESULT_MSG, checkAuthFail);
+        }
         return result;
     }
 

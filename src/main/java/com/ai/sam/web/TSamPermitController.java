@@ -171,9 +171,10 @@ public class  TSamPermitController extends BaseAction {
 		String parentAuthIds = request.getParameter("parentAuthIds");//权限及父节点集合
 		String addEntityIds = request.getParameter("addEntityIds");//要新增的实体集合
 		String delEntityIds = request.getParameter("delEntityIds");//要删除的实体集合
+		String opStaffId = request.getParameter("opStaffId");//操作人员
 		Map<String,Object> result = null;
 		try {
-			result = tsampermitservice.updateAuthPermitEntity(moduleId,permitType,subAuthIds,parentAuthIds,addEntityIds,delEntityIds);
+			result = tsampermitservice.updateAuthPermitEntity(moduleId,permitType,subAuthIds,parentAuthIds,addEntityIds,delEntityIds,opStaffId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

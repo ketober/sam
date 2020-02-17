@@ -59,7 +59,7 @@ public interface TSamPermitService {
     * @return
     * @throws Exception
     */
-   Map<String,Object> updateAuthPermitEntity(String moduleId,String permitType,String subAuthIds,String parentAuthIds,String addEntityIds,String delEntityIds)throws Exception;
+   Map<String,Object> updateAuthPermitEntity(String moduleId,String permitType,String subAuthIds,String parentAuthIds,String addEntityIds,String delEntityIds,String opStaffId)throws Exception;
 
 
 

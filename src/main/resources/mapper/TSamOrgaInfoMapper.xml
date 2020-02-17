@@ -104,6 +104,10 @@
     delete from t_sam_orga_info
     where ORGA_ID = #{orgaId,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteByTenantId" parameterType="java.lang.String">
+    delete from t_sam_orga_info
+    where TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamOrgaInfoExample" >
     delete from t_sam_orga_info
     <if test="_parameter != null" >
@@ -200,14 +204,17 @@
     <include refid="Base_Column_List" />
     from t_sam_orga_info
     where SUPER_ORGA_CODE = 0
+    and TENANT_ID = (select TENANT_ID from t_sam_staff_info where STAFF_ID = #{opStaffId})
   </select>
 
 
-  <select id="selectSuperNodeByChildren" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectSuperNodeByChildren" resultMap="BaseResultMap" >
     select
     <include refid="Base_Column_List" />
     from t_sam_orga_info
     where SUPER_ORGA_CODE=#{superOrgaCode,jdbcType=VARCHAR}
+    and
+    TENANT_ID in (select TENANT_ID from t_sam_staff_info where STAFF_ID = #{opStaffId,jdbcType=VARCHAR})
   </select>
 
 

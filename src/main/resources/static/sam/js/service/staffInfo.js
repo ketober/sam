@@ -60,7 +60,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 // headers: {
                 //     "Authorization":"Bearer " + token
                 // },
-                url: "/sam/tsamorgainfo/selectSamOrgaTree?access_token="+token,
+                url: "/sam/tsamorgainfo/selectSamOrgaTree?access_token="+token+"&opStaffId="+ajaxUtils.getOpStaffId(),
                 // url: "/tsamorgainfo/selectSamOrgaTree",
                 autoParam : [ "id" ]	// 异步加载时自动提交父节点属性的参数,假设父节点 node = {id:1, name:"test"}，异步加载时，提交参数 zId=1
             },
@@ -76,11 +76,12 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             callback : {
                 onClick : function(event, treeId, treeNode, clickFlag) {
                     // 判断是否父节点
-                    if(!treeNode.isParent){
+                    /*if(!treeNode.isParent){
                         orgaCode = treeNode.id;
                     }else{
                         orgaCode=treeNode.pId;
-                    }
+                    }*/
+                    orgaCode = treeNode.id;
                     // alert(treeNode.id);
                     $page.find("#staff").datagrid('reload');
                 },
@@ -152,9 +153,9 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             "<div class='formControls col-2'><select class='easyui-combobox' id='staffIdStatus' name='staffIdStatus' data-options='panelHeight:\"auto\"' style='width:90%;height:30px'><option value='00'>选择类型</option><option value='01'>正常</option><option value='02'>停用</option><option value='03'>作废</option><option value='04'>锁定</option><option value='05'>解锁</option><option value='06'>失效</option><option value='07'>未启用</option></select></div>",
             // "<label class='form-label col-2'>岗位：</label>"+
             // "<div class='formControls col-2'><select class='easyui-combobox' id='postId1' name='postId' data-options='panelHeight:\"auto\"' style='width:90%;height:30px'><option value='00'>选择类型</option><option value='01'>组长</option><option value='02'>职员</option></select></div>",
-            "<label class='form-label col-2'>所属租户：</label>"+
+            /*"<label class='form-label col-2'>所属租户：</label>"+
             "<div class='formControls col-2'><input  type='text'  name='tenantId'  class='easyui-combobox' style='width:90%;height:30px'/></div>"+
-            "</div>",
+*/            "</div>",
 
             "<div class='row cl'>",
             "<div class='mt-10 text-c '>" +
@@ -225,7 +226,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
      */
     function getParams($document) {
         var param = {
-            "opUserId":"hk1001"
+            "opStaffId":AjaxUtils.getOpStaffId()
         };
 
         $document && $document.find("input").each(function() {
@@ -299,7 +300,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             loader: function (param, success) {
                 var start = (param.page - 1) * param.rows+1;
                 var pageNum = param.rows;
-                var params = $.extend({"startIndex":start, "pageNum":pageNum,"orgaCode":orgaCode}, getParams($search));
+                var params = $.extend({"startIndex":start, "pageNum":pageNum,"orgaCode":orgaCode,"opStaffId":AjaxUtils.getOpStaffId()}, getParams($search));
                 AjaxUtils.commonAjax('post','/sam/StaffInfo/qryStaffInfo',params,function (data) {
                     $search.find("a.btn-green").linkbutton({disabled:false});
                     var dd={"total":data.total,"rows":data.list};
@@ -360,7 +361,15 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 $.messager.confirm("提示","确认删除？",function(sure) {
                     if (sure) {
                         var url='/sam/StaffInfo/deleteStaffInfo?ids='+ ids;
-                        AjaxUtils.commonAjax('post',url,null,function (data) {
+                        AjaxUtils.commonAjax('post',url,{"opStaffId":AjaxUtils.getOpStaffId()},function (data) {
+                            if(data.resultVal == 1)
+                            {
+                                $.messager.alert("提示","删除人员成功!");
+                            }
+                            if(data.resultVal == 2)
+                            {
+                                $.messager.alert("提示","删除人员失败"+data.resultMsg);
+                            }
                             $("#deleteAccount").linkbutton({disabled: false});
                             $page.find("#staff").datagrid('load');
                         },function f() {
@@ -529,7 +538,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             multiple: true,
             checkbox : true,
             onlyLeafCheck : true,//只能叶子节点才能勾选
-            url : "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?access_token="+token,
+            url : "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?access_token="+token+"&opStaffId="+ajaxUtils.getOpStaffId(),
             onBeforeSelect : function(node){
                 // $(this).tree("check", node.target);//控制点击文字时也能勾选
                 // return false;
@@ -1150,7 +1159,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
             //     })
             // });
             $update.find("a.btn").linkbutton();
-            var url ='/sam/StaffInfo/qryStaffInfo?staffId='+ staffId;
+            var url ='/sam/StaffInfo/qryStaffInfo?staffId='+ staffId+'&'+'opStaffId='+AjaxUtils.getOpStaffId();
             AjaxUtils.commonAjax('post',url,null,function (data) {
                 $("#staffId5").textbox("setValue",data.list[0].staffId);
                 $("#staffName5").textbox("setValue",data.list[0].staffName);
@@ -1173,7 +1182,7 @@ require(["load","request", "jquery",'ajaxUtils', 'crm','common-enum',  'easyui',
                 multiple: true,
                 checkbox : true,
                 onlyLeafCheck : true,//只能叶子节点才能勾选
-                url : "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?access_token="+token,
+                url : "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?access_token="+token+"&opStaffId="+ajaxUtils.getOpStaffId(),
                 onBeforeSelect : function(node){
                     // $(this).tree("check", node.target);//控制点击文字时也能勾选
                     // return false;

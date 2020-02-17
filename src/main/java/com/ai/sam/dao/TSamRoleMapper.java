@@ -13,6 +13,8 @@ public interface TSamRoleMapper extends Mapper<TSamRole>  {
 
     int deleteByPrimaryKey(String roleId);
 
+    int deleteByTenantId(String tenantId);
+
     int insert(TSamRole record);
 
     int insertSelective(TSamRole record);

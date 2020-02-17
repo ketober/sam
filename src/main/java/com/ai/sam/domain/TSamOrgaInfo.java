@@ -22,6 +22,16 @@ public class TSamOrgaInfo extends Page {
     }
 
     private String tenantName;
+
+    public String getOpStaffId() {
+        return opStaffId;
+    }
+
+    public void setOpStaffId(String opStaffId) {
+        this.opStaffId = opStaffId;
+    }
+
+    private String opStaffId;
     /**
      * 组织机构编号。
      */

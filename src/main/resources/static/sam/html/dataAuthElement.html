@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>数据权限维护</title>
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/cmcui.css">
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/demo.css">
+    <link rel="stylesheet" type="text/css" href="../../common/ztree/css/cmcStyle/tree1.css"/>
+    <link rel="stylesheet" type="text/css" href="../../common/easyui/themes/cmcui/iconfont/iconfont.css">
+    <script type="text/javascript" src="../../common/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../common/ztree/js/jquery.ztree.all.js"></script>
+    <script type="text/javascript" src="../../common/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../common/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../common/easyui/plugins/jquery.messager.js"></script>
+    <script type="text/javascript" src="../../common/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../sam/js/ajaxUtilsTemp.js"></script>
+
+</head>
+<html>
+<head></head>
+<body>
+<div class="easyui-layout"style="width:100%;height:650px;">
+    <!--左侧树-->
+    <div class="easyui-layout" style="width:100%;height:650px;">
+        <div data-options="region:'west',split:true,title:'数据权限树'" style="overflow: auto; width: 225px;height: 600px;" title="" class="panel-body layout-body">
+            <a href="javascript:void(0)" class="btn btn-secondary radius" onclick="openOrgaView1();"><i class="iconfont iconfont-add"></i>新增</a>
+            <!--<a href="javascript:void(0)" class="btn btn-secondary radius" onclick="showEditOrgaInfo();" ><i class="iconfont iconfont-edit"></i>修改</a>-->
+            <a href="javascript:void(0)" class="btn btn-secondary radius" onclick="deleteOrga1();"><i class="iconfont iconfont-del2" ></i>删除</a>
+
+            <div>
+                <ul id="menuTree" class="ztree1"></ul>
+            </div>
+
+        </div>
+        <!-- 右侧表格-->
+        <div  id='rightTable' title="对象名称" data-options="region:'center',border:false" style="height: 800px;">
+            <div class="cl">
+                <!--按钮操作-->
+                <div class="panel-search" style="height: 40px;">
+                    <div class="col" style="float:left;">
+                        数据对象ID：
+                        <input class="easyui-textbox" data-options="prompt:'请输入数据对象ID'" style="width:200px;height:30px" id="searchOrgaName"/>
+                    </div>
+                    <div class="col" style="float:left;">
+                        数据对象名称：
+                        <input class="easyui-textbox" data-options="prompt:'请输入数据对象名称'" style="width:200px;height:30px" id="searchTenantName"/>
+                    </div>
+
+                    <div class="col" style="float: right;margin-top: -10px;margin-left: 10px;">
+                        <div class="mt-10 text-c ">
+                            <a href="javascript:void(0)"  onclick="selectOrga();" class="btn btn-green radius l-btn l-btn-small">
+                                 <span class="l-btn-left">
+                                       <i class="iconfont iconfont-search2">查询</i>
+                                  </span>
+                            </a>
+                            <a onclick="resultSearch()" class="btn btn-default radius mt-l-20  l-btn l-btn-small" >
+                                   <span class="l-btn-text">
+                                       <i class="iconfont iconfont-zhongzuo">重置</i>
+                                    </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class="panel-tool-box cl">
+                    <div class="fl text-bold">数据对象列表</div>
+                    <div class="fr">
+                        <a href="javascript:void(0)" class="btn btn-secondary radius" onclick="openOrgaView();"><i class="iconfont iconfont-add"></i>新增</a>
+                        <!--<a href="javascript:void(0)" class="btn btn-secondary radius" onclick="showEditOrgaInfo();" ><i class="iconfont iconfont-edit"></i>修改</a>-->
+                        <a href="javascript:void(0)" class="btn btn-secondary radius" onclick="deleteOrga();"><i class="iconfont iconfont-del2" ></i>删除</a>
+                    </div>
+                </div>
+                <!--表格-->
+                <table id="dg" class="easyui-datagrid" style="width:100%;height:530px;">
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+    <!--新增数据对象弹出窗口-->
+    <div id="pop-window1" class="easyui-window" title="新增数据对象" data-options="modal:true,closed:true,collapsible:false" style="width:600px;height:400px;padding:10px">
+        <div class="easyui-layout" data-options="fit:true,border:false">
+            <div class='panel-search'style="height: 300px;">
+                <form action="" method="post" class="form form-horizontal">
+                    <div class="row cl">
+                        <label class="form-label col-4">所属权限编码：</label>
+                        <div class="formControls col-6">
+                            <input type='text' class='easyui-textbox' id= "authconfigid" name='authconfigid'style="height:30px" >
+                        </div>
+                        <div class="formControls col-2" style="padding-top: 10px;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+
+                    </div>
+
+                    <div class="row cl">
+                        <label class="form-label col-4">编号：</label>
+                        <div class="formControls col-6">
+                            <input type='text' class='easyui-textbox' id= "commonid" name='commonid'style="height:30px" >
+                        </div>
+                        <div style="padding-top: 10px;position: initial;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+                    </div>
+
+                    <div class="row cl">
+                        <label class="form-label col-4">名称：</label>
+                        <div class="formControls col-6">
+                            <input type='text' class='easyui-textbox' id= "commonname" name='commonname'style="height:30px" >
+                        </div>
+                        <div  style="padding-top: 10px;position: initial;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class='form-label col-4'>CODE：</label>
+                        <div class='formControls col-6' >
+                            <input type='text' class='easyui-textbox' id= "commoncode" name='commoncode'style="height:30px" >
+                        </div>
+                        <div  style="padding-top: 10px;position: initial;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div data-options="region:'south',border:false" style="text-align:center;">
+                <a href="javascript:void(0)"  onclick="saveOrgaInfo();" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                    <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>
+                <a href="javascript:void(0)" onclick="$('#pop-window1').window('close');"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                    <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+            </div>
+        </div>
+    </div>
+    <!--&lt;!&ndash;新增数据权限弹出窗口&ndash;&gt;
+    <div id="pop-window2" class="easyui-window" title="新增数据权限树节点" data-options="modal:true,closed:true,collapsible:false" style="width:600px;height:400px;padding:10px">
+        <div class="easyui-layout" data-options="fit:true,border:false">
+            <div class='panel-search'style="height: 300px;">
+                <form action="" method="post" class="form form-horizontal">
+                    <div class="row cl">
+                        <label class="form-label col-4">数据权限父节点：</label>
+                        <div class="formControls col-6">
+                            <input type='text' class='easyui-textbox' id= "parentfield" name='parentfield'style="height:30px" >
+                        </div>
+                        <div class="formControls col-2" style="padding-top: 10px;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+                    </div>
+
+                    <div class="row cl">
+                        <label class="form-label col-4">数据权限ID：</label>
+                        <div class="formControls col-6">
+                            <input type='text' class='easyui-textbox' id= "dataID" name='bianhao'style="height:30px" >
+                        </div>
+                        <div style="padding-top: 10px;position: initial;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+                    </div>
+
+                    <div class="row cl">
+                        <label class="form-label col-4">数据权限名称：</label>
+                        <div class="formControls col-6">
+                            <input type='text' class='easyui-textbox' id= "dataId1" name='mingcheng'style="height:30px" >
+                        </div>
+                        <div  style="padding-top: 10px;position: initial;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+                    </div>
+                    <div class="row cl">
+                        <label class='form-label col-4'>权限描述：</label>
+                        <div class='formControls col-6' >
+                            <input type='text' class='easyui-textbox' id= "code1" name='code'style="height:30px" >
+                        </div>
+                        <div  style="padding-top: 10px;position: initial;">
+                            <span style='color:red;padding-left:25px;text-align: center'>*</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div data-options="region:'south',border:false" style="text-align:center;">
+                <a href="javascript:void(0)"  onclick="dynameicOrgaOperation()" class="btn btn-green radius mt-l-20 l-btn l-btn-small" group="">
+                    <span class="l-btn-left"><span class="l-btn-text">保存</span></span></a>
+                <a href="javascript:void(0)" onclick="$('#pop-window2').window('close');"  class="btn btn-secondary radius mt-l-20 l-btn l-btn-small" group="">
+                    <span class="l-btn-left"><span class="l-btn-text">取消</span></span></a>
+            </div>
+        </div>
+    </div>
+-->
+</div>
+<div data-options="region:'north'" id="pop-window" style="display:none">
+    <div id="win_content" style="overflow:auto">
+    </div>
+</div>
+<div data-options="region:'north'" id="pop-window3" style="display:none">
+    <div id="win_content3" style="overflow:auto">
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="../../sam/js/service/dataAuthElement.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        initOrgainfoTree();
+        initOrgainfoGrid("001");
+    });
+</script>
+</html>

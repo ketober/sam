@@ -16,16 +16,16 @@ public class TSamStaffInfo extends Page {
      */
     @Id
     @Column(name = "`STAFF_ID`")
-    @ApiModelProperty(name = "STAFFID", value = "", required = true, example = "")
-    @JsonProperty("STAFFID")
+    @ApiModelProperty(name = "staffId", value = "", required = true, example = "")
+    @JsonProperty("staffId")
     private String staffId;
 
     /**
      * 人员姓名。
      */
     @Column(name = "`STAFF_NAME`")
-    @ApiModelProperty(name = "STAFFNAME", value = "", required = true, example = "")
-    @JsonProperty("STAFFNAME")
+    @ApiModelProperty(name = "staffName", value = "", required = true, example = "")
+    @JsonProperty("staffName")
     private String staffName;
 
     /**

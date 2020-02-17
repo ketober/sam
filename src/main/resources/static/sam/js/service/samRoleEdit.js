@@ -49,7 +49,7 @@ function initCombotree(){
         multiple: true,
         checkbox : true,
         onlyLeafCheck : true,//只能叶子节点才能勾选
-        url : "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?access_token="+token,
+        url : "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?access_token="+token+"&opStaffId="+AjaxUtilsTemp.getOpStaffId(),
         onBeforeSelect : function(node){
             $(this).tree("check", node.target);//控制点击文字时也能勾选
             return false;

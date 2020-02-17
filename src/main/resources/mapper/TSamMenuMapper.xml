@@ -119,6 +119,10 @@
     delete from t_sam_menu
     where MENU_ID = #{menuId,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteByTenantId" parameterType="java.lang.String">
+    delete from t_sam_menu
+    where TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamMenuExample" >
     delete from t_sam_menu
     <if test="_parameter != null" >

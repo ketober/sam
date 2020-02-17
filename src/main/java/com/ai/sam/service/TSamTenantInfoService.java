@@ -12,7 +12,7 @@ public interface TSamTenantInfoService {
    //更新租户
    int updateByPrimaryKey(TSamTenantInfo tSamTenantInfo)throws Exception;
    //删除租户
-   void deleteStaffInfo(List<String> staffIds)throws Exception;
+   void deleteStaffInfo(String tenantId)throws Exception;
 
    List<TSamTenantInfo> qryTenantInfoByExample(TSamTenantInfo tSamTenantInfo);
 

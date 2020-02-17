@@ -27,4 +27,6 @@ public interface TSamModuleMapper extends Mapper<TSamModule>  {
     int updateByPrimaryKeySelective(TSamModule record);
 
     int updateByPrimaryKey(TSamModule record);
+
+    int deleteByTenantId(String tenantId);
 }

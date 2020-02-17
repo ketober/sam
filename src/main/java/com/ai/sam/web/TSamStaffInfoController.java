@@ -36,7 +36,7 @@ public class  TSamStaffInfoController extends BaseAction {
 
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public @ResponseBody TSamStaffInfo getById(@PathVariable("id") Integer id) throws Exception {
+	public @ResponseBody TSamStaffInfo getById(@PathVariable("id") String id) throws Exception {
 
 		logger.info("");
 		logger.error("");
@@ -44,6 +44,43 @@ public class  TSamStaffInfoController extends BaseAction {
 
 	}
 
+    @ResponseBody
+    @RequestMapping("/qryStaffInfoForAssign")
+    public Map<String, Object> qryStaffInfoForAssign(HttpServletRequest request) {
+        String staffId = request.getParameter("staffId");
+        String staffName = request.getParameter("staffName");
+        String staffIdMin = request.getParameter("staffIdMin");
+        String staffIdMax = request.getParameter("staffIdMax");
+        //String startIndex = request.getParameter("startIndex");
+        //String pageNum = request.getParameter("pageNum");
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("staffId",staffId);
+        params.put("staffIdMin",staffIdMin);
+        params.put("staffIdMax",staffIdMax);
+        if (!StringUtils.isEmpty(request.getParameter("startIndex"))){
+            int startIndex = Integer.parseInt(request.getParameter("startIndex"));
+            params.put("start",startIndex-1);
+        }
+        if (!StringUtils.isEmpty(request.getParameter("pageNum"))){
+            int pageNum = Integer.parseInt(request.getParameter("pageNum"));
+            params.put("limit",pageNum);
+        }
+        params.put("staffName",staffName);
+        Map<String, Object> result = new HashMap<String, Object>();
+        try
+        {
+            List<TSamStaffInfo> list = tsamstaffinfoservice.getStaffInfo(params);
+            int total = tsamstaffinfoservice.getStaffInfoAssignCount(params);
+            //查询
+            result.put("list",list);
+            result.put("total",total);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
     @ResponseBody
     @RequestMapping("/qryStaffInfo")
     public Map<String, Object> qryStaffInfo(HttpServletRequest request) {
@@ -57,6 +94,7 @@ public class  TSamStaffInfoController extends BaseAction {
         String orgaId = request.getParameter("orgaId");
         String orgaCode = request.getParameter("orgaCode");
         String tenantId = request.getParameter("tenantId");
+        String opStaffId = request.getParameter("opStaffId");
         if (StringUtils.isEmpty(orgaId)&&!("0".equals(orgaCode))){
             orgaId=orgaCode;
         }
@@ -81,7 +119,8 @@ public class  TSamStaffInfoController extends BaseAction {
         params.put("staffIdStatus",staffIdStatus);
         params.put("channelId",channelId);
         params.put("postId",postId);
-        params.put("tenantId",tenantId);
+        //params.put("tenantId",tenantId);
+        params.put("opStaffId",opStaffId);
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             //
@@ -262,7 +301,7 @@ public class  TSamStaffInfoController extends BaseAction {
     @ResponseBody
     @RequestMapping("/updateStaffInfo")
     public Map<String, Object> updateStaffInfo(HttpServletRequest request) {
-	    String opUserId =request.getParameter("opUserId");
+	    String opStaffId =request.getParameter("opStaffId");
         String staffId = request.getParameter("staffId5");
         String staffName = request.getParameter("staffName5");
         String staffState = request.getParameter("staffState5");
@@ -275,7 +314,7 @@ public class  TSamStaffInfoController extends BaseAction {
         String channelId = request.getParameter("channelId5");
         String prsn_chnl_type_cd = request.getParameter("prsnchnltypecd5");
         String default_service_type = request.getParameter("defaultServiceType5");
-        String tenantId = request.getParameter("tenantId");
+        //String tenantId = request.getParameter("tenantId");
         TSamStaffInfo staffInfo = new TSamStaffInfo();
         staffInfo.setStaffId(staffId);
         staffInfo.setStaffName(staffName);
@@ -290,43 +329,31 @@ public class  TSamStaffInfoController extends BaseAction {
         staffInfo.setUpdaTetime(new Date());
         staffInfo.setDefaultServiceType(default_service_type);
         staffInfo.setPostId(postId);
-        staffInfo.setTenantId(tenantId);
+        //staffInfo.setTenantId(tenantId);
         Map<String, Object> result = new HashMap<String, Object>();
         try {
             //判断操作人是否有当前组织机构的租户操作权限
-            int message = tsamstaffinfoservice.updateStaffInfo(opUserId,staffInfo);
-            if (message==1){
-                result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
-                result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
-                return result;
-            }
-            result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_FAIL_VAL);
-            result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_FAIL_MSG);
+            result = tsamstaffinfoservice.updateStaffInfo(opStaffId,staffInfo);
         } catch (Exception e) {
             result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_FAIL_VAL);
-            result.put(StaticValue.RESULT_MSG,e.getMessage());
+            result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_FAIL_MSG);
         }
         return result;
-    }
-    private boolean opUserOrgaTenantAuth(String opUserId,String orgaId)throws Exception
-    {
-
-        return false;
     }
     //物理删除
 	@ResponseBody
 	@RequestMapping("/deleteStaffInfo")
 	public Map<String, Object> deleteStaffInfo(HttpServletRequest request) {
 		String ids_str = request.getParameter("ids");
+        String opStaffId =request.getParameter("opStaffId");
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (ids_str != null) {
 			String[] s = ids_str.split(",");
 			List<String> ids = new ArrayList<String>();
 			Collections.addAll(ids, s);
 			try {
-				tsamstaffinfoservice.deleteStaffInfo(ids);
-                result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
-                result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
+                result = tsamstaffinfoservice.deleteStaffInfo(ids,opStaffId);
+
 			} catch (Exception e) {
                 result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_FAIL_VAL);
                 result.put(StaticValue.RESULT_MSG,e.getMessage());
@@ -340,13 +367,14 @@ public class  TSamStaffInfoController extends BaseAction {
 	@RequestMapping("/updateStaffStatus")
 	public Map<String, Object> updateStaffStatus(HttpServletRequest request) {
 		String ids_str = request.getParameter("ids");
+        String opStaffId =request.getParameter("opStaffId");
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (ids_str != null) {
 			String[] s = ids_str.split(",");
 			List<String> ids = new ArrayList<String>();
 			Collections.addAll(ids, s);
 			try {
-				tsamstaffinfoservice.deleteStaffInfo(ids);
+				tsamstaffinfoservice.deleteStaffInfo(ids,opStaffId);
                 result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
                 result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
 			} catch (Exception e) {
@@ -583,6 +611,27 @@ public class  TSamStaffInfoController extends BaseAction {
         hashMap.put("total",staffInfoList.size());
         String jsonString = JSON.toJSONString(hashMap);
         return jsonString;
+    }
+
+    @RequestMapping(value = "updateStaffOrgaInfo", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> updateStaffOrgaInfo (HttpServletRequest request) {
+        String staffIds = request.getParameter("staffIds");
+        String orgaId = request.getParameter("orgaId");
+        Map<String, Object> result = new HashMap<String, Object>();
+        try {
+            String resultMsg = tsamstaffinfoservice.updateStaffOrgaInfo(staffIds,orgaId);
+            result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
+            result.put(StaticValue.RESULT_MSG, StaticValue.RESULT_SUCCESS_MSG);
+            if(!resultMsg.isEmpty()) {
+                result.put(StaticValue.RESULT_MSG, resultMsg);
+            }
+        } catch (Exception e) {
+            result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_FAIL_VAL);
+            result.put(StaticValue.RESULT_MSG,e.getMessage());
+            e.printStackTrace();
+        }
+        return result;
     }
 
 

@@ -152,6 +152,10 @@
     delete from t_sam_staff_info
     where STAFF_ID = #{staffId,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteStaffInfoByTenantId" parameterType="java.lang.String">
+    delete from t_sam_staff_info
+    where TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamStaffInfoExample" >
     delete from t_sam_staff_info
     <if test="_parameter != null" >
@@ -831,6 +835,16 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+    <update id="batchUpdateByStaffIds" parameterType="java.util.Map">
+        update  t_sam_staff_info
+        set ORGA_ID= #{orgaId}
+        WHERE
+        STAFF_ID in (
+        <foreach collection="staffIds" index="index" item="staffId" separator=",">
+            #{staffId}
+        </foreach>
+        )
+    </update>
   <update id="updateByExample" parameterType="map" >
     update t_sam_staff_info
     set STAFF_ID = #{record.staffId,jdbcType=VARCHAR},
@@ -1065,6 +1079,90 @@
       limit ${start},${limit}
     </if>
   </select>
+  <select id="queryStaffInfoAssignCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(*) from t_sam_staff_info where 1=1
+    <if test="staffId != null &amp; staffId != ''">
+      AND STAFF_ID = #{staffId}
+    </if>
+    <if test="staffName != null &amp; staffName != ''">
+      AND STAFF_NAME like CONCAT('%',#{staffName},'%')
+    </if>
+    <if test="staffIdMin != null &amp; staffIdMin != ''">
+      and STAFF_ID &gt;= #{staffIdMin}
+    </if>
+    <if test="staffIdMax != null &amp; staffIdMax != ''">
+      and STAFF_ID &lt;= #{staffIdMax}
+    </if>
+    <if test="staffState != null &amp; staffState != '' &amp; staffState != '00'">
+      AND STAFF_STATE = #{staffState}
+    </if>
+    <if test="staffIdStatus != null &amp; staffIdStatus != '' &amp; staffIdStatus != '00'">
+      AND STAFF_ID_STATUS = #{staffIdStatus}
+    </if>
+    <if test="dlevelId != null &amp; dlevelId != ''">
+      AND DLEVEL_ID = #{dlevelId}
+    </if>
+    <if test="dutyId != null &amp; dutyId != ''">
+      AND DUTY_ID = #{dutyId}
+    </if>
+    <if test="secondDuty != null &amp; secondDuty != ''">
+      AND SECOND_DUTY = #{secondDuty}
+    </if>
+    <if test="orgaId != null &amp; orgaId != ''">
+      AND ORGA_ID = #{orgaId}
+    </if>
+    <if test="postId != null &amp; postId != ''">
+      AND POST_ID = #{postId}
+    </if>
+    <if test="secondPost != null &amp; secondPost != ''">
+      AND SECOND_POST = #{secondPost}
+    </if>
+    <if test="updaTetime != null &amp; updaTetime != ''">
+      AND UPDA_TETIME = #{updaTetime}
+    </if>
+    <if test="joinDate != null &amp; joinDate != ''">
+      AND JOIN_DATE = #{joinDate}
+    </if>
+    <if test="mobilePhone != null &amp; mobilePhone != ''">
+      AND MOBILE_PHONE like CONCAT('%',#{mobilePhone},'%')
+    </if>
+    <if test="emailAddress != null &amp; emailAddress != ''">
+      AND  EMAIL_ADDRESS = #{emailAddress}
+    </if>
+    <if test="cityId != null &amp; cityId != ''">
+      AND  CITY_ID = #{cityId}
+    </if>
+    <if test="proviceId != null &amp; proviceId != ''">
+      AND PROVICE_ID = #{proviceId}
+    </if>
+    <if test="staffType != null &amp; staffType != ''">
+      AND  STAFF_TYPE = #{staffType}
+    </if>
+    <if test="idCardNo != null &amp; idCardNo != ''">
+      AND ID_CARD_NO = #{idCardNo}
+    </if>
+    <if test="channelId != null &amp; channelId != ''">
+      AND CHANNEL_ID = #{channelId}
+    </if>
+    <if test="authenRuleId != null &amp; authenRuleId != ''">
+      AND AUTHEN_RULE_ID = #{authenRuleId}
+    </if>
+    <if test="insertTime != null &amp; insertTime != ''">
+      AND INSERT_TIME = #{insertTime}
+    </if>
+    <if test="staffNmShort != null &amp; staffNmShort != ''">
+      AND STAFF_NM_SHORT = #{staffNmShort}
+    </if>
+    <if test="prsnChnlTypeCd != null &amp; prsnChnlTypeCd != ''">
+      AND  PRSN_CHNL_TYPE_CD = #{prsnChnlTypeCd}
+    </if>
+    <if test="defaultServiceType != null &amp; defaultServiceType != ''">
+      AND  DEFAULT_SERVICE_TYPE = #{defaultServiceType}
+    </if>
+    <if test="tenantId != null &amp; tenantId != ''">
+      AND  TENANT_ID = #{tenantId}
+    </if>
+  </select>
   <!--查询人员信息用于前台展示-->
   <select id="queryStaffInfo2" resultMap="StaffOrgaMap" parameterType="java.util.Map" >
     select
@@ -1098,6 +1196,7 @@
     LEFT JOIN t_sam_orga_info t2 ON t1.ORGA_ID=t2.ORGA_ID
     LEFT JOIN t_sam_tenant_info t3 ON t1.TENANT_ID=t3.TENANT_ID
     where 1=1
+    and t1.STAFF_ID in (select STAFFID from t_sam_userdataauth where AUTHOBJECTID = #{tenantId})
     <if test="staffId != null &amp; staffId != ''">
       AND t1.STAFF_ID like CONCAT('%',#{staffId},'%')
     </if>
@@ -1187,6 +1286,7 @@
 
   <select id="queryStaffInfoCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
     select count(*) from t_sam_staff_info where 1=1
+    and STAFF_ID in (select STAFFID from t_sam_userdataauth where AUTHOBJECTID = #{tenantId})
     <if test="staffId != null &amp; staffId != ''">
       AND STAFF_ID like CONCAT('%',#{staffId},'%')
     </if>

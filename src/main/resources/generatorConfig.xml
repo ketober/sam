@@ -42,9 +42,9 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名 -->
-        <table tableName="t_sam_tenantauth" schema="spider" enableSelectByExample="true"
+        <table tableName="t_sam_roledataauth" schema="spider" enableSelectByExample="true"
                enableCountByExample="true" enableDeleteByExample="true" enableUpdateByExample="true">
-            <generatedKey column="DBL_CEN_ID" sqlStatement="MySql"/>
+           <!-- <generatedKey column="ID" sqlStatement="MySql"/>-->
         </table>
     </context>
 </generatorConfiguration>

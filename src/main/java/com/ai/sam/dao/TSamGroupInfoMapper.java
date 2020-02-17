@@ -43,5 +43,7 @@ public interface TSamGroupInfoMapper extends Mapper<TSamGroupInfo>  {
     //根据点击的节点显示数据和子节点数据
     List<TSamGroupInfo> selectBySamGroupBySuperCode(TSamGroupInfo tSamGroupInfo);
 
+    int deleteByTenantId(String tenantId);
+
 
 }

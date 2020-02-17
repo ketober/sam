@@ -131,7 +131,7 @@ function updateOrgaInfo(){
     }
     ajaxLoading();
     //选中那个节点就绑定在哪个节点下，没有选就默认是最顶级。
-    var data = {TENANTID:1,SUPERORGACODE:$(".superOrgaCode").val(),ORGACODE:$(".orgaCode").val(),ORGAID:$(".orgaId").val(),ORGANAME:$(".orgaName").val(), ORGASTATE:$(".orgaState").combobox('getValue'),ORGATYPEID:$(".orgaTypeId").combobox('getValue'),orgaDesc:$(".orgaDesc").val()};
+    var data = {opUserId:AjaxUtilsTemp.getOpStaffId(),SUPERORGACODE:$(".superOrgaCode").val(),ORGACODE:$(".orgaCode").val(),ORGAID:$(".orgaId").val(),ORGANAME:$(".orgaName").val(), ORGASTATE:$(".orgaState").combobox('getValue'),ORGATYPEID:$(".orgaTypeId").combobox('getValue'),orgaDesc:$(".orgaDesc").val()};
 
     AjaxUtilsTemp.commonAjax('POST','/sam/tsamgroupinfo/updateTSamOrgaInfo',JSON.stringify(data),true,'application/json',function (data) {
         ajaxLoadEnd();

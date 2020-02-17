@@ -87,6 +87,9 @@ define(['jquery'], function ($) {
                 token = JSON.parse(tokenInfo).access_token;
             }
             return token;
+        },
+        getOpStaffId:function () {
+            return "bjt1001";
         }
 
     };

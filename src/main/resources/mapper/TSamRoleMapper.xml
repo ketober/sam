@@ -141,6 +141,10 @@
     delete from t_sam_role
     where ROLE_ID = #{roleId,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteByTenantId" parameterType="java.lang.String">
+    delete from t_sam_role
+    where TENANT_ID = #{tenantId,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.ai.sam.domain.TSamRoleExample" >
     delete from t_sam_role
     <if test="_parameter != null" >

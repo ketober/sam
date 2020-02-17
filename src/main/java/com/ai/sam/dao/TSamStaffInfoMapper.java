@@ -67,7 +67,9 @@ public interface TSamStaffInfoMapper extends Mapper<TSamStaffInfo>  {
      * @return
      */
     int queryStaffInfoCount(Map<String,Object> params);
+    int queryStaffInfoAssignCount(Map<String,Object> params);
     int qryStaffByOrgaIdCount(Map<String,Object> params);
+
 
 
     /*空闲的用户和角色下关联的用户*/
@@ -101,5 +103,9 @@ public interface TSamStaffInfoMapper extends Mapper<TSamStaffInfo>  {
     List<TSamStaffInfo> selectStaffForOrgaId(String orgaId);
 
     List<String> opUserTenantAuth(String orgaId);
+
+    int batchUpdateByStaffIds(Map<String,Object> map);
+
+    int deleteStaffInfoByTenantId(String tenantId);
 
 }

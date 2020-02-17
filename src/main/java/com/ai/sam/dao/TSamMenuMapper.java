@@ -30,4 +30,6 @@ public interface TSamMenuMapper extends Mapper<TSamMenu>  {
     int updateByPrimaryKeySelective(TSamMenu record);
 
     int updateByPrimaryKey(TSamMenu record);
+
+    int deleteByTenantId(String tenantId);
 }

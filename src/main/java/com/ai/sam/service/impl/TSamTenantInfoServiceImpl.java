@@ -1,11 +1,8 @@
 package com.ai.sam.service.impl;
 
-import com.ai.sam.dao.TSamTenantauthMapper;
-import com.ai.sam.domain.TSamTenantInfo;
-import com.ai.sam.domain.TSamTenantInfoExample;
-import com.ai.sam.domain.TSamTenantauth;
+import com.ai.sam.dao.*;
+import com.ai.sam.domain.*;
 import com.ai.sam.service.TSamTenantInfoService;
-import com.ai.sam.dao.TSamTenantInfoMapper;
 
 import com.alibaba.fastjson.JSON;
 import com.mysql.jdbc.StringUtils;
@@ -25,6 +22,28 @@ public class TSamTenantInfoServiceImpl implements TSamTenantInfoService {
 	private TSamTenantInfoMapper tsamtenantinfomapper;
     @Autowired
     private TSamTenantauthMapper tSamTenantauthMapper;
+    @Autowired
+    private TSamStaffInfoMapper tsamstaffinfomapper;
+
+    @Autowired
+    private TSamPasswordMapper tsampasswordmapper;
+    @Autowired
+    private TSamGroupMemberMapper tsamgroupmembermapper;
+
+    @Autowired
+    private TSamRoleMapper tSamRoleMapper;
+    @Autowired
+    private TSamPermitMapper tsampermitmapper;
+    @Autowired
+    private TSamPlatformRelMapper tsamplatformrelmapper;
+    @Autowired
+    private TSamGroupInfoMapper tSamGroupInfoMapper;
+    @Autowired
+    private TSamOrgaInfoMapper tSamOrgaInfoMapper;
+    @Autowired
+    private TSamMenuMapper tSamMenuMapper;
+    @Autowired
+    private TSamModuleMapper tSamModuleMapper;
 
     @Override
 	public  TSamTenantInfo getById(Integer id) throws Exception  {
@@ -43,15 +62,28 @@ public class TSamTenantInfoServiceImpl implements TSamTenantInfoService {
     @Override
     public int updateByPrimaryKey(TSamTenantInfo tSamTenantInfo) throws Exception {
         tSamTenantInfo.setModfTime(new Date());
-        tSamTenantInfo.setModfUserId("CurrentUser");
+        //tSamTenantInfo.setModfUserId(tSamTenantInfo.getCrtUserId());
         return tsamtenantinfomapper.updateByPrimaryKeySelective(tSamTenantInfo);
     }
 
     @Override
-    public void deleteStaffInfo(List<String> staffIds) throws Exception {
-        Map<String,Object> params = new HashMap<>();
-        params.put("tenantIds",staffIds);
-        tsamtenantinfomapper.batchDeleteByTenantIds(params);
+    public void deleteStaffInfo(String tenantId) throws Exception {
+
+        //删除人员信息
+        tsamstaffinfomapper.deleteStaffInfoByTenantId(tenantId);
+        //组织机构
+        tSamOrgaInfoMapper.deleteByTenantId(tenantId);
+        //角色
+        tSamRoleMapper.deleteByTenantId(tenantId);
+        //工作组
+        tSamGroupInfoMapper.deleteByTenantId(tenantId);
+        //菜单
+        tSamMenuMapper.deleteByTenantId(tenantId);
+        //模块
+        tSamModuleMapper.deleteByTenantId(tenantId);
+        //删除租户ID
+        tsamtenantinfomapper.deleteByPrimaryKey(tenantId);
+
     }
 
     @Override

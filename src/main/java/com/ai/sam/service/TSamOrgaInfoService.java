@@ -13,13 +13,13 @@ public interface TSamOrgaInfoService {
 
    //根据点击的节点显示count
    int selectByTSamOrgaInfoCountBySuperCode(TSamOrgaInfo record);
-   String selectTSamOrgaTree(String pId);
-   String selectTSamOrgaTreeForCombotree();
+   String selectTSamOrgaTree(String pId,String opStaffId);
+   String selectTSamOrgaTreeForCombotree(String opStaffId);
 
    //根据点击的节点显示数据和子节点数据
    List<TSamOrgaInfo> selectByTSamOrgaInfoBySuperCode(TSamOrgaInfo record);
 
-   Map<String, Object> deleteByPrimaryKey(String orgaId);
+   Map<String, Object> deleteByPrimaryKey(String orgaId,String opStaffId) throws Exception;
    int selectRepeatOrgaName(Map<String,String> hashMap);
 
 

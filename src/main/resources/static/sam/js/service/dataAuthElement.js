@@ -38,45 +38,11 @@ function initOrgainfoTree(){
         onLoadSuccess: function (data) {
         }
     });
-    $('#tenantId1').combobox({
-        // url: '../../data/skill-priority.json',
-        valueField: 'codeValue',
-        textField: 'codeName',
-        panelHeight: 'auto',
-        disabled:false,
-        missingMessage: '请选择',
-        loader: function (param, success, error) {
-            param = {
-            };
-            $.ajax({
-                url: "/sam/tsamtenantinfo/qrytenantinfo",
-                dataType: 'json',
-                type: "POST",
-                data: param,
-                success: function (data) {
-                    var items = $.map(data.list, function (item, index) {
-                        return {
-                            codeValue: item["tenantId1"],
-                            codeName: item["tenantName1"]
-                        };
-                    });
-                    success(items);
-                },
-                error: function () {
-                    error.apply(this, arguments);
-                }
-            });
-        },
-        onLoadSuccess: function (data) {
-        }
-    });
-
-
     var token = AjaxUtilsTemp.getToken();
     var setting = {
         async : {
             enable : true, // 设置 zTree是否开启异步加载模式
-            url: "/sam/tsamorgainfo/selectSamOrgaTree?access_token="+token+"&opStaffId="+AjaxUtilsTemp.getOpStaffId(),
+            url: "/sam/dataAuth/dataAuthTree?access_token="+token+"&opStaffId="+AjaxUtilsTemp.getOpStaffId(),
             autoParam : [ "id" ]	// 异步加载时自动提交父节点属性的参数,假设父节点 node = {id:1, name:"test"}，异步加载时，提交参数 zId=1
         },
         data:{ // 必须使用data
@@ -147,13 +113,10 @@ function initOrgainfoGrid(id){
         fixRowHeight:600,
         loadMsg:"正在努力加载数据,表格渲染中...",
         columns:[[
-            {field :'ck',checkbox : true,width : '10%' },
-            {field:'orgaId',title:'组织机构编号',width:'23%'},
-            {field:'orgaName',title:'组织机构名称',width:'25%'},
-            {field:'orgaTypeName',title:'组织机构类型',width:'10%'},
-            {field:'orgaStateName',title:'组织机构状态',width:'10%'},
-            {field:'tenantName',title:'所属租户',width:'20%'},
-            {field: 'opera', title: '操作', width: '10%',formatter: rowformater}
+            {field :'ck',checkbox : true,width : '20%' },
+            {field:'commonid',title:'数据对象ID',width:'40%'},
+            {field:'commonname',title:'数据对象名称',width:'40%'},
+            {field: 'opera', title: '操作', width: '20%',formatter: rowformater}
         ]],
         onLoadSuccess: function (data) {
             console.log(data);
@@ -167,21 +130,11 @@ function initOrgainfoGrid(id){
             var start = (param.page - 1) * param.rows + 1;
             var pageNum = param.rows;
             var params={
-                "orgaName":$("#searchOrgaName").val(),
-                "tenantName":$("#searchTenantName").val(),
+                "commonid":$("#searchOrgaName").val(),
+                "commonname":$("#searchTenantName").val(),
                 "page":pageNum,
                 "start":start};
-            // $.ajax({
-            //     url: "/tsamorgainfo/selectTSamOrgaGrid?nodeId="+id, //获取数据后台接口
-            //     method: "GET",
-            //     data: params,
-            //     dataType: "json",
-            //     success: function (data) {
-            //         success(data);
-            //     }
-            // });
-
-            AjaxUtilsTemp.commonAjax('GET','/sam/tsamorgainfo/selectTSamOrgaGrid?nodeId='+id,params,true,'text/plain',function (data) {
+            AjaxUtilsTemp.commonAjax('GET','/sam/dataAuth/commonAuthDataInfo?authconfigid='+id,params,true,'text/plain',function (data) {
                 success(jQuery.parseJSON(data));
             },function () {
                 $.messager.alert("提示","获取数据异常!");
@@ -196,8 +149,18 @@ function initOrgainfoGrid(id){
 
 
 function rowformater(value, row, index) {
-    var orgaId = row.orgaId;
-    return  "<a onclick='initWinContent(),initUpdateWindow(\""+orgaId+"\");'>编辑</a>";
+    var commonid = row.commonid;
+    var zTree = $.fn.zTree.getZTreeObj("menuTree");
+    var nodes = zTree.getSelectedNodes();
+    var authtypeid;
+    if(nodes.length!=0)
+    {
+        authtypeid = nodes[0].id;
+    }
+    else {
+        authtypeid = "001";
+    }
+    return  "<a onclick='initWinContent(),initUpdateWindow(\""+commonid+"\",\""+authtypeid+"\");'>分配权限</a>";
 }
 
 //修改弹出窗口
@@ -206,180 +169,166 @@ window.initWinContent =function initWinContent(){
         width:950,
         height:550,
         modal:true,
-        title:"修改组织结构信息"
+        title:"权限分配"
     });
 };
 
 //修改页面初始化
-window.initUpdateWindow = function initUpdateWindow(orgaId) {
+window.initUpdateWindow = function initUpdateWindow(commonid,authtypeid) {
     $("#win_content").empty();
     // $popWindow = $("<div id='tt' class='easyui-tabs' style='fit:true;overflow:auto;'>").appendTo($("#win_content"));
     $popWindow = $("<div id='tt' class='easyui-tabs'>").appendTo($("#win_content"));
     var $winContent =
         $([
-            "<div title=\"基本信息\" style=\"padding:20px;\">\n" +
+           /* "<div title=\"基本信息\" style=\"padding:20px;\">\n" +
             "        <div data-options=\"region:'center'\" style=\"overflow: auto;\">\n" +
             "            <div id=\"baseInfo_page_content\" data-options=\"region:'center'\">\n" +
             "            </div>\n" +
             "        </div>\n" +
-            "    </div>\n" +
+            "    </div>\n" +*/
             "<div title=\"人员分配\"  style=\"overflow:auto;padding:20px;\">\n" +
             "        <div data-options=\"region:'center'\" style=\"overflow: auto;\">\n" +
-            "            <div id=\"plat_page_content\" data-options=\"region:'center'\">\n" +
+            "            <div id=\"staff_page_content\" data-options=\"region:'center'\">\n" +
+            "            </div>\n" +
+            "        </div>\n" +
+            "    </div>\n" +
+            "    </div>"+
+            "<div title=\"角色分配\"  style=\"overflow:auto;padding:20px;\">\n" +
+            "        <div data-options=\"region:'center'\" style=\"overflow: auto;\">\n" +
+            "            <div id=\"role_page_content\" data-options=\"region:'center'\">\n" +
             "            </div>\n" +
             "        </div>\n" +
             "    </div>\n" +
             "    </div>"
         ].join("")).appendTo($popWindow);
-    initConfig(orgaId);
+    initConfig(commonid,authtypeid);
 };
 
 //修改页面tab页初始化及事件
-window.initConfig=function initConfig(orgaId){
+window.initConfig=function initConfig(commonid,authtypeid){
     var $updatePage;
     var $platPage;
-    $updatePage = $("<div></div>").appendTo($("#baseInfo_page_content"));
-    $platPage = $("<div></div>").appendTo($("#plat_page_content"));
+    $updatePage = $("<div></div>").appendTo($("#role_page_content"));
+    $platPage = $("<div></div>").appendTo($("#staff_page_content"));
     $.parser.parse();
     var token = AjaxUtilsTemp.getToken();
-    initSearchGrid();
+    initSearchGrid(commonid);
     initPlatSearch();
-    initPlatTab();
+    initPlatTab(commonid,authtypeid);
     initPlatEvent()
-    function initSearchGrid() {
+    function initSearchGrid(commonid) {
         $update = $([
-            "<div class='panel-search'style='height: 300px;'>"+
-            "                <form action='' method='post' class='form form-horizontal'>"+
-            "                    <div class='row cl'>"+
-            "                        <label class='form-label col-4'>组织机构名称：</label>"+
-            "                        <div class='formControls col-6'>"+
-            "                            <input type='hidden' class='orgaId' style='height:30px' />"+
-            "                            <input type='hidden' class='orgaCode' style='height:30px' />"+
-            "                            <input type='hidden' class='superOrgaCode' style='height:30px' />"+
-            "                            <input type='text' class='easyui-textbox orgaName' style='height:30px' />"+
-            "                        </div>"+
-            "                        <div class='formControls col-2' style='padding-top: 10px;'>"+
-            "                            <span style='color:red;padding-left:25px;text-align: center'>*</span>"+
-            "                        </div>"+
-            ""+
-            "                    </div>"+
-            ""+
-            "                    <div class='row cl'>"+
-            "                        <label class='form-label col-4'>组织机构类型：</label>"+
-            "                        <div class='formControls col-6'>"+
-            "                            <select  style='height:30px' class='easyui-combobox orgaTypeId' >"+
-            "                                <option value='-1'>--请选择--</option>"+
-            "                                <option value='1'>公司</option>"+
-            "                                <option value='2'>省份</option>"+
-            "                                <option value='3'>地市</option>"+
-            "                                <option value='4'>组织</option>"+
-            "                                <option value='5'>班组</option>"+
-            "                            </select>"+
-            "                        </div>"+
-            "                        <div style='padding-top: 10px;position: initial;'>"+
-            "                            <span style='color:red;padding-left:25px;text-align: center'>*</span>"+
-            "                        </div>"+
-            "                    </div>"+
-            ""+
-            "                    <div class='row cl'>"+
-            "                        <label class='form-label col-4'>组织机构状态：</label>"+
-            "                        <div class='formControls col-6'>"+
-            "                            <select  style='height:30px' class='easyui-combobox orgaState' >"+
-            "                                <option value='-1'>--请选择--</option>"+
-            "                                <option value='0'>在用</option>"+
-            "                                <option value='1'>废弃</option>"+
-            "                                <option value='2'>暂停</option>"+
-            "                            </select>"+
-            "                        </div>"+
-            "                        <div  style='padding-top: 10px;position: initial;'>"+
-            "                            <span style='color:red;padding-left:25px;text-align: center'>*</span>"+
-            "                        </div>"+
-            "                    </div>"+
-            "                    <div class='row cl'>"+
-            "                    <label class='form-label col-4'>租户名称：</label>"+
-            "                    <div class='formControls col-6' >"+
-            "                    <input type='text' class='easyui-combobox' id= 'tenantId' name='tenantId'style='height:30px' >"+
-            "                    </div>"+
-            "                        <div  style='padding-top: 10px;position: initial;'>"+
-            "                            <span style='color:red;padding-left:25px;text-align: center'>*</span>"+
-            "                        </div>"+
-            "                    </div>"+
-            "                    <div class='row cl'>"+
-            "                        <label class='form-label col-4'>组织机构描述：</label>"+
-            "                        <div class='formControls col-6'>"+
-            "                            <input class='easyui-textbox orgaDesc' data-options='multiline:true'  style='height:100px;'></input>"+
-            "                        </div>"+
-            "                    </div>"+
-            "                </form>"+
-            "            </div>"+
+            "<div class='panel-search'>",
+            "<form class='form form-horizontal'>",
             "<div class='row cl'>",
-            "<div class='mt-10 text-c '>" +
-            "<a href='javascript:void(0)' id='global' onclick=\"dynameicOrgaOperation()\" class='btn btn-green radius mt-l-20' >" +
-            "保存</a>",
+            "<label class='form-label col-2'>当前数据对象ID：</label>",
+            "<div class='formControls col-2'><input type='text' id='commonid' disabled='true' name='commonid' class='easyui-textbox'  style='width:90%;height:30px' ></div>",
+            "</div>",
+            "<div>",
+            "<ul id='roleTree' class='ztree1'></ul>",
+            "</div>",
+            "<div class='mt-10 test-c'>",
+            "<label class='form-label col-5'></label>",
+            "<a href='javascript:void(0)' id='global2' class='btn btn-green radius mt-l-20' >保存</a>",
             "<span>          </span>",
-            "<a href='javascript:void(0)' id='cancel1' onclick=\"cancle1()\" class='btn btn-secondary radius mt-l-20' >" +
+            "<a href='javascript:void(0)' id='cancel2' class='btn btn-secondary radius mt-l-20' >" +
             "取消</a>",
             "</div>",
-            "</div>",
             "</form>",
-            "</div>"
+            "</div>",
         ].join("")).appendTo($updatePage);
 
-        $update.find("input.easyui-textbox").textbox();
-        $update.find("select.easyui-combobox").combobox();
-        $update.find("input.easyui-datetimebox").datetimebox({
-            editable: false
-        });
-        $update.find("a.easyui-linkbutton").linkbutton();
-        $update.find("a.btn").linkbutton();
-        $update.find('#tenantId').combobox({
-            // url: '../../data/skill-priority.json',
-            valueField: 'codeValue',
-            textField: 'codeName',
-            panelHeight: 'auto',
-            editable: true,
-            missingMessage: '请选择',
-            loader: function (param, success, error) {
-                param = {
-
-
-                };
-                $.ajax({
-                    url: "/sam/tsamtenantinfo/qrytenantinfo",
-                    dataType: 'json',
-                    type: "POST",
-                    data: param,
-                    success: function (data) {
-                        var items = $.map(data.list, function (item, index) {
-                            return {
-                                codeValue: item["tenantId"],
-                                codeName: item["tenantName"]
-                            };
-                        });
-                        success(items);
-                    },
-                    error: function () {
-                        error.apply(this, arguments);
-                    }
-                });
-            },
-            onLoadSuccess: function (data) {
-            }
-        });
-        AjaxUtilsTemp.commonAjax('GET','/sam/tsamorgainfo/'+orgaId,null,true,'text/plain',function (data) {
-            $(".orgaId").val(data.ORGAID);
-            $(".orgaCode").val(data.ORGACODE);
-            $(".superOrgaCode").val(data.SUPERORGACODE);
-            $(".orgaName").textbox('setValue', data.ORGANAME);
-            $(".orgaTypeId").combobox('setValue', data.ORGATYPEID);
-            $(".orgaState").combobox('setValue', data.ORGASTATE);
-            $(".orgaDesc").textbox('setValue', data.ORGANAME);
-            $update.find("#tenantId").combobox('setText', data.tenantName);
-            $update.find("#tenantId").combobox('setValue', data.TENANTID);
-        },'json');
+        $updatePage.find("#commonid").val(commonid);
+        initRoleTree(commonid);
 
     }
+    //角色树
+    function initRoleTree(commonid){
+        var staffId = "";
+        var setting = {
+            async : {
+                enable : true, // 设置 zTree是否开启异步加载模式
+                url: "/sam/dataAuth/selectTSamRoleTree?sync=true&authId="+commonid+"&chkDisabled=false&access_token="+token,
+                autoParam : [ "id" ]	// 异步加载时自动提交父节点属性的参数,假设父节点 node = {id:1, name:"test"}，异步加载时，提交参数 zId=1
+            },
+            data:{ // 必须使用data
+                simpleData : {
+                    enable : true,
+                    idKey : "id", // id编号命名 默认
+                    pIdKey : "pId", // 父id编号命名 默认
+                    rootPId : 0	// 用于修正根节点父节点数据，即 pIdKey 指定的属性值
+                }
+            },
+            view: {
+                dblClickExpand: false,
+                selectedMulti: false
+            },
+            check:{
+                enable: true,
+                autoCheckTrigger: true
+            },
+            // 回调函数
+            callback : {
+                onClick : function(event, treeId, treeNode, clickFlag) {
+                    // 判断是否父节点
+                    // if(!treeNode.isParent){
+                    // initRoleGrid(treeNode.id);
+                    //}
+                },
+                //捕获异步加载出现异常错误的事件回调函数 和 成功的回调函数
+                onAsyncError : zTreeOnAsyncError,
+                onAsyncSuccess : zTreeOnAsyncSuccess
+            }
+        };
 
+        // 加载错误提示
+        function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+            alert("加载错误：" + XMLHttpRequest);
+        };
+        function zTreeOnAsyncSuccess(event, treeId, treeNode, msg){
+            var treeObj = $.fn.zTree.getZTreeObj(treeId);
+            var nodes = treeObj.getNodes();
+            if (nodes.length>0) {
+                for(var i=0;i<nodes.length;i++){
+                    if(nodes[i].pId == "0"){
+                        treeObj.expandNode(nodes[i], true, false, false);//默认展开第一级节点
+                    }
+                }
+            }
+        }
+
+        roleTree = $.fn.zTree.init( $("#roleTree"), setting);
+    };
+    //角色树保存按钮
+    var btn2 = document.getElementById("global2");
+    btn2.addEventListener('click',function(){
+        var checked = roleTree.getCheckedNodes(true);
+        var str="";
+        for (var i = 0; i < checked.length; i++) {
+            str += checked[i].id+ ",";
+        }
+        //去掉最后一个逗号(如果不需要去掉，就不用写)
+        if (str.length > 0) {
+            str = str.substr(0, str.length - 1);
+        }
+        var params ={};
+        params.commonid = commonid;
+        params.authtypeid = authtypeid;
+        params.roleIds=str;
+        AjaxUtilsTemp.commonAjaxAsync('post','/sam/dataAuth/updateRoleDataAuth',true,params,function (data) {
+            if(data.resultVal==="1"){
+                initRoleTree();
+                //initStaffAuthTree();
+                //initRoleTree3();
+                //initRoleIdAuthTree(0);
+                $.messager.alert('提示','操作成功!');
+            }else{
+                $.messager.alert('提示',data.resultMsg);
+            }
+        },function () {
+            $.messager.alert("提示","分配角色失败!");
+        },'json');
+    },false);
     /**
      * 平台工号配置tab页搜索模块
      */
@@ -409,7 +358,7 @@ window.initConfig=function initConfig(orgaId){
     /**
      * 平台工号配置分配人员模块
      */
-    function initPlatTab() {
+    function initPlatTab(commonid,authtypeid) {
         $([
             "<div class='col' style='height: 400px;padding-top: 10px;'>",
             "<div style='float:left;width:45%;'>",
@@ -460,19 +409,19 @@ window.initConfig=function initConfig(orgaId){
                 var start = (param.page - 1) * param.rows + 1;
                 var pageNum = param.rows;
                 var data = getFormData("platSearchForm");
-                /*if(data.staffId == "" && data.staffName=="" && data.staffIdMax=="" && data.staffIdMin=="")
+              /*  if(data.staffId == "" && data.staffName=="" && data.staffIdMax=="" && data.staffIdMin=="")
                 {
                     var dd = {"total":0,"rows":""};
                     success(dd);
                     return;
                 }*/
                 var params = $.extend({"startIndex":start, "pageNum":pageNum},data);
-         /*       AjaxUtilsTemp.commonAjax('post','/sam/StaffInfo/qryStaffInfo',params,function (data) {
-                    var dd = {"total":data.total,"rows":data.list};
-                    success(dd);
-                },function () {
-                    $.messager.alert("提示","查询平台工号失败!");
-                },'json');*/
+                /*       AjaxUtilsTemp.commonAjax('post','/sam/StaffInfo/qryStaffInfo',params,function (data) {
+                           var dd = {"total":data.total,"rows":data.list};
+                           success(dd);
+                       },function () {
+                           $.messager.alert("提示","查询平台工号失败!");
+                       },'json');*/
                 $.ajax({
                     headers: {
                         Authorization: "Bearer " + token,
@@ -509,28 +458,36 @@ window.initConfig=function initConfig(orgaId){
             singleSelect:false,
             height:400,
             loader: function (param, success) {
-                var params ={"orgaId":orgaId,
-                    "opStaffId":AjaxUtilsTemp.getOpStaffId()
-                };
-           /*     AjaxUtilsTemp.commonAjaxAsync('post','/sam/StaffInfo/qryStaffInfo',params,function (data) {
-                    var d=[];
-                    for(var i=0;i<data['resultMsg'].length;++i){
-                        d.push($.extend({'staffId':data['resultMsg'][i]['staffId']},{'staffName':data['resultMsg'][i]['staffName']}));
-                    }
-                    var dd={"total":data.total,"rows":d};
+               /* var start = (param.page - 1) * param.rows;
+                var pageNum = param.rows;*/
+                var params = {"authobjectid":commonid,"authtypeid":authtypeid};
+                /*     AjaxUtilsTemp.commonAjaxAsync('post','/sam/StaffInfo/qryStaffInfo',params,function (data) {
+                         var d=[];
+                         for(var i=0;i<data['resultMsg'].length;++i){
+                             d.push($.extend({'staffId':data['resultMsg'][i]['staffId']},{'staffName':data['resultMsg'][i]['staffName']}));
+                         }
+                         var dd={"total":data.total,"rows":d};
+                         success(dd);
+                     },function () {
+                         $.messager.alert("提示","查询已分配平台工号信息失败!");
+                     },'json');*/
+
+                AjaxUtilsTemp.commonAjaxAsync('post', '/sam/dataAuth/queryDataAuthAssignedStaff', true,params, function (data) {
+                    var dd = {"total":data.total,"rows":data.list};
                     success(dd);
                 },function () {
-                    $.messager.alert("提示","查询已分配平台工号信息失败!");
-                },'json');*/
-                $.ajax({
+                    $.messager.alert("提示","查询待分配人员失败!");
+                }, 'json');
+
+/*                $.ajax({
                     headers: {
                         Authorization: "Bearer " + token,
                     },
                     type: "post",
-                    url: '/sam/StaffInfo/qryStaffInfo',
-                    data: params,
-                    //async: async,
-                    //contentType:postType,
+                    url: '/sam/dataAuth/queryDataAuthAssignedStaff',
+                    data: JSON.stringify(params),
+                    async: true,
+                    contentType:'application/json',
                     error: function (request) {
                         $.messager.alert("提示","查询已分配平台工号信息失败!");
                     },
@@ -539,7 +496,7 @@ window.initConfig=function initConfig(orgaId){
                         var dd = {"total":result.total,"rows":result.list};
                         success(dd);
                     }
-                });
+                });*/
             }
         });
     }
@@ -626,10 +583,11 @@ window.initConfig=function initConfig(orgaId){
             });
             ids = ids.slice(0, ids.length - 1);
             var params ={
-                "orgaId":orgaId,
-                "staffIds":ids
+                "staffid":ids,
+                "authobjectid":commonid,
+                "authtypeid":authtypeid
             };
-/*            AjaxUtilsTemp.commonAjax('post','/sam/StaffInfo/updateStaffOrgaInfo',params,function (data) {
+            AjaxUtilsTemp.commonAjax('post','/sam/dataAuth/assignDataAuth',JSON.stringify(params),false,'application/json',function (data) {
                 if(data.resultVal == "1"){
                     $.messager.alert("提示","分配组织机构工号成功");
                 }else{
@@ -637,13 +595,13 @@ window.initConfig=function initConfig(orgaId){
                 }
             },function () {
                 $.messager.alert("提示","分配平台工号失败!");
-            },'json');*/
-            $.ajax({
+            },'json');
+/*            $.ajax({
                 headers: {
                     Authorization: "Bearer " + token,
                 },
                 type: "post",
-                url: '/sam/StaffInfo/updateStaffOrgaInfo',
+                url: '/sam/dataAuth/assignDataAuth',
                 data: params,
                 //async: async,
                 //contentType:postType,
@@ -652,13 +610,13 @@ window.initConfig=function initConfig(orgaId){
                 },
                 success: function (result) {
                     if(result.resultVal == "1"){
-                        $.messager.alert("提示","分配组织机构工号成功</br>"+result.resultMsg);
+                        $.messager.alert("提示","分配组织机构工号成功");
                     }else{
                         $.messager.alert("提示","分配组织机构工号失败"+result.resultMsg);
                     }
 
                 }
-            });
+            });*/
         };
     }
     function getFormData(formId){
@@ -685,7 +643,7 @@ function  openOrgaEditView(orgaId) {
         $(".orgaDesc").textbox('setValue', data.ORGANAME);
         $("#tenantId").combobox('setText', data.tenantName);
         $("#tenantId").combobox('setValue', data.TENANTID);
-      },'json');
+    },'json');
 
 
 }
@@ -694,6 +652,7 @@ function  openOrgaEditView(orgaId) {
 
 function resultSearch(){
     $("#searchOrgaName").textbox('setValue',"");
+    $("#searchTenantName").textbox('setValue',"");
     var zTree = $.fn.zTree.getZTreeObj("menuTree");
     var nodes = zTree.getSelectedNodes();
     if(nodes.length == 0){
@@ -707,6 +666,7 @@ function resultSearch(){
 
 
 function openOrgaView() {
+    //$("#rightTable").attr('title',"asf");
     var zTree = $.fn.zTree.getZTreeObj("menuTree");
     var nodes = zTree.getSelectedNodes();
     if(nodes.length == 0){
@@ -717,27 +677,154 @@ function openOrgaView() {
         $.messager.alert('提示', '树节点深度限制为5级!');
         return;
     }
+    if(nodes[0].id=="001")
+    {
+        $.messager.alert('提示', '根节点不允许新增数据对象!');
+        return;
+    }
     $('#pop-window1').window('open');
     $(".form").form('clear');
-    AjaxUtilsTemp.commonAjax('POST','/sam/StaffInfo/qryStaffInfo?staffId='+ AjaxUtilsTemp.getOpStaffId(),null,true,'text/plain',function (data) {
-        $("#tenantId1").combobox('setValue',  data.list[0].tenantId);
-        $("#tenantId1").combobox('setText',  data.list[0].tenantName);
-    },'json');
-
-    $(".orgaTypeId").combobox("setValue",-1);
-    $(".orgaState").combobox("setValue",-1);
+    $("#authconfigid").textbox('setValue', nodes[0].id);
+    $("#authconfigid").textbox('textbox').attr('readonly',true);
 }
+var $popWindow3;
+function openOrgaView1() {
 
-
-
-//新增修改入口,根据主键id 判断是新增还是修改
-function dynameicOrgaOperation(){
-    var orgaId = $(".orgaId").val();
-    if(orgaId == "" || orgaId == null){
-        saveOrgaInfo();
-    }else{
-        updateOrgaInfo();
+    var zTree = $.fn.zTree.getZTreeObj("menuTree");
+    var nodes = zTree.getSelectedNodes();
+    if(nodes.length == 0){
+        $.messager.alert('提示', '请选择树某个节点进行新增。');
+        return;
     }
+    if(nodes[0].level == 5){
+        $.messager.alert('提示', '树节点深度限制为5级!');
+        return;
+    }
+    $("#win_content3").show().window({
+        width: 550,
+        height: 350,
+        modal: true,
+        title: "新增数据权限树节点",
+    });
+    initAddDataElementPopWindow();
+    initAddDataElementWindowEvent();
+    //父节点
+    $popWindow3.find("#rootvalue").textbox('setValue', nodes[0].id);
+}
+function initAddDataElementWindowEvent() {
+    $popWindow3.on("click", "#global3", function () {
+        // if($(this).hasClass("disabled")){
+        //     return;
+        // }
+        // //关闭按钮，防止多次提交
+        // $(this).addClass("disabled");
+        if ($(this).linkbutton("options").disabled) {
+            return;
+        }
+        //禁用按钮
+        $(this).linkbutton({disabled: true});
+        var rootvalue = $popWindow3.find("input[name='rootvalue']").val().trim();
+        var authtypeid = $popWindow3.find("input[name='authtypeid']").val().trim();
+        var authtypename = $popWindow3.find("input[name='authtypename']").val().trim();
+        var authtypedesc = $popWindow3.find("input[name='authtypedesc']").val().trim();
+
+        if (!authtypeid) {
+            $.messager.alert('提示', '请输入权限ID！');
+            $(this).linkbutton({disabled: false});
+        }else if(!authtypename){
+            $.messager.alert('提示', '请输入权限名称！');
+            $(this).linkbutton({disabled: false});
+        }else{
+            var sd = {
+                "rootvalue":rootvalue,
+                "authtypeid":authtypeid,
+                "authtypename":authtypename,
+                "authtypedesc":authtypedesc,
+            }
+            AjaxUtilsTemp.commonAjaxAsync('post','/sam/dataAuth/addAuthTreeNode',true,sd,function (data) {
+                $("#global").linkbutton({disabled: false});
+
+                if (data.resultVal === "1") {
+                    $.messager.alert('提示', '操作成功！');
+                    $("#win_content3").window("close");
+                    $page.find("#account").datagrid("load");
+                } else {
+                    $.messager.alert('提示', data.resultMsg);
+                }
+            },function () {
+                $.messager.alert("提示","新增数据权限树节点失败!");
+            },'json');
+        }
+
+
+    });
+    $popWindow3.on("click", "#cancel3", function () {
+        $popWindow3.find('form.form').form('clear');
+        $("#win_content3").window("close");
+    });
+
+}
+function initAddDataElementPopWindow() {
+
+    $("#win_content3").empty();
+    $popWindow3 = $("<div></div>").appendTo($("#win_content3"));
+    $([
+        "<div class='panel-tool-box cl' >",
+        //"<div class='fl text-bold'>基本信息</div>",
+        "</div>",
+        "<div class='panel-search'>",
+        "<form id='createServiceAccount' method='POST' class='form form-horizontal'>",
+        "<div style='display:none'>",
+        "<input type='hidden'  name='serviceId' class='easyui-textbox' value='0'   />",
+        "</div>",
+        "<div class='row cl'>",
+        "<label class='form-label col-4'>数据权限父节点：</label>",
+        "<div class='formControls col-6'><input  type='text' id='rootvalue' name='rootvalue' class='easyui-textbox'  style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+        "</div>",
+        "<div class='row cl'>",
+        "<label class='form-label col-4'>数据权限ID：</label>" +
+        "<div class='formControls col-6'><input  type='text' id='authtypeid' name='authtypeid' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+        "</div>",
+        "<div class='row cl'>",
+        "<label class='form-label col-4'>数据权限名称：</label>" +
+        "<div class='formControls col-6'><input  type='text' id='authtypename' name='authtypename' class='easyui-textbox' style='width:90%;height:30px' /><span style='color:red;padding-left:2px'>*</span></div>" +
+        "</div>",
+        "<div class='row cl'>",
+        "<label class='form-label col-4'>权限描述：</label>" +
+        "<div class='formControls col-6'><input  type='text' id ='authtypedesc' name='authtypedesc' class='easyui-textbox' style='width:90%;height:30px' /></div>" +
+        "</div>",
+        "</form>",
+        "</div>"
+    ].join("")).appendTo($popWindow3);
+    $([
+        "<div class='mt-10 test-c'>",
+        "<label class='form-label col-5'></label>",
+        "<a href='javascript:void(0)' id='global3' class='btn btn-green radius mt-l-20' >" +
+        "保存</a>",
+        "<span>          </span>",
+        "<a href='javascript:void(0)' id='cancel3' class='btn btn-secondary radius mt-l-20' >" +
+        "取消</a>",
+        "</div>",
+        "</div>"
+    ].join("")).appendTo($popWindow3);
+    //父节点
+    $popWindow3.find("input.easyui-textbox").textbox();
+    //$("#parentfield").textbox('setValue', asdf);
+    $popWindow3.find("#rootvalue").textbox('textbox').attr('readonly',true);
+    $popWindow3.find("a.btn").linkbutton();
+}
+function getParams($document) {
+    var param = {};
+
+    $document && $document.find("input").each(function () {
+        var $item = $(this);
+        param[$item.attr("name")] = $item.val();
+    });
+    $document && $document.find("select").each(function() {
+        var $item  = $(this);
+        param[$item.attr("name")] = $item.val();
+    });
+    return param;
 }
 function cancle1() {
     //新增成功 往tree节点上append数据。
@@ -770,57 +857,41 @@ function ajaxLoadEnd(){
 //新增
 function saveOrgaInfo(){
     //选中那个节点就绑定在哪个节点下，没有选就默认是最顶级。
-    var SUPERGROUPCODE;
     var zTree = $.fn.zTree.getZTreeObj("menuTree");
     var nodes = zTree.getSelectedNodes();
+    var authconfigid = $("#authconfigid").textbox('getValue');
+    var commonid =     $("#commonid").textbox('getValue');
+    var commonname =   $("#commonname").textbox('getValue');
+    var commoncode =   $("#commoncode").textbox('getValue');
 
-    var orgaName = $(".orgaName").textbox('getValue');
-    if(orgaName == "" || orgaName == null){
-        $.messager.alert('提示', '组织机构名称必填。');
+    if(!authconfigid)
+    {
+        $.messager.alert("无权限ID！")
         return;
     }
-
-    if(orgaName.length>=10){
-        $.messager.alert('提示', '组织机构名称长度过长,最长不超过10个字符。');
+    if(!commonid)
+    {
+        $.messager.alert("请输入编号！")
         return;
     }
-
-
-    var result = selectRepeatOrgaName(orgaName, nodes[0].id);
-    if(result !=0){
-        $.messager.alert('提示', '组织机构名称重复,请重新填写。');
+    if(!commonname)
+    {
+        $.messager.alert("请输入名称！")
         return;
     }
-
-    if($(".orgaTypeId").combobox('getValue') == "" || $(".orgaTypeId").combobox('getValue') == null || $(".orgaTypeId").combobox('getValue') == "-1"){
-        $.messager.alert('提示', '请选择组织机构类型。');
-        return;
-    }
-    if($(".orgaState").combobox('getValue') == "" || $(".orgaState").combobox('getValue') == null || $(".orgaState").combobox('getValue') == "-1"){
-        $.messager.alert('提示', '请选择组织机构状态。');
-        return;
-    }
-    var tenantId = $("#tenantId1").combobox('getValue');
-    //var tenantId1 =$update.find("#tenantId").combobox('getText');
-    if(tenantId == "" || tenantId == null){
-        $.messager.alert('提示', '请选择组所属租户。');
+    if(!commoncode)
+    {
+        $.messager.alert("请输入CODE！")
         return;
     }
     ajaxLoading();
-    if(nodes[0] != null){
-        SUPERORGACODE = nodes[0].id;
-    }else{
-        SUPERORGACODE = '1';
-    }
-    var data = {SUPERORGACODE:""+SUPERORGACODE+"",TENANTID:tenantId,ORGANAME:$(".orgaName").val(), ORGASTATE:$(".orgaState").combobox('getValue'),ORGATYPEID:$('.orgaTypeId').combobox('getValue'),orgaDesc:$(".orgaDesc").val(),opStaffId:AjaxUtilsTemp.getOpStaffId()};
-    AjaxUtilsTemp.commonAjax('POST','/sam/tsamorgainfo/insterTSamOrgaInfo',JSON.stringify(data),true,'application/json',function (data) {
+    var data = {
+        "authconfigid":authconfigid,"commonid":commonid,"commonname":commonname,"commoncode":commoncode
+    };
+    AjaxUtilsTemp.commonAjax('POST','/sam/dataAuth/addAuthData',JSON.stringify(data),true,'application/json',function (data) {
         ajaxLoadEnd();
-        if(data.flag == 1){
+        if(data.resultVal == 1){
             $('#dg').datagrid('reload'); //刷新grid
-            //刷新父节点
-            var parentZNode = zTree.getNodeByParam("id", SUPERORGACODE, null); //获取父节点
-            zTree.addNodes(parentZNode, new ZtreeNode(data.orgaId,SUPERORGACODE,$(".orgaName").val()), true);
-            zTree.expandNode(parentZNode,true,true);
             $.messager.alert('提示', '新增成功!');
             $('#pop-window1').window('close');
 
@@ -970,21 +1041,89 @@ function deleteOrga(){
         $.messager.alert('提示', '请选择一条数据删除。');
         return;
     }
-
-    var orgaIds=new Array();
+    var nodes = zTree.getSelectedNodes();
+    var authtypeid = nodes[0].id;
+    var commonids=new Array();
     var nodes=new Array();
     for(var i = 0;i<row.length;i++){
-        var node=zTree.getNodeByParam('id',row[i].orgaId);
-        var count = selectSamOrgaCountBySuperCode(row[i].orgaId);
-        if(count ==0 ){
-            nodes.push(node);
-        }
-         orgaIds.push(row[i].orgaId);
+
+        commonids.push(row[i].commonid);
     }
 
     $.messager.confirm("提示","确认删除？",function(sure) {
         if(sure) {
-            AjaxUtilsTemp.commonAjax('GET', '/sam/tsamorgainfo/deleteOrga', {"orgaIds": orgaIds.join(","),"opStaffId":AjaxUtilsTemp.getOpStaffId()}, true, 'application/json', function (data) {
+            AjaxUtilsTemp.commonAjax('GET', '/sam/dataAuth/deleteCommonAuthData', {"authconfigid":authtypeid,"commonid": commonids.join(",")}, true, 'application/json', function (data) {
+                if (data.resultVal == "1") {
+                    if (data.resultMsg == "") {
+                        $.messager.alert('提示', '组织删除成功。');
+                    } else {
+                        $.messager.alert('提示', data.resultMsg);
+                    }
+                    if (nodes.length > 0) {
+                        for (var i = 0; i < nodes.length; i++) {
+                            zTree.removeNode(nodes[i]);
+                        }
+                    }
+                    $('#dg').datagrid('reload'); //刷新grid
+                    return;
+                } else {
+                    $.messager.alert('提示', '组织删除失败。'+data.resultMsg);
+                    return;
+
+                }
+            },function () {
+                $.messager.alert("提示","删除组织失败!");
+            }, 'json');
+        }else{
+            return false;
+        }
+
+
+
+        //     var rowDatga = $('#dg').datagrid('getChecked');
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/tsamorgainfo/deleteOrga",
+        //         data:{"orgaIds":orgaIds.join(",")},
+        //         dataType: "json",
+        //         success: function(data){
+        //             if(data.resultVal == "1"){
+        //                 if(data.resultMsg == ""){
+        //                     $.messager.alert('提示', '组织删除成功。');
+        //                 }else{
+        //                     $.messager.alert('提示', data.resultMsg);
+        //                 }
+        //                 if(nodes.length>0){
+        //                     for(var i = 0;i<nodes.length;i++){
+        //                         zTree.removeNode(nodes[i]);
+        //                     }
+        //                 }
+        //                 $('#dg').datagrid('reload'); //刷新grid
+        //                 return;
+        //             }else{
+        //                 $.messager.alert('提示', '组织删除失败。');
+        //                 return;
+        //
+        //             }
+        //         }
+        //     });
+        // }else{
+        //     return false;
+        // }
+    });
+
+}
+function deleteOrga1(){
+    var zTree = $.fn.zTree.getZTreeObj("menuTree");
+    var nodes = zTree.getSelectedNodes();
+    if(nodes.length == 0){
+        $.messager.alert('提示', '请选择树某个节点进行新增。');
+        return;
+    }
+
+    $.messager.confirm("提示","确认删除？",function(sure) {
+        if(sure) {
+            AjaxUtilsTemp.commonAjax('GET', '/sam/dataAuth/deleteDataAuthTree', {"authtypeid": nodes[0].id,"opStaffId":AjaxUtilsTemp.getOpStaffId()}, true, 'application/json', function (data) {
                 if (data.resultVal == "1") {
                     if (data.resultMsg == "") {
                         $.messager.alert('提示', '组织删除成功。');

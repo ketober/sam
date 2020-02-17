@@ -227,7 +227,7 @@ require(["load", "request", "jquery", 'ajaxUtils', 'crm', 'common-enum', 'easyui
                 var pageNum = param.rows;
                 var params = {"startIndex": start, "pageNum": pageNum};
 
-                AjaxUtils.commonAjax('post', '/sam/StaffInfo/qryStaffInfo', params, function (data) {
+                AjaxUtils.commonAjax('post', '/sam/StaffInfo/qryStaffInfoForAssign', params, function (data) {
                     var dd = {"total": data.total, "rows": data.list};
                     success(dd);
                 },function () {
@@ -396,7 +396,7 @@ require(["load", "request", "jquery", 'ajaxUtils', 'crm', 'common-enum', 'easyui
             multiple: true,
             checkbox: true,
             onlyLeafCheck: true,//只能叶子节点才能勾选
-            url: "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?access_token=" + token,
+            url: "/sam/tsamorgainfo/selectSamOrgaTreeForCombotree?accesds_token=" + token+"&opStaffId="+ajaxUtils.getOpStaffId(),
             onBeforeSelect: function (node) {
                 // $(this).tree("check", node.target);//控制点击文字时也能勾选
                 // return false;
@@ -707,6 +707,7 @@ require(["load", "request", "jquery", 'ajaxUtils', 'crm', 'common-enum', 'easyui
                 }
             }
             var params = {
+                "opStaffId":AjaxUtils.getOpStaffId(),
                 "moduleId": root,
                 "permitType": "1",
                 "subAuthIds":children,
@@ -718,7 +719,7 @@ require(["load", "request", "jquery", 'ajaxUtils', 'crm', 'common-enum', 'easyui
             console.log(JSON.stringify(params));
             AjaxUtils.commonAjax('post', '/sam/tsampermit/updateAuthPermitEntity', params, function (data) {
                 if (data.resultVal === "1") {
-                    $.messager.alert("提示", "权限分配成功！");
+                    $.messager.alert("提示", "权限分配成功！</br>"+data.resultMsg);
                 } else {
                     $.messager.alert("提示", data.resultMsg);
                 }
@@ -770,7 +771,7 @@ require(["load", "request", "jquery", 'ajaxUtils', 'crm', 'common-enum', 'easyui
                         var start = (param.page - 1) * param.rows + 1;
                         var pageNum = param.rows;
                         var params = $.extend({"startIndex": start, "pageNum": pageNum}, getFormData("searchLeft"));
-                        AjaxUtils.commonAjax('post', '/sam/StaffInfo/qryStaffInfo', params, function (data) {
+                        AjaxUtils.commonAjax('post', '/sam/StaffInfo/qryStaffInfoForAssign', params, function (data) {
                             var dd = {"total": data.total, "rows": data.list};
                             success(dd);
                         }, function () {
@@ -888,6 +889,7 @@ require(["load", "request", "jquery", 'ajaxUtils', 'crm', 'common-enum', 'easyui
                     }
                 }
                 var params = {
+                    "opStaffId":AjaxUtils.getOpStaffId(),
                     "moduleId": root,
                     "permitType": "2",
                     "subAuthIds":children,
@@ -898,7 +900,7 @@ require(["load", "request", "jquery", 'ajaxUtils', 'crm', 'common-enum', 'easyui
                 console.log(JSON.stringify(params));
                 AjaxUtils.commonAjax('post', '/sam/tsampermit/updateAuthPermitEntity', params, function (data) {
                     if (data.resultVal === "1") {
-                        $.messager.alert("提示", "权限分配成功！");
+                        $.messager.alert("提示", "权限分配成功！</br>"+data.resultMsg);
                     } else {
                         $.messager.alert("提示", data.resultMsg);
                     }

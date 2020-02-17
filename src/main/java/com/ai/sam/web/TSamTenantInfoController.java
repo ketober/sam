@@ -96,10 +96,8 @@ public class  TSamTenantInfoController extends BaseAction {
     public Map<String, Object> delTenant(String ids) {
         Map<String,Object> result = new HashMap<>();
         try {
-            String[] s = ids.split(",");
-            List<String> list = new ArrayList<String>();
-            Collections.addAll(list, s);
-            tsamtenantinfoservice.deleteStaffInfo(list);
+
+            tsamtenantinfoservice.deleteStaffInfo(ids);
             result.put(StaticValue.RESULT_VAL,StaticValue.RESULT_SUCCESS_VAL);
             result.put(StaticValue.RESULT_MSG,StaticValue.RESULT_SUCCESS_MSG);
         } catch (Exception e) {
